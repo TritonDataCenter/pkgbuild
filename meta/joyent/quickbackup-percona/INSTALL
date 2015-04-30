@@ -1,0 +1,10 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if [ ! -d @VARBASE@/backups/percona ]; then
+		mkdir -p @VARBASE@/backups/percona
+		chown mysql:mysql @VARBASE@/backups/percona
+	fi
+	;;
+esac

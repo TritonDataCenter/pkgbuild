@@ -1,0 +1,70 @@
+# $NetBSD$
+#
+# Configure @INTERNAL_IP@ for our MySQL cluster.
+#
+# XXX: merge with pkgsrc-joyent/percona/INSTALL
+#
+
+case ${STAGE} in
+POST-INSTALL)
+	# Supported configuration files, used later.
+	cnfs=
+	for file in my.cnf mysql-cluster.ini; do
+		if [ -f ${PKG_SYSCONFDIR}/${file} ]; then
+			cnfs="${cnfs} ${PKG_SYSCONFDIR}/${file}"
+		fi
+	done
+
+	# Try to find an internal IP.  Prefer 10.* as that is what JPC uses,
+	# otherwise other RFC1918.
+	found=0
+	internal_ip=
+	for match in "10.*" \
+		     "192.168.*" \
+		     "172.1[6-9].*" "172.2[0-9].*" "172.3[01].*" \
+		     "127.*"; do
+		for ip in $(ipadm show-addr -p -o addr 2>/dev/null \
+			    | cut -d/ -f1); do
+			case "${ip}" in
+			${match})
+				internal_ip="${ip}"
+				found=1
+				break
+				;;
+			esac
+		done
+		if [ $found -eq 1 ]; then
+			break
+		fi
+	done
+	if [ -n "${internal_ip}" ]; then
+		for file in ${cnfs}; do
+			ed ${file} >/dev/null 2>&1 <<-EOF
+				g/@INTERNAL_IP@/s/@INTERNAL_IP@/${internal_ip}/
+				w
+				q
+			EOF
+		done
+	else
+		cat >&2 <<-EOF
+	Unable to determine internal IP address.  You will need to manually
+	substitute @INTERNAL_IP@ entries in the following files:
+
+		EOF
+		for file in ${cnfs}; do
+			echo "	${file}" >&2
+		done
+	fi
+
+	# Find trailing stub of zone UUID to use for cluster name
+	zone_name=$(zonename)
+	uuid_stub=${zone_name##*-}
+	for file in ${cnfs}; do
+		ed ${file} >/dev/null 2>&1 <<-EOF
+			g/@UUID_STUB@/s/@UUID_STUB@/${uuid_stub}/
+			w
+			q
+		EOF
+	done
+	;;
+esac

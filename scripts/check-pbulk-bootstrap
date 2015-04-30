@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Check to see if we need to build a pbulk bootstrap.
+#
+
+if [ $# -ne 1 ]; then
+	echo "usage: $0 <pkgbuild>" 1>&2
+	exit 2
+else
+	pkgbuild=$1; shift
+fi
+
+# Load per-pkgbuild config
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+#
+# Do the tests.  For trunk-based builds we want to regularly update the
+# bootstrap to ensure we pick up any changes, currently every 7 days.
+#
+rv=0
+BOOTGZ="${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/bootstrap-${pkgbuild}.tar.gz"
+if [ ! -f "${BOOTGZ}" ]; then
+	rv=1
+else
+	days=7
+	case "${pkgbuild}" in
+	trunk-*|upstream-*)
+		found=$(find ${BOOTGZ} -mtime +${days} 2>/dev/null)
+		[ -n "${found}" ] && rv=1
+		;;
+	esac
+fi
+exit ${rv}

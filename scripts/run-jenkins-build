@@ -1,0 +1,83 @@
+#!/bin/bash -x
+#
+# Script to initiate a Jenkins build.
+#
+# The variables JOB_NAME and PKGBUILD are supplied by the Jenkins environment.
+#
+
+# Load per-pkgbuild config
+. $(dirname $0)/../conf/${PKGBUILD}/pkgbuild.conf
+
+#
+# Execute optional pre-build script
+#
+if [ -n "${JENKINS_PRE_BUILD}" ]; then
+	. ${JENKINS_PRE_BUILD}
+fi
+
+#
+# Sanity check that build hosts are running the expected platform image.
+#
+if [ -n "${PI_REQUIRED}" ]; then
+	for ip in ${PBULK_CLIENTS}; do
+		hostpi=$(ssh ${ip} "uname -v")
+		if [ "${hostpi}" != "${PI_REQUIRED}" ]; then
+			echo "ERROR: ${ip} failed platform check, ${hostpi} != ${PI_REQUIRED}"
+			exit 1
+		fi
+	done
+fi
+
+#
+# Perform the build.
+#
+if [ -d /chroot/${JOB_NAME} ]; then
+	# Assume that previous job was aborted and try to remove it.
+	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
+	sleep 10
+	${CHROOT_DELETE} /chroot/${JOB_NAME}
+fi
+${CHROOT_CREATE} /chroot/${JOB_NAME}
+/usr/sbin/chroot /chroot/${JOB_NAME} /usr/bin/env -i /usr/bin/su - root -c "
+	PATH=/sbin:/usr/sbin:/usr/bin
+	${PBULK_BASEDIR}/bin/bulkbuild ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
+"
+#
+# Save the return code of the bulkbuild run so we can correctly report
+# success/failure back to Jenkins.
+#
+ret=$?
+
+#
+# Attempt to automatically report scan failures.
+#
+if [ $ret -ne 0 ]; then
+	matchfile=/tmp/no-match-$$.txt
+	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile}
+	if [ -s ${matchfile} ]; then
+		cat ${matchfile}
+		(
+			printf "The following unresolvable dependencies are preventing bulk builds\n"
+			printf "from running:\n\n"
+			cat ${matchfile}
+		) | ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/mail-report \
+		    -s "Scan failure for ${PKGBUILD} bulk build" ${FAILURE_RECIPIENTS}
+	fi
+	rm -f ${matchfile}
+fi
+
+#
+# Execute optional post-build script
+#
+if [ -n "${JENKINS_POST_BUILD}" ]; then
+	. ${JENKINS_POST_BUILD}
+	ret=$((ret+$?))
+fi
+
+if [ $ret -ne 0 ]; then
+	# Wait a little while on failure to ensure the chroot is unused.
+	sleep 10
+fi
+
+${CHROOT_DELETE} /chroot/${JOB_NAME}
+exit ${ret}

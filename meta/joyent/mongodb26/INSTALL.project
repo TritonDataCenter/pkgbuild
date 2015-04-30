@@ -1,0 +1,10 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Create a project
+	LANG=C projadd -c "MongoDB Service" -K "process.max-file-descriptor=(basic,10000,deny)" \
+	  -U mongodb -G mongodb mongodb
+
+	;;
+esac

@@ -1,0 +1,17 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Create a project
+	LANG=C projadd -c "CouchDB Service" \
+	  -K "process.max-file-descriptor=(basic,65536,deny)" \
+	  -U @COUCH_USER@ -G @COUCH_GROUP@ couchdb || true
+
+	svcprop -q couchdb && \
+		svccfg -s couchdb setprop method_context/project = "couchdb"
+;;
+DEINSTALL)
+	# Remove project
+	LANG=C projdel couchdb
+;;
+esac

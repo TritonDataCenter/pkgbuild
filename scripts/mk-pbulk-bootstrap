@@ -1,0 +1,103 @@
+#!/bin/bash -x
+#
+# Create an initial pbulk bootstrap.
+#
+# usage: mk-pbulk-bootstrap <pkgbuild>
+#
+
+if [ $# -ne 1 ]; then
+	echo "usage: $0 <pkgbuild>" 1>&2
+	exit 2
+else
+	pkgbuild=$1; shift
+fi
+
+# Load per-pkgbuild config
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+#
+# Defaults
+#
+cc=
+make_jobs=
+multiarch=
+prefer_pkgsrc="--prefer-pkgsrc=yes"
+gccbase=
+tardirs=".${PREFIX}"
+
+#
+# GCC selection.
+#
+case "${pkgbuild}" in
+upstream-*)
+	# The upstream builds need to rely on external GCC to avoid circular
+	# dependencies as we don't have the mk.conf handling for it.
+	gccbase="GCCBASE=${TOOLS_BASEDIR}/gcc49"
+	cc="${TOOLS_BASEDIR}/gcc49/bin/gcc"
+	;;
+*)
+	# All branches thus far use in-tree gcc47
+	cc="${TOOLS_BASEDIR}/gcc47/bin/gcc"
+	;;
+esac
+
+# Parallel make jobs
+case "${pkgbuild}" in
+upstream-*|trunk-*|2014Q[34]-*|201[5-9]Q*)
+	make_jobs="--make-jobs=8"
+	;;
+esac
+
+# PREFER_PKGSRC is the default, switch off for upstream builds, but not tools.
+case "${pkgbuild}" in
+upstream-trunk-tools)
+	;;
+upstream-*)
+	prefer_pkgsrc=
+	;;
+esac
+
+# Multiarch
+case "${pkgbuild}" in
+*-multiarch)
+	multiarch="--multiarch"
+	;;
+esac
+
+${CHROOT_CREATE} /chroot/bootstrap-pbulk-${pkgbuild}
+/usr/sbin/chroot /chroot/bootstrap-pbulk-${pkgbuild} \
+    /usr/bin/env -i /usr/bin/su - root -c "
+	set -e
+	PATH=/sbin:/usr/sbin:/usr/bin
+	cd /workspace/pkgsrc-${pkgbuild}/bootstrap
+	env ${gccbase} CC=${cc} RANLIB=${TOOLS_BASEDIR}/bin/granlib \
+	  ./bootstrap \
+	    --abi=${ABI} \
+	    ${multiarch} \
+	    ${make_jobs} \
+	    --prefix=${PREFIX} \
+	    ${prefer_pkgsrc} \
+	    --sysconfdir=${SYSCONFDIR} \
+	    --pkgdbdir=${PKGDBDIR} \
+	    --varbase=${VARBASE} \
+	    --mk-fragment=${PKGBUILD_BASEDIR}/conf/${pkgbuild}/mk-fragment.conf \
+	    --workdir=/tmp/pkgsrc-${pkgbuild}
+	rm -rf /tmp/pkgsrc-${pkgbuild}
+	cd /
+	touch ${PREFIX}/.dlj_license_accepted
+	if [ -n '${GPG_SIGN_AS}' ]; then
+		mkdir -p ${SYSCONFDIR}/gnupg
+		${TOOLS_BASEDIR}/bin/gpg2 --export ${GPG_SIGN_AS} \
+		    >${SYSCONFDIR}/gnupg/pkgsrc.gpg
+		cat >${SYSCONFDIR}/pkg_install.conf <<-EOF
+			GPG=${TOOLS_BASEDIR}/bin/gpg2
+			GPG_SIGN_AS=${GPG_SIGN_AS}
+			GPG_KEYRING_VERIFY=${SYSCONFDIR}/gnupg/pkgsrc.gpg
+		EOF
+	fi
+	gtar zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/bootstrap-${pkgbuild}.tar.gz \
+	    ${tardirs}
+"
+ret=$?
+${CHROOT_DELETE} /chroot/bootstrap-pbulk-${pkgbuild}
+exit ${ret}

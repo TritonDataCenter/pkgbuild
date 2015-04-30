@@ -1,0 +1,126 @@
+#!/bin/bash
+#
+# Delete a per-pkgbuild chroot area.
+#
+
+PATH=/sbin:/usr/sbin:/bin
+
+if [ $# -eq 1 ]; then
+	chrootdir="${1%%/}"; shift
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+#
+# For hysterical raisins we need to calculate pkgbuild based on the chroot
+# name, and cannot easily nor without great pain do it sensibly with an
+# argument or similar due to the places it is embedded (e.g. pbulk).
+#
+pkgbuild=$(basename ${chrootdir})
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+unmount()
+{
+	umount "$1" 2>/dev/null || true
+}
+
+unmount_and_rm()
+{
+	unmount "$1"
+	rmdir "$1" 2>/dev/null || true
+}
+
+if [ -d "${chrootdir}" ]; then
+
+	# Kill off processes first to avoid umount failures.
+	pids=$(fuser ${chrootdir} 2>/dev/null)
+	if [ -n "${pids}" ]; then
+		kill -9 ${pids} 2>/dev/null
+	fi
+
+	#
+	# Unmount nested mounts first.
+	#
+	unmount ${chrootdir}/dev/fd
+
+	#
+	# Overlay mounts which may be nested under system directories.
+	#
+	for mount in ${OVERLAY_MOUNTS}; do
+		dst=${mount#*=}
+		unmount ${chrootdir}${dst}
+	done
+
+	#
+	# System directories.
+	#
+	for dir in /dev /lib /sbin /usr /proc /system/lxproc; do
+		unmount_and_rm ${chrootdir}${dir}
+	done
+
+	#
+	# NFS mounts, carefully avoiding an rm -rf if the unmount fails for
+	# any reason.
+	#
+	for mount in ${NFS_MOUNTS}; do
+		dst=${mount#*=}
+		unmount ${chrootdir}${dst}
+		rmdir ${chrootdir}${dst}
+	done
+
+	#
+	# Loopback mounts.  Handle read-write mounts carefully just in case
+	# the umount fails.
+	#
+	for mount in ${LOFS_RO_MOUNTS}; do
+		dst=${mount#*=}
+		unmount_and_rm ${chrootdir}${dst}
+	done
+	for mount in ${LOFS_RW_MOUNTS}; do
+		dst=${mount#*=}
+		unmount ${chrootdir}${dst}
+		rmdir ${chrootdir}${dst}
+	done
+
+	#
+	# tmpfs mounts.
+	#
+	for mount in ${TMPFS_MOUNTS}; do
+		dst=${mount#*=}
+		unmount_and_rm ${chrootdir}${dst}
+	done
+
+	#
+	# This must be done carefully to avoid deleting anything in writeable
+	# mounts which may have failed to unmount.
+	#
+	rm -rf ${chrootdir}/{bin,etc,home,opt,root,system,var}
+
+	#
+	# pkgsrc leftovers
+	#
+	rm -rf ${chrootdir}/{news,media}
+
+	#
+	# chrootdir should now be empty, if not print what's left.
+	#
+	rmdir ${chrootdir}
+	if [ $? -ne 0 ]; then
+		echo "Leftovers:"
+		find ${chrootdir} -mount -fstype zfs
+	fi
+
+fi

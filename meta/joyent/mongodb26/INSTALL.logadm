@@ -1,0 +1,13 @@
+# $NetBSD$
+
+case ${STAGE} in
+DEINSTALL)
+	# Remove log rotation
+	logadm -r /var/log/mongodb/mongodb.log
+	;;
+
+POST-INSTALL)
+	# Add log rotation
+	logadm -C 5 -c -s 10k -z 1 -w /var/log/mongodb/mongodb.log
+	;;
+esac

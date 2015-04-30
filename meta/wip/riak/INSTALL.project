@@ -1,0 +1,12 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if ! projects -l riak >/dev/null 2>&1; then
+	  LANG=C projadd -U riak -G riak \
+	    -K "process.max-file-descriptor=(priv,262140,deny)" \
+	    -c "Riak default project" riak
+	fi
+
+;;
+esac

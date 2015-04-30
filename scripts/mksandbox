@@ -1,0 +1,188 @@
+#!/bin/bash
+#
+# Create a per-pkgbuild chroot area.
+#
+
+set -e
+
+PATH=/sbin:/usr/sbin:/bin
+
+if [ $# -eq 1 ]; then
+	chrootdir="${1%%/}"; shift
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+if [ -d "${chrootdir}" ]; then
+	echo "Chroot directory ${chrootdir} already exists.  Not recreating"
+	exit 0
+fi
+
+mkdir -p ${chrootdir}
+
+#
+# For hysterical raisins we need to calculate pkgbuild based on the chroot
+# name, and cannot easily nor without great pain do it sensibly with an
+# argument or similar due to the places it is embedded (e.g. pbulk).
+#
+pkgbuild=$(basename ${chrootdir})
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+#
+# Create system loopback mounts.
+#
+for dir in /dev /lib /sbin /usr; do
+	mkdir -p ${chrootdir}${dir}
+	mount -F lofs -r ${dir} ${chrootdir}${dir}
+done
+
+#
+# Create system special mounts.
+#
+mount -F fd fd ${chrootdir}/dev/fd
+
+mkdir -p ${chrootdir}/proc
+mount -F proc /proc ${chrootdir}/proc
+
+# /system/lxproc, if supported
+if [ -d /system/lxproc/1 ]; then
+	mkdir -p ${chrootdir}/system/lxproc
+	mount -F lxproc lxproc ${chrootdir}/system/lxproc
+fi
+
+#
+# Create any overlay mounts as required.
+#
+for mount in ${OVERLAY_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mount -F lofs -r ${src} ${chrootdir}${dst}
+done
+
+#
+# NFS mounts.
+#
+for mount in ${NFS_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount -F nfs ${src} ${chrootdir}${dst}
+done
+
+#
+# Read-only loopback mounts.
+#
+for mount in ${LOFS_RO_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	if [ -d ${src} ]; then
+		mkdir -p ${chrootdir}${dst}
+		mount -F lofs -r ${src} ${chrootdir}${dst}
+	fi
+done
+
+#
+# Read-write loopback mounts.
+#
+for mount in ${LOFS_RW_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	if [ -d ${src} ]; then
+		mkdir -p ${chrootdir}${dst}
+		mount -F lofs ${src} ${chrootdir}${dst}
+	fi
+done
+
+#
+# tmpfs mounts
+#
+for tmpdir in ${TMPFS_MOUNTS}; do
+	mkdir -p ${chrootdir}${tmpdir}
+	mount -F tmpfs swap ${chrootdir}${tmpdir}
+done
+
+#
+# Misc files/symlinks
+#
+
+# /bin
+ln -s ./usr/bin ${chrootdir}/bin
+
+# /tmp and /var/tmp, chmod separate in case they are mountpoints
+mkdir -p ${chrootdir}/tmp ${chrootdir}/var/tmp
+chmod 1777 ${chrootdir}/tmp ${chrootdir}/var/tmp
+
+# /root
+mkdir -p -m 0755 ${chrootdir}/root
+
+# /var/adm/utmpx for some feature tests
+mkdir -p -m 775 ${chrootdir}/var/adm
+touch ${chrootdir}/var/adm/utmpx
+chown root:sys ${chrootdir}/var/adm
+chown root:bin ${chrootdir}/var/adm/utmpx
+
+# /var/logadm for when logadm in INSTALL is involved
+mkdir -p -m 775 ${chrootdir}/var/logadm
+
+# /var/mail (for mutt's configure script)
+mkdir -p -m 1777 ${chrootdir}/var/mail
+
+# /var/spool/clientmqueue for smmsp
+mkdir -p -m 0770 ${chrootdir}/var/spool/clientmqueue
+chown smmsp:smmsp ${chrootdir}/var/spool/clientmqueue
+
+# /var/spool/locks for misc/xtend
+mkdir -p -m 0755 ${chrootdir}/var/spool/locks
+chown uucp:uucp ${chrootdir}/var/spool/locks
+
+# /etc
+mkdir -p ${chrootdir}/etc
+(cd /etc; gtar -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; gtar -xf -)
+
+# passwd/group files from the overlay to ensure unmodified copies
+cp ${PKGBUILD_BASEDIR}/overlay/{group,passwd,shadow} ${chrootdir}/etc/
+chown root:sys ${chrootdir}/etc/{group,passwd,shadow}
+chmod 0644 ${chrootdir}/etc/{group,passwd}
+chmod 0400 ${chrootdir}/etc/shadow
+
+# /home/pbulk only if user exists
+if id pbulk >/dev/null 2>&1; then
+	mkdir -p ${chrootdir}/home/pbulk
+	rsync -a ${PKGBUILD_BASEDIR}/homedir/ ${chrootdir}/home/pbulk/
+	chown -R pbulk:pbulk ${chrootdir}/home/pbulk
+	# Optional fixups to avoid warnings
+	chmod 0400 ${chrootdir}/home/pbulk/.ssh/*_rsa 2>/dev/null || true
+fi
+
+#
+# Unpack tools bootstrap and install required packages for building.
+#
+if [ -n "${TOOLS_BOOTSTRAP}" ]; then
+	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+		gtar -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
+		export PKG_SKIP_SMF=yes
+		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		else
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;http://${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		fi
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_GCC} gnupg2 gtexinfo libtool-base \
+		    nbpatch nodejs pbulk >/dev/null 2>&1"
+fi

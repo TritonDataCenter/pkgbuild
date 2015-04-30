@@ -1,0 +1,12 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Add log rotation
+	logadm -C 5 -c -s 10m -z 1 -w /var/log/redis/redis.log
+;;
+DEINSTALL)
+	# Remove log rotation
+	logadm -r /var/log/redis/redis.log
+;;
+esac

@@ -1,0 +1,11 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if ! projects -l www >/dev/null 2>&1; then
+	  LANG=C projadd -U www -G www \
+	    -K "process.max-file-descriptor=(basic,10000,deny)" \
+	    -c "Apache service" www
+	fi
+;;
+esac

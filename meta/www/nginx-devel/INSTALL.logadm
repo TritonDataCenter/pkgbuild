@@ -1,0 +1,12 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Add log rotation
+	logadm -C 5 -c -s 100m -z 1 -w /var/log/nginx/*.log
+;;
+DEINSTALL)
+	# Remove log rotation
+	logadm -r /var/log/nginx/*.log
+;;
+esac

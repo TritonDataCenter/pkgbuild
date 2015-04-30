@@ -1,0 +1,11 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	grep '^mysql' /etc/project >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		projid=`id -u mysql`
+		LANG=C projadd -p ${projid} -U mysql -G mysql -K "process.max-file-descriptor=(basic,15000,deny)" mysql
+	fi
+	;;
+esac

@@ -1,0 +1,69 @@
+#!/bin/sh
+
+# description: start/stop Clam AntiVirus daemon
+#
+# default: S/K41 0/K41 1/K41 2/S86
+
+. /lib/svc/share/smf_include.sh
+
+# account, under which clamfresh should run - it should be the sames
+# as specified in the configuration file for the 'User' keyword.
+# Default: clamav
+ACCOUNT=@SMF_USER@
+
+# clamav configuration file - important to be able to inform clamd/milter
+# about changes in the virus signature database
+CONF=@PKG_SYSCONFDIR@/clamd.conf
+
+#
+# no further changes should be required 
+#
+CLAMDIR=@PREFIX@
+
+if [ ! -f ${CONF} ]; then
+	echo "Missing config file $CONF"
+	exit $SMF_EXIT_ERR_CONFIG
+fi
+
+case "$1" in
+'start')
+	# we do a little bit more than usual, since freshclam will run,
+	# no matter, whether it can write to the dbdir nor whether conf
+	# is available.
+	echo "Starting Clam AntiVirus scan engine ..."
+	if [ ! -x ${CLAMDIR}/sbin/clamd ]; then	
+		echo "failed (unable to execute ${CLAMDIR}/sbin/clamd)."
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+	PIDS=`pgrep -x -u clamav -P 1 clamd`
+	if [ -n "$PIDS" ]; then
+		echo "is already running."
+		exit $SMF_EXIT_OK;
+	fi
+	SOCK=`egrep '^[[:space:]]*LocalSocket[[:space:]]' $CONF | awk '{ print $2 }'`
+	if [ -n "$SOCK" -a -r "$SOCK" ]; then
+		# otherwise this thing would not start :-(((
+		rm -f "$SOCK"
+		if [ $? -ne 0 ]; then
+			echo "Unable to remove $SOCK - as long as it exist, clamd would not start. So remove it manually, please."
+			exit $SMF_EXIT_ERR_PERM
+		fi
+	fi
+	${CLAMDIR}/sbin/clamd -c $CONF
+	if [ $? -ne 0 ]; then
+		echo "Failed starting ${CLAMDIR}/sbin/clamd"
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+	echo "done."
+	;;
+'stop')
+	echo "Stopping Clam AntiVirus scan engine ..."
+	pkill -9 -x -u $ACCOUNT clamd
+	echo "done."
+	;;
+*)
+	echo "Usage: $0 { start | stop }"
+	exit $SMF_EXIT_ERR_FATAL
+	;;
+esac
+exit $SMF_EXIT_OK

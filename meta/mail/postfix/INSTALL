@@ -1,0 +1,9 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Add Postfix to the mail group. This allows it to talk to the
+	# Courier authdaemon socket file out of the box
+	usermod -G mail postfix
+;;
+esac

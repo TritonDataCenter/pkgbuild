@@ -1,0 +1,11 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if ! projects -l tomcat >/dev/null 2>&1; then
+	  LANG=C projadd -U tomcat -G tomcat \
+	    -K "process.max-file-descriptor=(basic,10000,deny)" \
+	    -c "Tomcat service" tomcat
+	fi
+;;
+esac

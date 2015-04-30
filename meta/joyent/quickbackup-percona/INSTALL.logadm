@@ -1,0 +1,10 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	logadm -C 5 -c -s 10k -z 1 -w @VARBASE@/log/mysql/quickbackup-percona.log
+	;;
+DEINSTALL)
+	logadm -r @VARBASE@/log/mysql/quickbackup-percona.log
+	;;
+esac

@@ -1,0 +1,11 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if ! projects -l cassandra >/dev/null 2>&1; then
+	  LANG=C projadd -U cassandra -G cassandra \
+	    -K "process.max-file-descriptor=(basic,10000,deny)" \
+	    -c "Cassandra service" cassandra
+	fi
+;;
+esac

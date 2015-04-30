@@ -1,0 +1,14 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Create a project
+	LANG=C projadd -c "Elastic Search Service" \
+	  -K "process.max-file-descriptor=(basic,40000,deny)" \
+	  -U elastic -G elastic elastic || true
+;;
+DEINSTALL)
+	# Remove project
+	LANG=C projdel elastic
+;;
+esac

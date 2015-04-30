@@ -1,0 +1,12 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Add project
+	if ! projects -l redis >/dev/null 2>&1; then
+	  LANG=C projadd -U redis -G redis \
+	    -K "process.max-file-descriptor=(basic,65536,deny)" \
+	    -c "Redis service" redis
+	fi
+;;
+esac

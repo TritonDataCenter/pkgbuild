@@ -1,0 +1,20 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	# Optimize the config file
+	cat >>${PKG_PREFIX}/etc/mongod.conf <<EOF
+
+nohttpinterface = true
+directoryperdb = true
+EOF
+	# Add RBAC profile for mongodb user
+	grep mongodb /etc/user_attr >/dev/null ||\
+		cat >>/etc/user_attr <<EOF
+mongodb::::profiles=Service Management,IP Filter Management
+EOF
+
+	# Enable the default user (for Cron jobs)
+	passwd -N mongodb
+	;;
+esac

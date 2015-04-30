@@ -1,0 +1,258 @@
+#!/bin/bash
+
+PATH=/opt/local/bin:/opt/local/sbin:/usr/xpg4/bin:/usr/bin:/usr/sbin
+
+{
+site_name=${SMF_FMRI##*:}
+source /lib/svc/share/smf_include.sh
+source /opt/local/share/smf/lib/libsites.sh
+
+prefix=/opt/local
+master_user=admin
+master_group=staff
+
+default_drop=disable
+config_prop_names=(host user group root fpm port ini)
+}
+
+{
+### Initialize config
+
+# Get defaults and parse them into variables
+load_site_config ${site_name} default
+for prop in ${config_prop_names[@]} home index template nginx shell; do
+  set_from_config ${prop} default
+done
+
+# Get site config properties
+load_site_config ${site_name}
+
+# Parse host name and make it into an array
+set_from_config host
+: ${host:=${config_host_parsed:-${site_name}}}
+host=(${host//,/ })
+
+# Parse site user
+set_from_config user
+: ${user:=${config_user_parsed:-${default_user_parsed}}}
+[ ! "${user}" == 'admin' ] && default_group_parsed='${user}'
+
+# Parse site group
+set_from_config group
+: ${group:=${config_group_parsed:-$(eval echo ${default_group_parsed})}}
+
+# Set the user's home directory
+home=$(get_home ${user})
+: ${home:=${config_home_parsed:-$(eval echo ${default_home_parsed})}}
+
+# Parse the user's password and public key
+set_from_config password
+: ${password:=${config_password_parsed}}
+set_from_config key_type
+: ${key_type:=${config_key_type_parsed}}
+set_from_config key_body
+: ${key_body:=${config_key_body_parsed}}
+
+# Parse site document root
+set_from_config root
+: ${root:=${config_root_parsed:-$(eval echo ${default_root_parsed})}}
+
+# Get values for site php.ini file, FPM config file and port
+set_from_config ini
+set_from_config fpm
+set_from_config port
+
+# Parse site php.ini file location
+if [ "${config_ini_parsed}" == "auto" ]; then \
+  # Handle the special 'want my own' case as set by the 'site' script
+  config_ini_parsed='${home}/etc/php-${site_name}.ini'
+  pushback_props=(${pushback_props[@]} ini)
+fi
+: ${ini:=${config_ini_parsed}}
+if [ -n "${config_ini_parsed}" ] && [ -z "${config_fpm_parsed}" ]; then
+  # Separate FPM config if an explicit PHP ini specified
+  config_fpm_parsed='auto'
+fi
+
+# Parse site FPM config file location
+if [ "${config_fpm_parsed}" == "auto" ]; then
+  # Handle the special 'want my own' case as set by the 'site' script
+  config_fpm_parsed='${home}/etc/fpm-${site_name}.conf'
+  pushback_props=(${pushback_props[@]} fpm)
+fi
+: ${fpm:=${config_fpm_parsed}}
+if [ -n "${config_fpm_parsed}" ]; then
+  if [ -z "${config_port_parsed}" ]; then
+    # New port required if an explicit FPM config file specified
+    config_port_parsed='auto'
+  fi
+fi
+
+# Decide on the PHP SMF instance name
+: ${php_instance:=default}
+if [ -n "${fpm}" ]; then
+  php_instance=${site_name}
+fi
+
+# Parse and check site port
+if [ -n "${config_port_parsed}" ] && \
+  ([ "${config_port_parsed}" == "auto" ] || is_port_used ${config_port_parsed}); then
+  get_new_port
+  pushback_props=(${pushback_props[@]} port)
+fi
+# If no port set, we will try to piggy-back on the default FPM pool
+: ${port:=${config_port_parsed:-${default_port_parsed}}}
+
+# Parse various
+: ${template:=$(eval echo ${default_template_parsed})}
+: ${nginx:=$(eval echo ${default_nginx_parsed})}
+: ${shell:=$(eval echo ${default_shell_parsed})}
+
+# Handle the special 'drop' property (i.e. what to tear down on 'disable')
+set_from_config drop
+: ${drop:=${config_drop_parsed:-disable}}
+drop=(${drop//,/ })
+
+# End of config initialization
+}
+
+case ${SMF_METHOD} in
+### Act based on SMF method triggered
+start)
+
+  # Feed auto-sensed config back to the SMF
+  for prop in ${pushback_props[@]}; do
+      set_property ${prop} "$(eval eval echo \${${prop}})"
+  done
+
+  # User context
+  ! is_group_created ${group} && groupadd ${group}
+  ! is_user_created ${user} && \
+    useradd \
+      -g ${group} \
+      -d $(eval echo "${default_home_parsed}") \
+      -m -k /etc/skel \
+      -s "${shell}" \
+      ${user}
+  [ ! -d "${home}" ] && mkdir -p ${home} ${home}/web && chown -R ${user}:${group} ${home}
+  if [ -n "${key_type}" ] && [ -n "${key_body}" ]; then
+    [ ! -d "${home}/.ssh" ] && mkdir ${home}/.ssh
+    echo "${key_type} ${key_body} ${site_name}" >> ${home}/.ssh/authorized_keys
+    chmod 600 ${home}/.ssh/authorized_keys
+    chown -R ${user}:${group} ${home}/.ssh
+  fi
+  if [ -n "${password}" ]; then
+    echo "${user}:${password}" | changepass -e >/dev/null 2>&1
+    remove_property password
+    refresh_site
+  fi
+
+  # Directory context
+  if [ ! -d ${root} ]; then
+    mkdir -p ${root} && \
+      chown ${user}:${group} ${root}
+  fi
+
+  # Generate an index file if needed
+  if [ ! -f ${root}/${default_index_parsed} ]; then
+    generate_index ${root}/${default_index_parsed} ${template} && \
+      chown ${user}:${group} ${root}/${default_index_parsed}
+  fi
+
+  # PHP INI context
+  ini=$(eval "echo ${ini}")
+  if [ -n "${ini}" ] && [ "${php_instance}" != "default" ] && [ ! -s "${ini}" ]; then
+    php_dir=$(dirname ${ini})
+    [ ! -d ${php_dir} ] && mkdir -p ${php_dir}
+    cp -p $(eval echo ${default_ini_parsed}) ${ini}
+    [[ "${ini}" =~ ${home} ]] && chown -R ${user}:${group} ${php_dir}
+  fi
+
+  # PHP FPM context
+  fpm=$(eval "echo ${fpm}")
+  if [ -n "${fpm}" ] && [ ! -s "${fpm}" ]; then
+    fpm_dir=$(dirname ${fpm})
+    [ ! -d "${fpm_dir}" ] && mkdir -p ${fpm_dir}
+    [ ! -s "${fpm}" ] && generate_fpm ${fpm}
+    [[ "${fpm}" =~ ${home} ]] && chown -R ${user}:${group} ${fpm}
+  fi
+  svcprop -c -q php:${php_instance} || svccfg -s php add ${php_instance}
+  if [[ "$(svcs -Ho state php:${php_instance})" =~ ^(disabled|-)$ ]]; then
+    svcadm enable php:${php_instance}
+  else
+    svcadm refresh php:${php_instance}
+  fi
+
+  # Nginx context
+  [ -e ${nginx_vhost:=${nginx}/vhosts/${site_name}.conf}.disabled ] && \
+    [ ! -s ${nginx_vhost} ] && \
+    mv ${nginx_vhost}.disabled ${nginx_vhost}
+  if [ ! -s ${nginx_vhost} ]; then
+   [ "${site_name}" == "default" ] && default="yes"
+   generate_nginx ${nginx_vhost}
+  fi
+  [ "$(svcs -Ho state nginx)" != "disabled" ] && svcadm refresh nginx
+
+  exit 0
+;;
+
+stop)
+  [ "${drop[0]}" == "all" ] && drop=(user root fpm ini nginx)
+  while [ ${#drop[@]} -gt 0 ]; do
+    case ${drop[0]} in
+      user)
+        [ "$(get_home ${user})" != "$(get_home ${default_user_parsed})" ] && \
+        [ "$(get_home ${user})" != "$(get_home ${master_user})" ] && \
+          rm -rf ${home}
+        [ "${user}" != "${default_user_parsed}" ] && \
+        [ "${user}" != "${master_user}" ] && \
+          userdel ${user}
+        [ "${group}" != "${default_group_parsed}" ] && \
+        [ "${group}" != "${master_group}" ] && \
+          groupdel ${group}
+        drop=(${drop[@]#user})
+        ;;
+      key)
+        gsed -i'' "/ ${site_name}$/d" ${home}/.ssh/authorized_keys 2>/dev/null
+        ;;
+      root)
+        [ -d ${root} ] && \
+          [ $(svcprop -c -p config/root sites 2>/dev/null | \
+            grep -v sites:${site_name} | grep -c "${root}$") -eq 0 ] && \
+          rm -rf ${root}
+        drop=(${drop[@]#root})
+        ;;
+      fpm)
+        if [ -n "$(svcs -Ho state php:${site_name} 2>/dev/null)" ]; then
+          svcadm disable php:${site_name} && sleep 1
+          svccfg -s php delete ${site_name}
+          [ -f ${fpm} ] && rm ${fpm}
+        else
+          svcadm refresh php:${php_instance}
+        fi
+        drop=(${drop[@]#fpm})
+        ;;
+      ini)
+        [ -n "${ini}" ] && [ "${ini}" != "${default_ini_parsed}" ] && \
+          rm ${ini}
+        drop=(${drop[@]#ini})
+        ;;
+      nginx)
+        [ -e ${nginx}/vhosts/${site_name}.conf ] && \
+          rm ${nginx}/vhosts/${site_name}.conf && \
+          svcadm refresh nginx
+        drop=(${drop[@]#nginx})
+        ;;
+      *)
+        [ -f ${nginx}/vhosts/${site_name}.conf ] && \
+          mv ${nginx}/vhosts/${site_name}.conf ${nginx}/vhosts/${site_name}.conf.disabled
+        svcadm refresh nginx
+        drop=()
+        ;;
+    esac
+  done
+  [ -n "${config_drop_parsed}" ] && svccfg -s sites:${site_name} delprop config/drop
+  refresh_site
+  exit 0
+;;
+esac

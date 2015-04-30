@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<!DOCTYPE service_bundle SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
+<service_bundle type='manifest' name='export'>
+  <service name='pkgsrc/@SMF_NAME@' type='service' version='0'>
+    <create_default_instance enabled='false' />
+    <single_instance />
+    <dependency name='fs' grouping='require_all' restart_on='none' type='service'>
+      <service_fmri value='svc:/system/filesystem/local' />
+    </dependency>
+    <dependency name='net' grouping='require_all' restart_on='none' type='service'>
+      <service_fmri value='svc:/network/loopback' />
+    </dependency>
+    <dependency name='config' grouping='require_all' restart_on='none' type='path'>
+      <service_fmri value='file://@PKG_SYSCONFDIR@/my.cnf'/>
+    </dependency>
+    <method_context project='mysql' resource_pool=':default' working_directory='@MYSQL_DATADIR@'>
+      <method_credential user='@MYSQL_USER@' group='@MYSQL_GROUP@' limit_privileges=':default' privileges=':default' supp_groups=':default'/>
+      <method_environment>
+        <envvar name='LD_PRELOAD_32' value='/usr/lib/extendedFILE.so.1' />
+      </method_environment>
+    </method_context>
+    <exec_method name='start' type='method' exec='@PREFIX@/@SMF_METHOD_FILE@ start' timeout_seconds='18446744073709551615' />
+    <exec_method name='stop' type='method' exec='@PREFIX@/@SMF_METHOD_FILE@ stop' timeout_seconds='18446744073709551615' />
+    <stability value='Evolving' />
+    <template>
+      <common_name>
+        <loctext xml:lang='C'>MySQL Percona Server with XtraDB</loctext>
+      </common_name>
+      <documentation>
+        <doc_link name='percona.com' uri='http://www.percona.com/docs/wiki/percona-server:features:start' />
+      </documentation>
+    </template>
+  </service>
+</service_bundle>
