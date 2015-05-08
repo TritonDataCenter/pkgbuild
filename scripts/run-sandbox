@@ -66,8 +66,11 @@ else
 		BINPKG_SITES=	http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
 	EOF
 fi
-cat >${chrootdir}/root/.vimrc <<EOF
-syntax on
+cat >${chrootdir}/root/.curlrc <<-EOF
+	--capath ${TOOLS_BASEDIR}/etc/openssl/certs
+EOF
+cat >${chrootdir}/root/.vimrc <<-EOF
+	syntax on
 EOF
 ed ${chrootdir}${PREFIX}/etc/mk.conf >/dev/null <<-EOF
 	/^.include/
@@ -82,7 +85,8 @@ EOF
 echo "done."
 echo -n "Installing additional tools packages..."
 chroot ${chrootdir} /bin/bash -c "
-	${TOOLS_BASEDIR}/sbin/pkg_add git-base grep pkgdiff pkglint >/dev/null 2>&1
+	${TOOLS_BASEDIR}/sbin/pkg_add git-base grep mozilla-rootcerts pkgdiff pkglint >/dev/null 2>&1
+	${TOOLS_BASEDIR}/sbin/mozilla-rootcerts install >/dev/null 2>&1 || true
 "
 echo "done."
 echo "Logging in.  WARNING: On logout the sandbox will be destroyed."
