@@ -69,7 +69,7 @@ ${CHROOT_CREATE} /chroot/bootstrap-pbulk-${pkgbuild}
     /usr/bin/env -i /usr/bin/su - root -c "
 	set -e
 	PATH=/sbin:/usr/sbin:/usr/bin
-	cd /workspace/pkgsrc-${pkgbuild}/bootstrap
+	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap
 	env ${gccbase} CC=${cc} RANLIB=${TOOLS_BASEDIR}/bin/granlib \
 	  ./bootstrap \
 	    --abi=${ABI} \
