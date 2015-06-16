@@ -22,6 +22,7 @@ cc=
 make_jobs=
 multiarch=
 prefer_pkgsrc="--prefer-pkgsrc=yes"
+ranlib="RANLIB=${TOOLS_BASEDIR}/bin/granlib"
 gccbase=
 tardirs=".${PREFIX}"
 
@@ -35,6 +36,11 @@ upstream-*)
 	gccbase="GCCBASE=${TOOLS_BASEDIR}/gcc49"
 	cc="${TOOLS_BASEDIR}/gcc49/bin/gcc"
 	;;
+osx-*)
+	# Just use builtin tools.
+	cc=cc
+	ranlib=
+	;;
 *)
 	# All branches thus far use in-tree gcc47
 	cc="${TOOLS_BASEDIR}/gcc47/bin/gcc"
@@ -45,6 +51,9 @@ esac
 case "${pkgbuild}" in
 upstream-*|trunk-*|2014Q[34]-*|201[5-9]Q*)
 	make_jobs="--make-jobs=8"
+	;;
+osx-*)
+	make_jobs="--make-jobs=4"
 	;;
 esac
 
@@ -64,13 +73,13 @@ case "${pkgbuild}" in
 	;;
 esac
 
-${CHROOT_CREATE} /chroot/bootstrap-pbulk-${pkgbuild}
-/usr/sbin/chroot /chroot/bootstrap-pbulk-${pkgbuild} \
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
+/usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} \
     /usr/bin/env -i /usr/bin/su - root -c "
 	set -e
-	PATH=/sbin:/usr/sbin:/usr/bin
+	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap
-	env ${gccbase} CC=${cc} RANLIB=${TOOLS_BASEDIR}/bin/granlib \
+	env ${gccbase} CC=${cc} ${ranlib} \
 	  ./bootstrap \
 	    --abi=${ABI} \
 	    ${multiarch} \
@@ -95,9 +104,10 @@ ${CHROOT_CREATE} /chroot/bootstrap-pbulk-${pkgbuild}
 			GPG_KEYRING_VERIFY=${SYSCONFDIR}/gnupg/pkgsrc.gpg
 		EOF
 	fi
-	gtar zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/bootstrap-${pkgbuild}.tar.gz \
+	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk
+	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz \
 	    ${tardirs}
 "
 ret=$?
-${CHROOT_DELETE} /chroot/bootstrap-pbulk-${pkgbuild}
+${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 exit ${ret}

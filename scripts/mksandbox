@@ -5,7 +5,7 @@
 
 set -e
 
-PATH=/sbin:/usr/sbin:/bin
+PATH=/sbin:/usr/sbin:/usr/bin
 
 if [ $# -eq 1 ]; then
 	chrootdir="${1%%/}"; shift
@@ -150,7 +150,7 @@ chown uucp:uucp ${chrootdir}/var/spool/locks
 
 # /etc
 mkdir -p ${chrootdir}/etc
-(cd /etc; gtar -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; gtar -xf -)
+(cd /etc; ${TAR} -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; ${TAR} -xf -)
 
 # passwd/group files from the overlay to ensure unmodified copies
 cp ${PKGBUILD_BASEDIR}/overlay/{group,passwd,shadow} ${chrootdir}/etc/
@@ -172,7 +172,7 @@ fi
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
-		gtar -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
+		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
 		export PKG_SKIP_SMF=yes
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF

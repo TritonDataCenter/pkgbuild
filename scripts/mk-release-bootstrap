@@ -13,12 +13,14 @@ fi
 # Load per-pkgbuild config
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
-${CHROOT_CREATE} /chroot/bootstrap-${pkgbuild}
-chroot /chroot/bootstrap-${pkgbuild} /bin/bash -c "
-	gtar -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/bootstrap-${pkgbuild}.tar.gz -C /
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
+chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
+	PATH=${PBULK_PATH}
+	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz -C /
+	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
 	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All ${PREFIX}/sbin/pkg_add \
 	    mozilla-rootcerts pkg_alternatives pkgin pkgsrc-gnupg-keys
-	PATH=${PREFIX}/sbin:\$PATH ${PREFIX}/sbin/mozilla-rootcerts install >/dev/null
+	${PREFIX}/sbin/mozilla-rootcerts install >/dev/null
 	rm -f ${PREFIX}/.dlj_license_accepted
 	ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 		1,5d
@@ -71,7 +73,7 @@ chroot /chroot/bootstrap-${pkgbuild} /bin/bash -c "
 			q
 		EOF
 	fi
-	(cd /; gtar -zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap/bootstrap-${pkgbuild}.tar.gz .${PREFIX})
+	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
 "
-${CHROOT_DELETE} /chroot/bootstrap-${pkgbuild}
-echo "Created ${LOCAL_PACKAGE_BASEDIR}/bootstrap/bootstrap-${pkgbuild}.tar.gz"
+${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
+echo "Created ${LOCAL_PACKAGE_BASEDIR}/bootstrap/${BOOTSTRAP_KIT}.tar.gz"

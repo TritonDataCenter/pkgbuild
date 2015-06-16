@@ -8,8 +8,6 @@ else
 	exit 2
 fi
 
-chrootdir="/chroot/dev-${pkgbuild}"
-
 #
 # Load per-pkgbuild config
 #
@@ -18,6 +16,8 @@ if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
 	exit 1
 fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+chrootdir="${CHROOT_BASEDIR}/dev-${PKGBUILD}"
 
 #
 # Check that we're on the correct set of hosts for the build
@@ -36,14 +36,12 @@ fi
 
 echo -n "Creating ${chrootdir}..."
 ${CHROOT_CREATE} ${chrootdir} && echo "done."
-echo -n "Unpacking bootstrap-${pkgbuild} into ${chrootdir}..."
-gtar -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/bootstrap-${pkgbuild}.tar.gz \
+echo -n "Unpacking ${BOOTSTRAP_KIT} into ${chrootdir}..."
+${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz \
     -C ${chrootdir} && echo "done."
 echo -n "Setting environment..."
 cat >${chrootdir}/root/.bash_profile <<EOF
-PATH="${PREFIX}/sbin:${PREFIX}/bin"
-PATH="\${PATH}:/usr/sbin:/usr/bin:/sbin"
-PATH="\${PATH}:${TOOLS_BASEDIR}/sbin:${TOOLS_BASEDIR}/bin"
+PATH="${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}:${TOOLS_BASEDIR}/sbin:${TOOLS_BASEDIR}/bin"
 PS1="\[\033[0m\]\[\033[1;36m\]-\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;32m\]\u\[\033[0m\]\[\033[1;35m\]@\[\033[0m\]\[\033[0;32m\]\h\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\](\[\033[0m\]\[\033[0;31m\]${chrootdir}\[\033[0m\]\[\033[1;36m\])-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;33m\]\w\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]-\n\[\033[0m\]\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[0;37m\]> \[\033[0m\]"
 export DEPENDS_TARGET=bin-install
 export PKG_SKIP_SMF=yes

@@ -1,0 +1,75 @@
+#!/bin/bash
+#
+# Unmount a shadowed sandbox
+#
+
+if [ $# -eq 1 ]; then
+	chrootdir=$1; shift
+        chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+if [ ! -d ${chrootdir} ]; then
+	echo "ERROR: ${chrootdir} does not exist." >&2
+	exit 1
+fi
+
+# Calculate pkgbuild based on chroot name.
+pkgbuild=${chrootname}
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+i=1
+while true; do
+	pids=
+	for pid in $(fuser ${chrootdir} 2>/dev/null)
+	do
+		# Skip mount processes
+		ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
+		if [ $? -eq 0 ]; then 
+			continue
+		fi
+		if [ -n "${pids}" ]; then
+			pids="${pids} ${pid}"
+		else
+			pids="${pid}"
+		fi
+	done
+	if [ -n "${pids}" ]; then
+		echo "WARNING: $(uname -n) ${chrootdir} still in use (pids=${pids}, retry=$i)..."
+		i=$((i + 1))
+		sleep 5
+	else
+		break
+	fi
+done
+
+while true; do
+	for mount in ${NFS_MOUNTS}; do
+		dst=${mount#*=}
+		umount -f ${chrootdir}${dst} 2>/dev/null
+		rmdir ${chrootdir}${dst} 2>/dev/null
+	done
+	umount -f ${chrootdir}/dev 2>/dev/null
+	hdiutil detach ${chrootdir} -force >/dev/null
+	hdiutil info | grep ${chrootdir} >/dev/null || break
+	echo "WARN: $(uname -n) ${chrootdir} did not break"
+	hdiutil info | grep ${chrootdir}
+	sleep 3
+done
+
+rm -f ${SHADOW_BASEDIR}/${chrootname}.shadow
+rm -rf ${chrootdir}
