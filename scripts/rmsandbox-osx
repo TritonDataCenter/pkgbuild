@@ -57,19 +57,18 @@ while true; do
 	fi
 done
 
-while true; do
-	for mount in ${NFS_MOUNTS}; do
-		dst=${mount#*=}
-		umount -f ${chrootdir}${dst} 2>/dev/null
-		rmdir ${chrootdir}${dst} 2>/dev/null
-	done
-	umount -f ${chrootdir}/dev 2>/dev/null
-	hdiutil detach ${chrootdir} -force >/dev/null
-	hdiutil info | grep ${chrootdir} >/dev/null || break
-	echo "WARN: $(uname -n) ${chrootdir} did not break"
-	hdiutil info | grep ${chrootdir}
-	sleep 3
+for mount in ${NFS_MOUNTS}; do
+	dst=${mount#*=}
+	umount -f ${chrootdir}${dst} 2>/dev/null
+	rmdir ${chrootdir}${dst} 2>/dev/null
 done
 
+umount -f ${chrootdir}/dev 2>/dev/null
+
+read chrootdev <${SHADOW_BASEDIR}/${chrootname}.dev
+diskutil unmountDisk force ${chrootdev} >/dev/null
+hdiutil eject ${chrootdev} >/dev/null
+
+rm -f ${SHADOW_BASEDIR}/${chrootname}.dev
 rm -f ${SHADOW_BASEDIR}/${chrootname}.shadow
 rm -rf ${chrootdir}

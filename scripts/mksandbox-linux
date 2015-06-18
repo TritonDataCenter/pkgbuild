@@ -1,0 +1,75 @@
+#!/bin/bash
+#
+# Create a shadowed sandbox from the root file system ready for builds.
+#
+
+if [ $# -eq 1 ]; then
+	chrootdir=$1; shift
+	chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+while true; do
+	if [ -d ${chrootdir} ]; then
+		sleep 5
+	else
+		break
+	fi
+done
+
+# Calculate pkgbuild based on chroot name.
+pkgbuild=${chrootname}
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+# We use an external mksandbox from pkgsrc to avoid bootstrap issues.
+/usr/local/bin/mksandbox --without-pkgsrc \
+    --rodirs=${LOFS_RO_MOUNTS} \
+    --rwdirs=${LOFS_RW_MOUNTS} \
+    ${chrootdir} >/dev/null 2>&1
+
+mkdir -p ${chrootdir}/root
+rsync -a /root/.ssh ${chrootdir}/root/
+
+mkdir -p ${chrootdir}/home/pbulk
+chown pbulk:pbulk ${chrootdir}/home/pbulk
+
+#
+# Unpack tools bootstrap and install required packages for building.
+#
+if [ -n "${TOOLS_BOOTSTRAP}" ]; then
+	case "${chrootname}" in
+	*-build-*|*-scan-*)
+		tools_packages="nbpatch pbulk"
+		;;
+	*)
+		tools_packages="gnupg2 nbpatch nodejs pbulk"
+		;;
+	esac
+	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
+		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		else
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;http://${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		fi
+		${TOOLS_BASEDIR}/sbin/pkg_add ${tools_packages} >/dev/null 2>&1
+	"
+fi

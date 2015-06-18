@@ -40,7 +40,7 @@ echo -n "Unpacking ${BOOTSTRAP_KIT} into ${chrootdir}..."
 ${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz \
     -C ${chrootdir} && echo "done."
 echo -n "Setting environment..."
-cat >${chrootdir}/root/.bash_profile <<EOF
+cat >${chrootdir}${ROOT_HOMEDIR}/.bash_profile <<EOF
 PATH="${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}:${TOOLS_BASEDIR}/sbin:${TOOLS_BASEDIR}/bin"
 PS1="\[\033[0m\]\[\033[1;36m\]-\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;32m\]\u\[\033[0m\]\[\033[1;35m\]@\[\033[0m\]\[\033[0;32m\]\h\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\](\[\033[0m\]\[\033[0;31m\]${chrootdir}\[\033[0m\]\[\033[1;36m\])-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;33m\]\w\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]-\n\[\033[0m\]\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[0;37m\]> \[\033[0m\]"
 export DEPENDS_TARGET=bin-install
@@ -64,10 +64,10 @@ else
 		BINPKG_SITES=	http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
 	EOF
 fi
-cat >${chrootdir}/root/.curlrc <<-EOF
+cat >${chrootdir}${ROOT_HOMEDIR}/.curlrc <<-EOF
 	--capath ${TOOLS_BASEDIR}/etc/openssl/certs
 EOF
-cat >${chrootdir}/root/.vimrc <<-EOF
+cat >${chrootdir}${ROOT_HOMEDIR}/.vimrc <<-EOF
 	syntax on
 EOF
 ed ${chrootdir}${PREFIX}/etc/mk.conf >/dev/null <<-EOF

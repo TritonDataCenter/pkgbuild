@@ -15,77 +15,19 @@ fi
 # Load per-pkgbuild config
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
-#
-# Defaults
-#
-cc=
-make_jobs=
-multiarch=
-prefer_pkgsrc="--prefer-pkgsrc=yes"
-ranlib="RANLIB=${TOOLS_BASEDIR}/bin/granlib"
-gccbase=
-tardirs=".${PREFIX}"
-
-#
-# GCC selection.
-#
-case "${pkgbuild}" in
-upstream-*)
-	# The upstream builds need to rely on external GCC to avoid circular
-	# dependencies as we don't have the mk.conf handling for it.
-	gccbase="GCCBASE=${TOOLS_BASEDIR}/gcc49"
-	cc="${TOOLS_BASEDIR}/gcc49/bin/gcc"
-	;;
-osx-*)
-	# Just use builtin tools.
-	cc=cc
-	ranlib=
-	;;
-*)
-	# All branches thus far use in-tree gcc47
-	cc="${TOOLS_BASEDIR}/gcc47/bin/gcc"
-	;;
-esac
-
-# Parallel make jobs
-case "${pkgbuild}" in
-upstream-*|trunk-*|2014Q[34]-*|201[5-9]Q*)
-	make_jobs="--make-jobs=8"
-	;;
-osx-*)
-	make_jobs="--make-jobs=4"
-	;;
-esac
-
-# PREFER_PKGSRC is the default, switch off for upstream builds, but not tools.
-case "${pkgbuild}" in
-upstream-trunk-tools)
-	;;
-upstream-*)
-	prefer_pkgsrc=
-	;;
-esac
-
-# Multiarch
-case "${pkgbuild}" in
-*-multiarch)
-	multiarch="--multiarch"
-	;;
-esac
-
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} \
-    /usr/bin/env -i /usr/bin/su - root -c "
+    ${ENV} -i ${SU} - root -c "
 	set -e
 	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap
-	env ${gccbase} CC=${cc} ${ranlib} \
+	${ENV} ${BOOTSTRAP_ENV} \
 	  ./bootstrap \
 	    --abi=${ABI} \
-	    ${multiarch} \
-	    ${make_jobs} \
+	    ${BOOTSTRAP_ARG_JOBS} \
+	    ${BOOTSTRAP_ARG_MULTIARCH} \
+	    ${BOOTSTRAP_ARG_PREFER} \
 	    --prefix=${PREFIX} \
-	    ${prefer_pkgsrc} \
 	    --sysconfdir=${SYSCONFDIR} \
 	    --pkgdbdir=${PKGDBDIR} \
 	    --varbase=${VARBASE} \
@@ -105,8 +47,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 		EOF
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk
-	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz \
-	    ${tardirs}
+	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
 "
 ret=$?
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}

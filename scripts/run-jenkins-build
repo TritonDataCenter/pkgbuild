@@ -38,7 +38,7 @@ if [ -d ${CHROOT_BASEDIR}/${JOB_NAME} ]; then
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/${JOB_NAME}
 fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/${JOB_NAME}
-/usr/sbin/chroot ${CHROOT_BASEDIR}/${JOB_NAME} /usr/bin/env -i /usr/bin/su - root -c "
+/usr/sbin/chroot ${CHROOT_BASEDIR}/${JOB_NAME} ${ENV} -i ${SU} - root -c "
 	PATH=${PBULK_PATH}
 	${PBULK_BASEDIR}/bin/bulkbuild ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
 "

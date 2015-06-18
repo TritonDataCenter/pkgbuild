@@ -1,0 +1,21 @@
+#!/bin/bash
+
+chrootdir=`echo $1 | sed -e 's,/$,,'`; shift
+
+if [ -d ${chrootdir} ]; then
+	#
+	# Try a few times to unmount the sandbox, just in case there are any
+	# lingering processes holding mounts open.
+	#
+	for retry in 1 2 3
+	do
+		${chrootdir}/sandbox umount >/dev/null 2>&1
+		mounts=`mount -v | grep "${chrootdir}/"`
+		if [ -z "${mounts}" ]; then
+			rm -rf ${chrootdir}
+			break
+		else
+			sleep 5
+		fi
+	done
+fi

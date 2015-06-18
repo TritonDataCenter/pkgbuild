@@ -39,9 +39,11 @@ fi
 # Figure out where / is mounted
 rootdev=$(df -l / | awk '$NF == "/" {print $1}')
 
-hdiutil attach -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
-    -mountpoint ${chrootdir} -nobrowse -noverify -private \
-    ${rootdev} >/dev/null
+chrootdev=$(hdiutil attach \
+    -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
+    -mountpoint ${chrootdir} \
+    -nobrowse -noverify -private ${rootdev} | awk '{print $1}')
+echo ${chrootdev} >${SHADOW_BASEDIR}/${chrootname}.dev
 
 mount_devfs devfs ${chrootdir}/dev
 
@@ -51,13 +53,6 @@ for mount in ${NFS_MOUNTS}; do
 	mkdir -p ${chrootdir}${dst}
 	mount_nfs ${src} ${chrootdir}${dst}
 done
-
-if [ -w ${chrootdir}/var/root/.profile ]; then
-	cat >${chrootdir}/var/root/.profile <<-EOF
-	export PS1="[\u@\h (${chrootdir}) \w]# "
-	export PATH="${PBULK_PATH}"
-	EOF
-fi
 
 #
 # Unpack tools bootstrap and install required packages for building.

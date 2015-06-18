@@ -56,6 +56,7 @@ PKG_OPTIONS.sysbench=		mysql pgsql
 # options to revert defaults or mutually-exclusive selections.
 #
 PKG_OPTIONS.clamav+=		milter
+PKG_OPTIONS.dovecot+=		gssapi
 PKG_OPTIONS.exim+=		spf
 PKG_OPTIONS.ffmpeg+=		tools	# XXX: make default in pkgsrc
 PKG_OPTIONS.freeradius+=	-bdb	# no db4 support

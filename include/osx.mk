@@ -12,29 +12,13 @@
 NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 .endif
 
+# OSX does not perform name resolution in a chroot, so we need to hardcode
+# entries in /etc/hosts and override the default site.
+MASTER_SITE_OVERRIDE=	http://ftp.NetBSD.org/pub/pkgsrc/distfiles/
+
 # Fix GCC builds
 MULTILIB_SUPPORTED=	no
 
 # Use XQuartz
 X11_TYPE=	native
 X11BASE=	/opt/X11
-
-#
-# Package options.  Tune for desktop experience.
-#
-PKG_DEFAULT_OPTIONS+=	ncursesw
-PKG_DEFAULT_OPTIONS+=	unicode utf8
-PKG_DEFAULT_OPTIONS+=	bzip bzip2 lzo
-PKG_DEFAULT_OPTIONS+=	curl geoip inet6 libssh2
-PKG_DEFAULT_OPTIONS+=	sasl ssl tls
-PKG_DEFAULT_OPTIONS+=	bdb db4 ldap
-PKG_DEFAULT_OPTIONS+=	unixodbc memcached
-PKG_DEFAULT_OPTIONS+=	gif jpeg png rsvg
-PKG_DEFAULT_OPTIONS+=	faad lame mad vorbis
-PKG_DEFAULT_OPTIONS+=	dv opencore-amr theora x264 xvid
-#
-PKG_DEFAULT_OPTIONS+=	mutt-hcache mutt-smtp tokyocabinet
-#
-PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
-PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl spdy gzip
-PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses
