@@ -1,0 +1,75 @@
+#!/bin/bash -x
+#
+# Script to initiate a Jenkins build.
+#
+# The variables JOB_NAME and PKGBUILD are supplied by the Jenkins environment.
+#
+# This script is for tools builds, where we have to build packages
+# manually as we do not have any pbulk infrastructure available.
+#
+
+# Load per-pkgbuild config
+. $(dirname $0)/../conf/${PKGBUILD}/pkgbuild.conf
+
+#
+# Execute optional pre-build script
+#
+if [ -n "${JENKINS_PRE_BUILD}" ]; then
+	. ${JENKINS_PRE_BUILD}
+fi
+
+#
+# Sanity check that build hosts are running the expected platform image.
+#
+if [ -n "${PI_REQUIRED}" ]; then
+	for ip in ${PBULK_CLIENTS}; do
+		hostpi=$(ssh ${ip} "uname -v")
+		if [ "${hostpi}" != "${PI_REQUIRED}" ]; then
+			echo "ERROR: ${ip} failed platform check, ${hostpi} != ${PI_REQUIRED}"
+			exit 1
+		fi
+	done
+fi
+
+#
+# Perform the build.
+#
+if [ -d ${CHROOT_BASEDIR}/${JOB_NAME} ]; then
+	# Assume that previous job was aborted and try to remove it.
+	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
+	sleep 10
+	${CHROOT_DELETE} ${CHROOT_BASEDIR}/${JOB_NAME}
+fi
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/${JOB_NAME}
+/usr/sbin/chroot ${CHROOT_BASEDIR}/${JOB_NAME} ${ENV} -i ${SU} - root -c "
+	PATH=${PBULK_PATH}
+	set -ex
+	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz -C /
+	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
+	export DEPENDS_TARGET=bin-install
+	cd ${PKGSRC_BASEDIR}/pkgsrc-${PKGBUILD}
+	for pkg in ${TOOLS_BUILD_PACKAGES}; do
+		(cd \${pkg} && bmake bin-install)
+	done
+"
+#
+# Save the return code of the bulkbuild run so we can correctly report
+# success/failure back to Jenkins.
+#
+ret=$?
+
+#
+# Execute optional post-build script
+#
+if [ -n "${JENKINS_POST_BUILD}" ]; then
+	. ${JENKINS_POST_BUILD}
+	ret=$((ret+$?))
+fi
+
+if [ $ret -ne 0 ]; then
+	# Wait a little while on failure to ensure the chroot is unused.
+	sleep 10
+fi
+
+${CHROOT_DELETE} ${CHROOT_BASEDIR}/${JOB_NAME}
+exit ${ret}
