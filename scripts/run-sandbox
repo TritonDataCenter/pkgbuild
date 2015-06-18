@@ -70,7 +70,7 @@ EOF
 cat >${chrootdir}${ROOT_HOMEDIR}/.vimrc <<-EOF
 	syntax on
 EOF
-ed ${chrootdir}${PREFIX}/etc/mk.conf >/dev/null <<-EOF
+ed ${chrootdir}${PREFIX}/etc/mk.conf >/dev/null 2>&1 <<-EOF
 	/^.include/
 	s,/shared/pbulk,${PKGBUILD_BASEDIR},
 	a
