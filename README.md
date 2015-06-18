@@ -5,6 +5,16 @@ create Joyent's SmartOS packages.  The aim here is to provide users with
 everything they may need to replicate those packages, and help them to create
 a build environment for developing packages.
 
+### Getting Started
+
+The easiest way to get going is with the pkgdev image.
+
+```
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgdev-15.1.0.json
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgdev-15.1.0.zfs.gz
+imgadm install -m pkgdev-15.1.0.json -f pkgdev-15.1.0.zfs.gz
+```
+
 ### Layout
 
 #### `conf/`
