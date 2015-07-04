@@ -5,6 +5,7 @@
 # Packages which currently hang the build
 .if !empty(PKGPATH:Mgraphics/rayshade) \
  || !empty(PKGPATH:Mlang/jamvm) \
+ || !empty(PKGPATH:Mmail/elm) \
  || !empty(PKGPATH:Mnews/knews) \
  || !empty(PKGPATH:Mshells/pdksh) \
  || !empty(PKGPATH:Mtextproc/ja-groff) \

@@ -39,6 +39,7 @@ fi
 # Figure out where / is mounted
 rootdev=$(df -l / | awk '$NF == "/" {print $1}')
 
+mkdir -p ${SHADOW_BASEDIR}
 chrootdev=$(hdiutil attach \
     -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
     -mountpoint ${chrootdir} \
@@ -53,6 +54,25 @@ for mount in ${NFS_MOUNTS}; do
 	mkdir -p ${chrootdir}${dst}
 	mount_nfs ${src} ${chrootdir}${dst}
 done
+
+for mount in ${TMPFS_MOUNTS}; do
+	mnt=${mount%=*}
+	size=${mount#*=}
+	rm -f ${chrootdir}${mnt}
+	mkdir -p ${chrootdir}${mnt}
+	rd=$(hdid -nomount ram://$((${size} * 1024 * 2)))
+	newfs_hfs -s ${rd} >/dev/null
+	mount_hfs -o noatime,nobrowse ${rd} ${chrootdir}${mnt}
+	echo ${rd} >>${SHADOW_BASEDIR}/${chrootname}.ramfs
+done
+
+# If /tmp is a tmpfs, we want to share it with /var/tmp
+chmod 1777 ${chrootdir}/tmp
+rm -rf ${chrootdir}/var/tmp
+ln -s /tmp ${chrootdir}/var/tmp
+
+# XXX
+chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
 
 #
 # Unpack tools bootstrap and install required packages for building.

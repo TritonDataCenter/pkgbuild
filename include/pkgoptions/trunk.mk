@@ -11,7 +11,7 @@ PKG_DEFAULT_OPTIONS=		dtrace pam pcre readline ncursesw
 #
 #  - options grouped by function
 #
-PKG_DEFAULT_OPTIONS+=		unicode utf8
+PKG_DEFAULT_OPTIONS+=		unicode utf8 wide-curses
 PKG_DEFAULT_OPTIONS+=		bzip bzip2 lzo
 PKG_DEFAULT_OPTIONS+=		curl geoip inet6 libssh2
 PKG_DEFAULT_OPTIONS+=		sasl ssl tls
@@ -80,7 +80,7 @@ PKG_OPTIONS.scmgit+=		-python
 PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
-PKG_OPTIONS.weechat+=		lua perl python ruby wide-curses
+PKG_OPTIONS.weechat+=		lua perl python ruby
 
 #
 # Global version defaults

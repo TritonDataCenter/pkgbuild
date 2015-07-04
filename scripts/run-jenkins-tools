@@ -49,7 +49,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/${JOB_NAME}
 	export DEPENDS_TARGET=bin-install
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${PKGBUILD}
 	for pkg in ${TOOLS_BUILD_PACKAGES}; do
-		(cd \${pkg} && bmake bin-install)
+		(cd \${pkg} && (bmake bin-install; bmake clean clean-depends))
 	done
 "
 #

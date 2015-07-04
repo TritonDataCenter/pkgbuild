@@ -42,6 +42,7 @@ SMF_PROJECT.mysql-cluster=	mysql
 SMF_PROJECT.mysql-server=	mysql
 SMF_PROJECT.percona-cluster=	mysql
 SMF_PROJECT.percona-server=	mysql
+SMF_PROJECT.mariadb-server=	mysql
 SMF_PROJECT_ATTRS.mysql=	process.max-file-descriptor=(basic,15000,deny)
 SMF_PROJECT_DESC.mysql=		MySQL service
 SMF_PROJECT_GROUP.mysql=	${MYSQL_GROUP}

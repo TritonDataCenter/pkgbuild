@@ -39,7 +39,7 @@ while true; do
 	do
 		# Skip mount processes
 		ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
-		if [ $? -eq 0 ]; then 
+		if [ $? -eq 0 ]; then
 			continue
 		fi
 		if [ -n "${pids}" ]; then
@@ -63,6 +63,18 @@ for mount in ${NFS_MOUNTS}; do
 	rmdir ${chrootdir}${dst} 2>/dev/null
 done
 
+for mount in ${TMPFS_MOUNTS}; do
+	mnt=${mount%=*}
+	umount -f ${chrootdir}${mnt} 2>/dev/null
+	rmdir ${chrootdir}${mnt} 2>/dev/null
+done
+
+if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
+	while read disk; do
+		hdiutil eject ${disk} >/dev/null
+	done < ${SHADOW_BASEDIR}/${chrootname}.ramfs
+fi
+
 umount -f ${chrootdir}/dev 2>/dev/null
 
 read chrootdev <${SHADOW_BASEDIR}/${chrootname}.dev
@@ -70,5 +82,6 @@ diskutil unmountDisk force ${chrootdev} >/dev/null
 hdiutil eject ${chrootdev} >/dev/null
 
 rm -f ${SHADOW_BASEDIR}/${chrootname}.dev
+rm -f ${SHADOW_BASEDIR}/${chrootname}.ramfs
 rm -f ${SHADOW_BASEDIR}/${chrootname}.shadow
 rm -rf ${chrootdir}

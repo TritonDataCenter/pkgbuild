@@ -15,7 +15,7 @@
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <hudson.plugins.buildblocker.BuildBlockerProperty plugin="build-blocker-plugin@1.6">
       <useBuildBlocker>true</useBuildBlocker>
-      <blockingJobs></blockingJobs>
+      <blockingJobs>^pkgsrc-osx-trunk-pbulk64$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11">
       <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>

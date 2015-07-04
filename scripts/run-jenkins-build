@@ -40,7 +40,8 @@ fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/${JOB_NAME}
 /usr/sbin/chroot ${CHROOT_BASEDIR}/${JOB_NAME} ${ENV} -i ${SU} - root -c "
 	PATH=${PBULK_PATH}
-	${PBULK_BASEDIR}/bin/bulkbuild ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
+	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
+	    ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
 "
 #
 # Save the return code of the bulkbuild run so we can correctly report
