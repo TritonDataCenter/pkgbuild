@@ -32,6 +32,7 @@ fi
 #
 # Perform the build.
 #
+mkdir -p ${CHROOT_BASEDIR}
 if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	# Assume that previous job was aborted and try to remove it.
 	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
