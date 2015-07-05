@@ -56,7 +56,7 @@ ret=$?
 #
 if [ $ret -ne 0 ]; then
 	matchfile=/tmp/no-match-$$.txt
-	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile}
+	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile} 2>/dev/null
 	if [ -s ${matchfile} ]; then
 		cat ${matchfile}
 		(
