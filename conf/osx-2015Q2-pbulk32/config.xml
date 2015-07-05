@@ -76,7 +76,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 export PKGBUILD=osx-2015Q2-pbulk32
-/shared/pkgbuild/scripts/run-jenkins-tools</command>
+/data/pkgbuild/scripts/run-jenkins-tools</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

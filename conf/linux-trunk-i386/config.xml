@@ -79,7 +79,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 export PKGBUILD=linux-trunk-i386
-/shared/pkgbuild/scripts/run-jenkins-build</command>
+/data/pkgbuild/scripts/run-jenkins-build</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

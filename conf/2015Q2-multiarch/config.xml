@@ -76,7 +76,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 export PKGBUILD=2015Q2-multiarch
-/shared/pkgbuild/scripts/run-jenkins-build</command>
+/data/pkgbuild/scripts/run-jenkins-build</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
