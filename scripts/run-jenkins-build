@@ -2,7 +2,8 @@
 #
 # Script to initiate a Jenkins build.
 #
-# The variables JOB_NAME and PKGBUILD are supplied by the Jenkins environment.
+# The variable PKGBUILD is required to be set, and is normally set
+# by the Jenkins environment.
 #
 
 # Load per-pkgbuild config
@@ -31,14 +32,14 @@ fi
 #
 # Perform the build.
 #
-if [ -d ${CHROOT_BASEDIR}/${JOB_NAME} ]; then
+if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	# Assume that previous job was aborted and try to remove it.
 	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
 	sleep 10
-	${CHROOT_DELETE} ${CHROOT_BASEDIR}/${JOB_NAME}
+	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
-${CHROOT_CREATE} ${CHROOT_BASEDIR}/${JOB_NAME}
-/usr/sbin/chroot ${CHROOT_BASEDIR}/${JOB_NAME} ${ENV} -i ${SU} - root -c "
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+/usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${ENV} -i ${SU} - root -c "
 	PATH=${PBULK_PATH}
 	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
 	    ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
@@ -80,5 +81,5 @@ if [ $ret -ne 0 ]; then
 	sleep 10
 fi
 
-${CHROOT_DELETE} ${CHROOT_BASEDIR}/${JOB_NAME}
+${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 exit ${ret}
