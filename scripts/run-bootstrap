@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Pre-build script to set up hosts for pbulk.
+#
+
+#
+# Handle client setup.  If WORKSPACE is set (likely from Jenkins) then
+# rsync the pkgsrc area.
+#
+if [ -n "${WORKSPACE}" ]; then
+	rsync_cmd="rsync -aq --delete --exclude=.git --exclude=.nfs*"
+	for m in ${PBULK_CLIENTS}; do
+		${rsync_cmd} ${WORKSPACE} ${m}:${PKGSRC_BASEDIR}/ &
+	done
+	wait
+	if [ $? -ne 0 ]; then
+		echo "ERROR: Unable to rsync workspace to all machines."
+		exit 1
+	fi
+fi
+
+#
+# Build the bootstrap if necessary.
+#
+if ! ${PKGBUILD_BASEDIR}/scripts/check-pbulk-bootstrap ${PKGBUILD}; then
+	${PKGBUILD_BASEDIR}/scripts/mk-pbulk-bootstrap ${PKGBUILD}
+	if [ $? -ne 0 ]; then
+		exit 1
+	fi
+fi
