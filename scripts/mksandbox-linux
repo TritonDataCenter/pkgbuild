@@ -35,8 +35,9 @@ if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
 fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
-# We use an external mksandbox from pkgsrc to avoid bootstrap issues.
-/usr/local/bin/mksandbox --without-pkgsrc \
+# We use the pkgtools/mksandbox script on Linux as it works well.
+${PKGBUILD_BASEDIR}/scripts/mksandbox-pkgsrc \
+    --without-pkgsrc \
     --rodirs=${LOFS_RO_MOUNTS} \
     --rwdirs=${LOFS_RW_MOUNTS} \
     ${chrootdir} >/dev/null 2>&1
