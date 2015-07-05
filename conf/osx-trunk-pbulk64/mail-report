@@ -18,8 +18,8 @@ recipients=$1; shift
 message=$(cat)
 sendmail=/usr/sbin/sendmail
 
-${sendmail} -oi -r"pkgsrc@example.com" -t <<EOF
-From: Bulk Build User <pkgsrc@example.com>
+${sendmail} -oi -r"root" -t <<EOF
+From: Bulk Build User <root>
 To: ${recipients}
 Subject: ${subject}
 
