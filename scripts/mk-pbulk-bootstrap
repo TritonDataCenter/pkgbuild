@@ -17,11 +17,11 @@ fi
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} \
-    ${ENV} -i ${SU} - root -c "
+    env -i ${SU} - root -c "
 	set -e
 	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap
-	${ENV} ${BOOTSTRAP_ENV} \
+	env ${BOOTSTRAP_ENV} \
 	  ./bootstrap \
 	    --abi=${ABI} \
 	    ${BOOTSTRAP_ARG_JOBS} \

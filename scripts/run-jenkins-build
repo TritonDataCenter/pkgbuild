@@ -40,7 +40,7 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-/usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${ENV} -i ${SU} - root -c "
+/usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} env -i ${SU} - root -c "
 	PATH=${PBULK_PATH}
 	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
 	    ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
