@@ -43,7 +43,8 @@ mkdir -p ${SHADOW_BASEDIR}
 chrootdev=$(hdiutil attach \
     -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
     -mountpoint ${chrootdir} \
-    -nobrowse -noverify -private ${rootdev} | awk '{print $1}')
+    -noverify -private ${rootdev} | awk '{print $1}')
+mount -u -o noatime,nobrowse,nodev,nosuid ${chrootdev}
 echo ${chrootdev} >${SHADOW_BASEDIR}/${chrootname}.dev
 
 mount_devfs devfs ${chrootdir}/dev
