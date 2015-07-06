@@ -16,8 +16,7 @@ fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
-/usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} \
-    env -i ${SU} - root -c "
+env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - root -c "
 	set -e
 	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap

@@ -43,7 +43,7 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-/usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} env -i ${SU} - root -c "
+env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
 	PATH=${PBULK_PATH}
 	set -ex
 	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz -C /
