@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Pre-build script to set up hosts for pbulk.
 #
 
 #
-# Handle client setup.  If WORKSPACE is set (likely from Jenkins) then
-# rsync the pkgsrc area.
+# Handle client setup.  If WORKSPACE is set from Jenkins then rsync the
+# pkgsrc area to all clients.
 #
 if [ -n "${WORKSPACE}" ]; then
 	rsync_cmd="rsync -aq --delete --exclude=.git --exclude=.nfs*"
