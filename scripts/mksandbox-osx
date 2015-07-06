@@ -72,6 +72,14 @@ chmod 1777 ${chrootdir}/tmp
 rm -rf ${chrootdir}/var/tmp
 ln -s /tmp ${chrootdir}/var/tmp
 
+# Symlink various high-IO VARBASE things to tmpfs.
+rm -rf ${chrootdir}/var/cache
+mkdir -p ${chrootdir}/tmp/var_cache
+ln -s /tmp/var_cache ${chrootdir}/var/cache
+rm -rf ${chrootdir}/var/lib/texmf
+mkdir -p ${chrootdir}/tmp/var_lib_texmf
+ln -s /tmp/var_lib_texmf ${chrootdir}/var/lib/texmf
+
 # XXX
 chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
 
