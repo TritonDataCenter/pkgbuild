@@ -90,11 +90,14 @@ chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	case "${chrootname}" in
-	*-build-*|*-scan-*)
+	*-build-*)
+		tools_packages="gnupg nbpatch pbulk"
+		;;
+	*-scan-*)
 		tools_packages="nbpatch pbulk"
 		;;
 	*)
-		tools_packages="gnupg2 nbpatch nodejs pbulk"
+		tools_packages="gnupg nbpatch nodejs pbulk"
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
