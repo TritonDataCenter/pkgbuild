@@ -31,24 +31,53 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 		#
 
 		.
-		/^PKGSRC_COMPILER/
-		a
-		GCC_REQD=		${GCC_REQD}
-		USE_PKGSRC_GCC=		yes
-		USE_PKGSRC_GCC_RUNTIME=	yes
-		.
-		/^PREFER_PKGSRC/
-		a
-		PREFER_NATIVE=		${PREFER_NATIVE}
-		.
-		/^PREFER_NATIVE=	*$/d
+		/^.include/
+		?^.?+1
+		.,$ d
 		g/^TOOLS_PLATFORM/s/\?//
 		g/^TOOLS_PLATFORM/s/		/	/
-		/^.include/-1
-		.,$ d
 		w
 		q
 	EOF
+	# This is only required for legacy builds and could be removed.
+	if [ -n '${PREFER_NATIVE}' -a '${PREFER_NATIVE}' != 'yes' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			/^PREFER_PKGSRC/
+			i
+			PREFER_NATIVE=		${PREFER_NATIVE}
+			.
+			w
+			q
+		EOF
+	fi
+	# SmartOS specific, keyed on GCC_REQD being set.
+	if [ -n '${GCC_REQD}' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			/^PKGSRC_COMPILER/
+			a
+			GCC_REQD=		${GCC_REQD}
+			USE_PKGSRC_GCC=		yes
+			USE_PKGSRC_GCC_RUNTIME=	yes
+			.
+			w
+			q
+		EOF
+	# XXX: Assume OSX for now, tidy later.
+	else
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			a
+
+			FETCH_USING=		curl
+			MULTILIB_SUPPORTED=	no
+			X11_TYPE=		native
+			X11BASE=		/opt/X11
+
+			.
+			r ${PKGBUILD_BASEDIR}/include/pkgoptions/osx.mk
+			w
+			q
+		EOF
+	fi
 	cat >>${SYSCONFDIR}/pkgin/repositories.conf <<-EOF
 		#
 		http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
@@ -73,6 +102,7 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 			q
 		EOF
 	fi
+	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/bootstrap
 	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
 "
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
