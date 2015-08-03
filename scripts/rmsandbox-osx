@@ -4,7 +4,7 @@
 #
 
 if [ $# -eq 1 ]; then
-	chrootdir=$1; shift
+	chrootdir="${1%%/}"; shift
         chrootname=$(basename ${chrootdir})
 else
 	echo "usage: $0 <chrootdir>" >&2
