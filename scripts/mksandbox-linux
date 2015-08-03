@@ -25,6 +25,8 @@ pkgbuild=${pkgbuild#bootstrap-pbulk-}
 pkgbuild=${pkgbuild#bootstrap-}
 pkgbuild=${pkgbuild#dev-}
 pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build}
+pkgbuild=${pkgbuild%%-scan}
 pkgbuild=${pkgbuild%%-build-*}
 pkgbuild=${pkgbuild%%-scan-*}
 
