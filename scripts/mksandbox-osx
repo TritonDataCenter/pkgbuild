@@ -91,6 +91,11 @@ ln -s /tmp/folders ${chrootdir}/var/folders
 
 # XXX
 chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
+tmpdir=$(su - pbulk -c 'dirname $(getconf DARWIN_USER_TEMP_DIR) | sed -e "s,^/var,/tmp,"')
+if [ -n "${tmpdir}" ]; then
+	mkdir -p ${chrootdir}${tmpdir}
+	chown pbulk:staff ${chrootdir}${tmpdir}
+fi
 
 #
 # Enable DNS resolution via an mDNSResponder socket
