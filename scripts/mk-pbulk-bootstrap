@@ -37,10 +37,10 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	touch ${PREFIX}/.dlj_license_accepted
 	if [ -n '${GPG_SIGN_AS}' ]; then
 		mkdir -p ${SYSCONFDIR}/gnupg
-		${TOOLS_BASEDIR}/bin/gpg2 --export ${GPG_SIGN_AS} \
+		${GPG} --export ${GPG_SIGN_AS} \
 		    >${SYSCONFDIR}/gnupg/pkgsrc.gpg
 		cat >${SYSCONFDIR}/pkg_install.conf <<-EOF
-			GPG=${TOOLS_BASEDIR}/bin/gpg2
+			GPG=${GPG}
 			GPG_SIGN_AS=${GPG_SIGN_AS}
 			GPG_KEYRING_VERIFY=${SYSCONFDIR}/gnupg/pkgsrc.gpg
 		EOF
