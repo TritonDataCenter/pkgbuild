@@ -174,7 +174,7 @@ fi
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
-		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
+		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		export PKG_SKIP_SMF=yes
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF

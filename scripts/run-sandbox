@@ -37,7 +37,7 @@ fi
 echo -n "Creating ${chrootdir}..."
 ${CHROOT_CREATE} ${chrootdir} && echo "done."
 echo -n "Unpacking ${BOOTSTRAP_KIT} into ${chrootdir}..."
-${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz \
+${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz \
     -C ${chrootdir} && echo "done."
 echo -n "Setting environment..."
 cat >${chrootdir}${ROOT_HOMEDIR}/.bash_profile <<EOF

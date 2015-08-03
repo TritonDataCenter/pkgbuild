@@ -18,7 +18,7 @@ fi
 # bootstrap to ensure we pick up any changes, currently every 7 days.
 #
 rv=0
-BOOTGZ="${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz"
+BOOTGZ="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz"
 if [ ! -f "${BOOTGZ}" ]; then
 	rv=1
 else

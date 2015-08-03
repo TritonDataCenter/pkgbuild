@@ -16,7 +16,7 @@ fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	PATH=${PBULK_PATH}
-	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${BOOTSTRAP_KIT}.tar.gz -C /
+	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
 	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All ${PREFIX}/sbin/pkg_add \
 	    mozilla-rootcerts pkg_alternatives pkgin pkgsrc-gnupg-keys
@@ -102,8 +102,8 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 			q
 		EOF
 	fi
-	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/bootstrap
-	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/bootstrap/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
+	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
+	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
 "
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
-echo "Created ${LOCAL_PACKAGE_BASEDIR}/bootstrap/${BOOTSTRAP_KIT}.tar.gz"
+echo "Created ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz"

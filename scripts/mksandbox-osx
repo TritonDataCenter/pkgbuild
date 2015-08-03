@@ -158,7 +158,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
-		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/bootstrap-pbulk/${TOOLS_BOOTSTRAP} -C /
+		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
