@@ -90,6 +90,51 @@ ln -s /tmp/var_lib_texmf ${chrootdir}/var/lib/texmf
 chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
 
 #
+# Enable DNS resolution via an mDNSResponder socket
+#
+PB="/usr/libexec/PlistBuddy"
+PLIST="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
+ENTRY="Sockets:Listeners"
+while true; do
+	# Ensure only one process updates the plist at a time.
+	mkdir /tmp/updatemdns.lock 2>/dev/null
+	if [ $? -ne 0 ]; then
+		sleep 1
+		continue
+	fi
+	# Ensure Sockets:Listeners is an array.
+	${PB} -c "Print ${ENTRY}:0" ${PLIST} >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		tmplist="/tmp/import.$$.plist"
+		${PB} -x -c "Print ${ENTRY}" ${PLIST} >${tmplist}
+		${PB} -c "Delete ${ENTRY}" ${PLIST}
+		${PB} -c "Add ${ENTRY} array" ${PLIST}
+		${PB} -c "Add ${ENTRY}:0 dict" ${PLIST}
+		${PB} -c "Merge ${tmplist} ${ENTRY}:0" ${PLIST}
+		rm -f ${tmplist}
+	fi
+	addlist="/tmp/add.$$.plist"
+	cat >${addlist} <<-EOF
+	<array>
+		<dict>
+			<key>SockFamily</key>
+			<string>Unix</string>
+			<key>SockPathName</key>
+			<string>${chrootdir}/var/run/mDNSResponder</string>
+			<key>SockPathMode</key>
+			<integer>438</integer>
+		</dict>
+	</array>
+	EOF
+	${PB} -c "Merge ${addlist} ${ENTRY}" ${PLIST}
+	rm -f ${addlist}
+	launchctl unload ${PLIST}
+	launchctl load -w ${PLIST}
+	rm -rf /tmp/updatemdns.lock
+	break
+done
+
+#
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then

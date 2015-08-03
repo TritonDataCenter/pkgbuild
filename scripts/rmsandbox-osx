@@ -34,11 +34,44 @@ if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
 fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
+#
+# Disable name resolution via mDNSResponder
+#
+PB="/usr/libexec/PlistBuddy"
+PLIST="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
+ENTRY="Sockets:Listeners"
+while true; do
+	# Ensure only one process updates the plist at a time.
+	mkdir /tmp/updatemdns.lock 2>/dev/null
+	if [ $? -ne 0 ]; then
+		sleep 1
+		continue
+	fi
+	entries=$(${PB} -c "Print ${ENTRY}" ${PLIST} 2>/dev/null | grep -c " Dict {")
+	e=0
+	while [ ${e} -lt ${entries} ]; do
+		sockpath="$(${PB} -c 'Print '${ENTRY}':'$e':SockPathName' ${PLIST})"
+		if [ "${sockpath}" = "${chrootdir}/var/run/mDNSResponder" ]; then
+			break
+		fi
+		e=$((e + 1))
+	done
+	if [ ${e} -ne ${entries} ]; then
+		${PB} -c "Delete ${ENTRY}:${e}" ${PLIST}
+		launchctl unload ${PLIST}
+		launchctl load -w ${PLIST}
+	fi
+	rm -rf /tmp/updatemdns.lock
+	break
+done
+
+#
+# Wait for processes inside the chroot.
+#
 i=1
 while true; do
 	pids=
-	for pid in $(fuser ${chrootdir} 2>/dev/null)
-	do
+	for pid in $(fuser ${chrootdir} 2>/dev/null); do
 		# Skip mount processes
 		ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
 		if [ $? -eq 0 ]; then
