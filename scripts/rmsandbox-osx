@@ -94,14 +94,35 @@ done
 
 for mount in ${NFS_MOUNTS}; do
 	dst=${mount#*=}
-	umount -f ${chrootdir}${dst} 2>/dev/null
-	rmdir ${chrootdir}${dst} 2>/dev/null
+	while true; do
+		[ -d ${chrootdir}${dst} ] || break
+		umount -f ${chrootdir}${dst} 2>/dev/null
+		# We can't use rmdir for postfix as after unmounting we will
+		# see the original shadowed copy of the root file system, in
+		# which case we simply leave it for the final rm -rf.
+		if [[ ${dst} =~ "/var/spool/postfix" ]]; then
+			break
+		else
+			rmdir ${chrootdir}${dst} 2>/dev/null && break
+			echo "Stuck unmounting ${chrootdir}${dst}, retrying..."
+			sleep 5
+		fi
+	done
 done
+
+case "$(uname -r)" in
+10.8.*)	unmountcmd="umount -f" ;;
+*)	unmountcmd="diskutil unmount" ;;
+esac
 
 for mount in ${TMPFS_MOUNTS}; do
 	mnt=${mount%=*}
-	umount -f ${chrootdir}${mnt} 2>/dev/null
-	rmdir ${chrootdir}${mnt} 2>/dev/null
+	while true; do
+		${unmountcmd} ${chrootdir}${mnt} >/dev/null
+		rmdir ${chrootdir}${mnt} 2>/dev/null && break
+		echo "Stuck unmounting ${chrootdir}${mnt}, retrying..."
+		sleep 5
+	done
 done
 
 if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
@@ -110,7 +131,7 @@ if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
 	done < ${SHADOW_BASEDIR}/${chrootname}.ramfs
 fi
 
-umount -f ${chrootdir}/dev 2>/dev/null
+${unmountcmd} ${chrootdir}/dev 2>/dev/null
 
 read chrootdev <${SHADOW_BASEDIR}/${chrootname}.dev
 diskutil unmountDisk force ${chrootdev} >/dev/null
