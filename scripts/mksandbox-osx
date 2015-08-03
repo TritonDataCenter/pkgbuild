@@ -40,6 +40,10 @@ fi
 
 # Figure out where / is mounted
 rootdev=$(df -l / | awk '$NF == "/" {print $1}')
+if [ -z "${rootdev}" ]; then
+	echo "Couldn't determine root device, are you inside a chroot?" >&2
+	exit 1
+fi
 
 mkdir -p ${SHADOW_BASEDIR}
 chrootdev=$(hdiutil attach \
