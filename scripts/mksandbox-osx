@@ -85,6 +85,9 @@ ln -s /tmp/var_cache ${chrootdir}/var/cache
 rm -rf ${chrootdir}/var/lib/texmf
 mkdir -p ${chrootdir}/tmp/var_lib_texmf
 ln -s /tmp/var_lib_texmf ${chrootdir}/var/lib/texmf
+mv ${chrootdir}/var/folders ${chrootdir}/var/folders.sys
+mkdir -p ${chrootdir}/tmp/folders
+ln -s /tmp/folders ${chrootdir}/var/folders
 
 # XXX
 chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
