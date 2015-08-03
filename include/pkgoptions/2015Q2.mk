@@ -50,6 +50,7 @@ PKG_OPTIONS.sphinx-search=	mysql pgsql
 PKG_OPTIONS.sqlrelay=		mysql sqlite
 PKG_OPTIONS.sympa=		mysql pgsql
 PKG_OPTIONS.sysbench=		mysql pgsql
+PKG_OPTIONS.ejabberd=		sqlite
 
 #
 # Package specific build options.  These should mostly be either negative
