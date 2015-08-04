@@ -182,7 +182,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 			EOF
 		else
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
-				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;http://${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
 			EOF
 		fi
 		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_GCC} gnupg2 gtexinfo libtool-base \

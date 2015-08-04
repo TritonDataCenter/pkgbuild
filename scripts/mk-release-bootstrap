@@ -80,7 +80,7 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	fi
 	cat >>${SYSCONFDIR}/pkgin/repositories.conf <<-EOF
 		#
-		http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
+		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
 	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 		/^GPG=/d
@@ -88,7 +88,7 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 		\$
 		a
 		GPG_KEYRING_PKGVULN=${PREFIX}/share/gnupg/pkgsrc-security.gpg
-		PKG_PATH=http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
+		PKG_PATH=${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 		.
 		w
 		q

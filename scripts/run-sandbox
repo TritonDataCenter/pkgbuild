@@ -55,13 +55,13 @@ if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 	EOF
 else
 	cat >>${chrootdir}${PREFIX}/etc/pkg_install.conf <<-EOF
-		PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/All;http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
+		PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
 	cat >>${chrootdir}${PREFIX}/etc/mk.conf  <<-EOF
 		#
 		# Additional settings for this build sandbox
 		#
-		BINPKG_SITES=	http://${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
+		BINPKG_SITES=	${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
 	EOF
 fi
 cat >${chrootdir}${ROOT_HOMEDIR}/.curlrc <<-EOF
