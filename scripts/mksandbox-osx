@@ -21,8 +21,7 @@ while true; do
 done
 
 # Calculate pkgbuild based on chroot name.
-pkgbuild=${chrootname}
-pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${chrootname#bootstrap-pbulk-}
 pkgbuild=${pkgbuild#bootstrap-}
 pkgbuild=${pkgbuild#dev-}
 pkgbuild=${pkgbuild#pkgsrc-}
@@ -146,15 +145,15 @@ done
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
+	tools_packages="nbpatch pbulk"
 	case "${chrootname}" in
-	*-build-*)
-		tools_packages="gnupg nbpatch pbulk"
+	*-build*)
+		tools_packages="${tools_packages} gnupg"
 		;;
-	*-scan-*)
-		tools_packages="nbpatch pbulk"
+	*-scan*)
 		;;
 	*)
-		tools_packages="gnupg nbpatch nodejs pbulk"
+		tools_packages="${tools_packages} gnupg nodejs"
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
