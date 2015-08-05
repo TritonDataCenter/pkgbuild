@@ -183,15 +183,15 @@ fi
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
-	tools_packages="nbpatch pbulk"
+	tools_packages="gtexinfo nbpatch pbulk"
 	case "${chrootname}" in
 	*-build*)
-		tools_packages="${tools_packages} gnupg2 gtexinfo libtool-base"
+		tools_packages="${tools_packages} gnupg2 libtool-base"
 		;;
 	*-scan*)
 		;;
 	*)
-		tools_packages="${tools_packages} gnupg2 gtexinfo libtool-base nodejs"
+		tools_packages="${tools_packages} gnupg2 libtool-base nodejs"
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
