@@ -9,7 +9,8 @@
 #   | ${mail} -s "${report_subject_prefix} ${platform} ${build_start_iso}" \
 #             ${report_recipients}
 #
-# and assume this will always be the case.
+# and assume this will always be the case.  The variables report_from_addr and
+# report_from_name are exported from pbulk.conf.
 #
 
 shift
@@ -18,8 +19,8 @@ recipients=$1; shift
 message=$(cat)
 sendmail=/usr/sbin/sendmail
 
-${sendmail} -oi -r"pkgsrc@example.com" -t <<EOF
-From: Bulk Build User <pkgsrc@example.com>
+${sendmail} -oi -r"${report_from_addr}" -t <<EOF
+From: ${report_from_name} <${report_from_addr}>
 To: ${recipients}
 Subject: ${subject}
 
