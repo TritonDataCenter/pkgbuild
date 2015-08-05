@@ -57,7 +57,7 @@ else
 	cat >>${chrootdir}${PREFIX}/etc/pkg_install.conf <<-EOF
 		PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
-	cat >>${chrootdir}${PREFIX}/etc/mk.conf  <<-EOF
+	cat >>${chrootdir}${PREFIX}/etc/mk.conf <<-EOF
 		#
 		# Additional settings for this build sandbox
 		#
@@ -70,15 +70,8 @@ EOF
 cat >${chrootdir}${ROOT_HOMEDIR}/.vimrc <<-EOF
 	syntax on
 EOF
-ed ${chrootdir}${PREFIX}/etc/mk.conf >/dev/null 2>&1 <<-EOF
-	/^.include/
-	s,/shared/pbulk,${PKGBUILD_BASEDIR},
-	a
-
-	MAKE_JOBS=		8
-	.
-	w
-	q
+cat >>${chrootdir}${PREFIX}/etc/mk.conf <<-EOF
+	MAKE_JOBS=	8
 EOF
 echo "done."
 echo -n "Installing additional tools packages..."

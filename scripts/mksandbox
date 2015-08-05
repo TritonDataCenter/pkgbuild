@@ -170,6 +170,16 @@ if id pbulk >/dev/null 2>&1; then
 fi
 
 #
+# Default PKGBUILD_BASEDIR is /shared/pbulk.  If we're using something
+# different then we need to provide a compat symlink for the hardcoded
+# .include path in the bootstrap mk.conf
+#
+if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
+	mkdir -p ${chrootdir}/shared
+	ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/shared/pbulk
+fi
+
+#
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
