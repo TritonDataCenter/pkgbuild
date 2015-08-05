@@ -6,8 +6,21 @@
 # by the Jenkins environment.
 #
 
+if [ -z "${PKGBUILD}" ]; then
+	echo "ERROR: Must set PKGBUILD in the environment" >&2
+	exit 2
+fi
+
+#
 # Load per-pkgbuild config
-. $(dirname $0)/../conf/${PKGBUILD}/pkgbuild.conf
+#
+pkgconf="$(dirname $0)/../conf/${PKGBUILD}/pkgbuild.conf"
+if [ -f ${pkgconf} ]; then
+	. ${pkgconf}
+else
+	echo "ERROR: Could not find ${pkgconf}" >&2
+	exit 1
+fi
 
 #
 # Execute optional pre-build script
