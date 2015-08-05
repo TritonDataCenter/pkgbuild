@@ -10,6 +10,7 @@
 if [ -n "${WORKSPACE}" ]; then
 	rsync_cmd="rsync -aq --delete --exclude=.git --exclude=.nfs*"
 	for m in ${PBULK_CLIENTS}; do
+		echo "Syncing workspace to ${m}:${PKGSRC_BASEDIR}/${WORKSPACE}..."
 		${rsync_cmd} ${WORKSPACE} ${m}:${PKGSRC_BASEDIR}/ &
 	done
 	wait
@@ -22,7 +23,9 @@ fi
 #
 # Build the bootstrap if necessary.
 #
+echo "Checking bootstrap..."
 if ! ${PKGBUILD_BASEDIR}/scripts/check-pbulk-bootstrap ${PKGBUILD}; then
+	echo "Building new bootstrap..."
 	${PKGBUILD_BASEDIR}/scripts/mk-pbulk-bootstrap ${PKGBUILD}
 	if [ $? -ne 0 ]; then
 		exit 1

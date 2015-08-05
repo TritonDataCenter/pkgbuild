@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Script to initiate a Jenkins build.
 #
@@ -39,9 +39,12 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	sleep 10
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
+echo "Creating ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
 	PATH=${PBULK_PATH}
+	echo 'Running bulkbuild${PBULK_RESTART:+-restart} using' \
+	    '${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf'
 	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
 	    ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
 "
@@ -82,5 +85,6 @@ if [ $ret -ne 0 ]; then
 	sleep 10
 fi
 
+echo "Removing ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 exit ${ret}

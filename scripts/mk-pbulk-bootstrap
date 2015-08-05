@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Create an initial pbulk bootstrap.
 #
@@ -17,7 +17,7 @@ fi
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - root -c "
-	set -e
+	set -ex
 	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${pkgbuild}/bootstrap
 	env ${BOOTSTRAP_ENV} \
