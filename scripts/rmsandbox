@@ -112,9 +112,17 @@ if [ -d "${chrootdir}" ]; then
 	rm -rf ${chrootdir}/{bin,etc,home,opt,root,system,var}
 
 	#
-	# pkgsrc leftovers
+	# pkgsrc leftovers.
 	#
 	rm -rf ${chrootdir}/{news,media}
+
+	#
+	# Compat symlink.
+	#
+	if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
+		rm ${chrootdir}/shared/pbulk
+		rmdir ${chrootdir}/shared
+	fi
 
 	#
 	# chrootdir should now be empty, if not print what's left.
