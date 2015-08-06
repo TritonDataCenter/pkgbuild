@@ -104,6 +104,13 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
 	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
+	if [ -n '${GPG_SIGN_AS}' ]; then
+		${GPG} --armor --sign --detach \
+		    ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz
+	fi
 "
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 echo "Created ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz"
+if [ -n "${GPG_SIGN_AS}" ]; then
+	echo "Created ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz.asc"
+fi

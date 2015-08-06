@@ -147,7 +147,7 @@ done
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	tools_packages="nbpatch pbulk"
 	case "${chrootname}" in
-	*-build*)
+	*-build*|*-bootstrap*)
 		tools_packages="${tools_packages} gnupg"
 		;;
 	*-scan*)
