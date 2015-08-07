@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Script executed from pbulk client-clean to clean up the chroot prior to each
+# build starting.  Sourced from a script which has 'set -e' so ensure commands
+# return true.
+#
+
+
+#
+# Clean out any files in /tmp owned by pbulk.  Use -maxdepth to avoid files
+# under /var/folders (which we symlink to /tmp) such as the xcode xcrun_db.
+#
+find /tmp -user pbulk -maxdepth 1 -exec rm -rf -- {} + || true
