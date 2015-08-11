@@ -96,7 +96,7 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	if [ -n '${GPG_SIGN_AS}' ]; then
 		ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 			a
-			VERIFIED_INSTALLATION=trusted
+			VERIFIED_INSTALLATION=always
 			.
 			w
 			q
