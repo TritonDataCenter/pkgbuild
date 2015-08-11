@@ -114,7 +114,7 @@ if [ -d "${chrootdir}" ]; then
 	#
 	# pkgsrc leftovers.
 	#
-	rm -rf ${chrootdir}/{news,media}
+	rm -rf ${chrootdir}/{emul,media,news}
 
 	#
 	# Compat symlink.
