@@ -23,3 +23,8 @@ MULTILIB_SUPPORTED=	no
 # Use XQuartz
 X11_TYPE=	native
 X11BASE=	/opt/X11
+
+# Native curl SIGBUS's when accessing HTTPS in a chroot.
+.if exists(${TOOLS_BASEDIR}/bin/curl)
+TOOLS_PATH.curl=	${TOOLS_BASEDIR}/bin/curl
+.endif

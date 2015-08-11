@@ -147,8 +147,11 @@ done
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	tools_packages="nbpatch pbulk"
 	case "${chrootname}" in
-	*-build*|*-bootstrap*)
+	*-bootstrap*)
 		tools_packages="${tools_packages} gnupg"
+		;;
+	*-build*)
+		tools_packages="${tools_packages} curl gnupg mozilla-rootcerts"
 		;;
 	*-scan*)
 		;;
@@ -168,5 +171,8 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 			EOF
 		fi
 		${TOOLS_BASEDIR}/sbin/pkg_add ${tools_packages} >/dev/null 2>&1
+		if ${TOOLS_BASEDIR}/sbin/pkg_info -qE mozilla-rootcerts; then
+			${TOOLS_BASEDIR}/sbin/mozilla-rootcerts install >/dev/null
+		fi
 	"
 fi
