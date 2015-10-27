@@ -1,11 +1,29 @@
 #!/bin/bash
 #
 
+usage()
+{
+	echo "usage: $0 [-f] <pkgbuild>" >&2
+	exit 2
+}
+
+force=false
+while getopts ":f" opt; do
+	case "${opt}" in
+	f)
+		force=true
+		;;
+	*)
+		usage
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
 if [ $# -eq 1 ]; then
 	pkgbuild=$1; shift
 else
-	echo "usage: $0 <pkgbuild>" >&2
-	exit 2
+	usage
 fi
 
 #
@@ -23,7 +41,7 @@ chrootdir="${CHROOT_BASEDIR}/dev-${PKGBUILD}"
 # Check that we're on the correct set of hosts for the build
 #
 if [ -n "${HOSTS_REQUIRED}" ]; then
-	if [[ ! "$(uname -n)" =~ "${HOSTS_REQUIRED}" ]]; then
+	if ! $force && [[ ! "$(uname -n)" =~ "${HOSTS_REQUIRED}" ]]; then
 		echo "You must use a host matching ${HOSTS_REQUIRED} for ${pkgbuild}" >&2
 		exit 1
 	fi
