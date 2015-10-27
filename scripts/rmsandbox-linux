@@ -1,6 +1,16 @@
 #!/bin/bash
 
-chrootdir=`echo $1 | sed -e 's,/$,,'`; shift
+if [ $# -eq 1 ]; then
+	chrootdir="${1%%/}"; shift
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+if [ "$(uname -s)" != "Linux" ]; then
+	echo "ERROR: Script is only suitable for Linux." >&2
+	exit 1
+fi
 
 if [ -d ${chrootdir} ]; then
 	#

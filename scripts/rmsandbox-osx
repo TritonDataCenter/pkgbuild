@@ -16,6 +16,11 @@ if [ ! -d ${chrootdir} ]; then
 	exit 1
 fi
 
+if [ "$(uname -s)" != "Darwin" ]; then
+        echo "ERROR: Script is only suitable for OSX." >&2
+        exit 1
+fi
+
 # Calculate pkgbuild based on chroot name.
 pkgbuild=${chrootname}
 pkgbuild=${pkgbuild#bootstrap-pbulk-}

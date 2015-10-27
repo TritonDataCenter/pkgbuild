@@ -11,6 +11,11 @@ else
 	exit 2
 fi
 
+if [ "$(uname -s)" != "Linux" ]; then
+        echo "ERROR: Script is only suitable for Linux." >&2
+        exit 1
+fi
+
 while true; do
 	if [ -d ${chrootdir} ]; then
 		sleep 5

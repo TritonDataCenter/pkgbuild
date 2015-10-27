@@ -11,6 +11,11 @@ else
 	exit 2
 fi
 
+if [ "$(uname -s)" != "Darwin" ]; then
+        echo "ERROR: Script is only suitable for OSX." >&2
+        exit 1
+fi
+
 while true; do
 	if [ -d ${chrootdir} ]; then
 		#echo "${chrootdir} already exists, retrying or ^C" >&2
