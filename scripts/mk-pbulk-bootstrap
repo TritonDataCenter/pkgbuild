@@ -56,5 +56,10 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
 "
 ret=$?
+if [ $ret -ne 0 -a -d ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}/tmp/pkgsrc-${pkgbuild} ]; then
+	echo "Saving failed bootstrap directory to /var/tmp/pkgsrc-${pkgbuild}-$$"
+	mv ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}/tmp/pkgsrc-${pkgbuild} \
+	    /var/tmp/pkgsrc-${pkgbuild}-$$
+fi
 ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
 exit ${ret}
