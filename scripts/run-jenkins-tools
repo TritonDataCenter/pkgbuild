@@ -51,9 +51,14 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
 	export DEPENDS_TARGET=bin-install
 	cd ${PKGSRC_BASEDIR}/pkgsrc-${PKGBUILD}
 	for pkg in ${TOOLS_BUILD_PACKAGES}; do
-		(cd \${pkg} && (bmake bin-install; bmake clean clean-depends))
+		(
+			cd \${pkg} &&
+			pkg_info -qE \$(bmake show-var VARNAME=PKGBASE) ||
+			(bmake bin-install; bmake clean clean-depends)
+		)
 	done
 "
+
 #
 # Save the return code of the bulkbuild run so we can correctly report
 # success/failure back to Jenkins.
