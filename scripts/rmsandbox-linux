@@ -13,12 +13,18 @@ if [ "$(uname -s)" != "Linux" ]; then
 fi
 
 if [ -d ${chrootdir} ]; then
+
+	# Kill off processes first to avoid umount failures.
+	pids=$(fuser ${chrootdir} 2>/dev/null)
+	if [ -n "${pids}" ]; then
+		kill -9 ${pids} 2>/dev/null
+	fi
+
 	#
-	# Try a few times to unmount the sandbox, just in case there are any
-	# lingering processes holding mounts open.
+	# Don't exit until all mounts are gone, if this hangs then at least
+	# we get a chance to look into why and fix it.
 	#
-	for retry in 1 2 3
-	do
+	while true; do
 		${chrootdir}/sandbox umount >/dev/null 2>&1
 		mounts=`mount -v | grep "${chrootdir}/"`
 		if [ -z "${mounts}" ]; then
