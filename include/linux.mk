@@ -9,6 +9,9 @@
 NOT_FOR_BULK_PLATFORM=	Linux-*-*
 .endif
 
+# Fix GCC builds
+MULTILIB_SUPPORTED=	no
+
 # Use native Xorg, except libXft (XXX: forgot why, upstream?).
 #PREFER_PKGSRC=	libXft
-X11_TYPE=	native
+X11_TYPE=	modular
