@@ -45,7 +45,6 @@ PKG_DEFAULT_OPTIONS+=		-ruby-build-ri-db
 #
 PKG_OPTIONS.django=		pgsql sqlite
 PKG_OPTIONS.dovecot=		sqlite
-PKG_OPTIONS.postfix=		sqlite
 PKG_OPTIONS.sphinx-search=	mysql pgsql
 PKG_OPTIONS.sqlrelay=		mysql sqlite
 PKG_OPTIONS.sympa=		mysql pgsql
@@ -87,14 +86,14 @@ PKG_OPTIONS.weechat+=		lua perl python ruby
 #
 # Global version defaults
 #
-LUA_VERSION_DEFAULT=		51
+LUA_VERSION_DEFAULT=		52
 MYSQL_VERSION_DEFAULT=		56
-PGSQL_VERSION_DEFAULT=		93
-PHP_VERSION_DEFAULT=		55
+PGSQL_VERSION_DEFAULT=		94
+PHP_VERSION_DEFAULT=		56
 PKG_APACHE_DEFAULT=		apache24
 PYTHON_VERSION_DEFAULT=		27
 RUBY_RAILS_DEFAULT=		32
-RUBY_VERSION_DEFAULT=		193
+RUBY_VERSION_DEFAULT=		200
 
 #
 # XXX: This doesn't really belong here, move somewhere more sensible
