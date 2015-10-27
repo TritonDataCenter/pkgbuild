@@ -14,7 +14,7 @@ fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
-chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
+/usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	PATH=${PBULK_PATH}
 	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
@@ -85,6 +85,7 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 		/^GPG=/d
 		/^GPG_SIGN_AS=/d
+		/^VERIFIED_INSTALLATION=/d
 		\$
 		a
 		GPG_KEYRING_PKGVULN=${PREFIX}/share/gnupg/pkgsrc-security.gpg
@@ -103,8 +104,12 @@ chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 		EOF
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
-	(cd /; ${TAR} -zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX})
+	mkdir -p ${VARBASE}/db/pkgin/cache
+	${TAR} -zc -C / --exclude '.fseventsd' --exclude '.metadata_never_index' \
+	    -f ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz \
+	    .${PREFIX} .${VARBASE}/db/pkgin/cache
 	if [ -n '${GPG_SIGN_AS}' ]; then
+		rm -f ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz.asc
 		${GPG} --armor --sign --detach \
 		    ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz
 	fi
