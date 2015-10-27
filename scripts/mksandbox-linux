@@ -64,7 +64,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 		tools_packages="nbpatch pbulk"
 		;;
 	*)
-		tools_packages="gnupg2 nbpatch nodejs pbulk"
+		tools_packages="nbpatch nodejs pbulk"
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "

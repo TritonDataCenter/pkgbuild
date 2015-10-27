@@ -185,10 +185,10 @@ fi
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	tools_packages="gtexinfo nbpatch pbulk"
 	case "${chrootname}" in
-	*-bootstrap*)
+	bootstrap*)
 		tools_packages="${tools_packages} gnupg2"
 		;;
-	*-build*)
+	*-build|*-build-[0-9]*)
 		tools_packages="${tools_packages} gnupg2 libtool-base"
 		;;
 	*-scan*)
