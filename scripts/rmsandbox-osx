@@ -43,9 +43,13 @@ fi
 # Disable name resolution via mDNSResponder
 #
 PB="/usr/libexec/PlistBuddy"
-PLIST="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
+PLIST="/var/run/com.apple.mDNSResponder.plist"
 ENTRY="Sockets:Listeners"
+
 while true; do
+	# No need to do anything if we're cleaning up after a reboot.
+	[ -f ${PLIST} ] || break
+
 	# Ensure only one process updates the plist at a time.
 	mkdir /tmp/updatemdns.lock 2>/dev/null
 	if [ $? -ne 0 ]; then
@@ -71,29 +75,13 @@ while true; do
 done
 
 #
-# Wait for processes inside the chroot.
+# Kill off processes inside the chroot.
 #
-i=1
-while true; do
-	pids=
-	for pid in $(fuser ${chrootdir} 2>/dev/null); do
-		# Skip mount processes
-		ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
-		if [ $? -eq 0 ]; then
-			continue
-		fi
-		if [ -n "${pids}" ]; then
-			pids="${pids} ${pid}"
-		else
-			pids="${pid}"
-		fi
-	done
-	if [ -n "${pids}" ]; then
-		echo "WARNING: $(uname -n) ${chrootdir} still in use (pids=${pids}, retry=$i)..."
-		i=$((i + 1))
-		sleep 5
-	else
-		break
+for pid in $(fuser ${chrootdir} 2>/dev/null); do
+	# Skip mount processes.  Disabling mds helps too.
+	ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
+	if [ $? -ne 0 ]; then
+		kill -9 ${pid}
 	fi
 done
 
@@ -123,6 +111,9 @@ esac
 for mount in ${TMPFS_MOUNTS}; do
 	mnt=${mount%=*}
 	while true; do
+		[ -d ${chrootdir}${mnt} ] || break
+		mntpoint=$(mount | awk '$3 == "'${chrootdir}${mnt}'" {print}')
+		[ -n "${mntpoint}" ] || break
 		${unmountcmd} ${chrootdir}${mnt} >/dev/null
 		rmdir ${chrootdir}${mnt} 2>/dev/null && break
 		echo "Stuck unmounting ${chrootdir}${mnt}, retrying..."
@@ -136,11 +127,20 @@ if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
 	done < ${SHADOW_BASEDIR}/${chrootname}.ramfs
 fi
 
-${unmountcmd} ${chrootdir}/dev 2>/dev/null
+umount -f ${chrootdir}/dev 2>/dev/null
 
-read chrootdev <${SHADOW_BASEDIR}/${chrootname}.dev
-diskutil unmountDisk force ${chrootdev} >/dev/null
-hdiutil eject ${chrootdev} >/dev/null
+# Have seen situations where the .dev file is missing but the mount point is
+# still there, if that happens then handle the unmount directly.
+if [ -f ${SHADOW_BASEDIR}/${chrootname}.dev ]; then
+	read chrootdev <${SHADOW_BASEDIR}/${chrootname}.dev
+fi
+if [ -z "${chrootdev}" ]; then
+	chrootdev=$(mount | awk '$3 == "'${chrootdir}'" {print $1}')
+fi
+if [ -n "${chrootdev}" ]; then
+	diskutil unmountDisk force ${chrootdev} >/dev/null
+	hdiutil eject ${chrootdev} >/dev/null
+fi
 
 rm -f ${SHADOW_BASEDIR}/${chrootname}.dev
 rm -f ${SHADOW_BASEDIR}/${chrootname}.ramfs

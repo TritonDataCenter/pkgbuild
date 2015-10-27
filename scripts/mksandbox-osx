@@ -53,7 +53,26 @@ mkdir -p ${SHADOW_BASEDIR}
 chrootdev=$(hdiutil attach \
     -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
     -mountpoint ${chrootdir} \
-    -noverify -private ${rootdev} | awk '{print $1}')
+    -noverify -nobrowse ${rootdev} | awk '{print $1}')
+#
+# Disabling mdutil on a volume isn't enough, we need to create a couple of
+# extra files to make it really really not index things.
+#
+mkdir -p ${chrootdir}/.fseventsd
+touch ${chrootdir}/.fseventsd/no_log
+touch ${chrootdir}/.metadata_never_index
+#
+# It takes a few seconds for the initial mds state to be ready to transition,
+# and there appears no way to do it at attach time, so we just have to keep
+# retrying until successful.  To add insult to injury, mdutil happily exits 0
+# on failure, so we need to grep for the possible failure messages which are,
+# wait for it, sent to stdout!  Blech.
+#
+while true; do
+	mdutil -i off -d ${chrootdir} 2>/dev/null \
+	    | grep -q Error || break
+	sleep 1
+done
 mount -u -o noatime,nobrowse,nodev,nosuid ${chrootdev}
 echo ${chrootdev} >${SHADOW_BASEDIR}/${chrootname}.dev
 
@@ -75,11 +94,15 @@ for mount in ${TMPFS_MOUNTS}; do
 	newfs_hfs -s ${rd} >/dev/null
 	mount_hfs -o noatime,nobrowse ${rd} ${chrootdir}${mnt}
 	echo ${rd} >>${SHADOW_BASEDIR}/${chrootname}.ramfs
+	mkdir -p ${chrootdir}${mnt}/.fseventsd
+	touch ${chrootdir}${mnt}/.fseventsd/no_log
+	touch ${chrootdir}${mnt}/.metadata_never_index
 done
 
-# If /tmp is a tmpfs, we want to share it with /var/tmp
+# If /tmp is a tmpfs, we want to share it with /var/tmp.  We move it out of
+# the way rather than delete it to avoid unnecessary shadow writes.
 chmod 1777 ${chrootdir}/tmp
-rm -rf ${chrootdir}/var/tmp
+[ -d ${chrootdir}/var/tmp ] && mv ${chrootdir}/var/tmp ${chrootdir}/var/tmp.sys
 ln -s /tmp ${chrootdir}/var/tmp
 
 # Symlink various high-IO VARBASE things to tmpfs.
@@ -93,8 +116,9 @@ mv ${chrootdir}/var/folders ${chrootdir}/var/folders.sys
 mkdir -p ${chrootdir}/tmp/folders
 ln -s /tmp/folders ${chrootdir}/var/folders
 
-# XXX
-chown pbulk ${chrootdir}/Users/pbulk/build 2>/dev/null
+# XXX: hardcoded paths
+mkdir -p ${chrootdir}/Users/pbulk/build{,-disk}
+chown pbulk ${chrootdir}/Users/pbulk/build{,-disk} 2>/dev/null
 tmpdir=$(su - pbulk -c 'dirname $(getconf DARWIN_USER_TEMP_DIR) | sed -e "s,^/var,/tmp,"')
 if [ -n "${tmpdir}" ]; then
 	mkdir -p ${chrootdir}${tmpdir}
@@ -105,14 +129,27 @@ fi
 # Enable DNS resolution via an mDNSResponder socket
 #
 PB="/usr/libexec/PlistBuddy"
-PLIST="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
+PLIST="/var/run/com.apple.mDNSResponder.plist"
+PLIST_SYSTEM="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
 ENTRY="Sockets:Listeners"
+
 while true; do
 	# Ensure only one process updates the plist at a time.
 	mkdir /tmp/updatemdns.lock 2>/dev/null
 	if [ $? -ne 0 ]; then
 		sleep 1
 		continue
+	fi
+	#
+	# Modify a copy of the plist.  This supports SPI which would prevent us
+	# from modifying the original, but also ensures that on (re)boot we get
+	# a working configuration as mDNSResponder doesn't like non-existant
+	# sockets.  /var/run is wiped on each boot.
+	#
+	if [ ! -f ${PLIST} ]; then
+		cp ${PLIST_SYSTEM} ${PLIST}
+		launchctl unload ${PLIST_SYSTEM}
+		launchctl load -w ${PLIST}
 	fi
 	# Ensure Sockets:Listeners is an array.
 	${PB} -c "Print ${ENTRY}:0" ${PLIST} >/dev/null 2>&1
@@ -152,10 +189,10 @@ done
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	tools_packages="nbpatch pbulk"
 	case "${chrootname}" in
-	*-bootstrap*)
+	bootstrap*)
 		tools_packages="${tools_packages} gnupg"
 		;;
-	*-build*)
+	*-build|*-build-[0-9]*)
 		tools_packages="${tools_packages} curl gnupg mozilla-rootcerts"
 		;;
 	*-scan*)
