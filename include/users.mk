@@ -51,8 +51,10 @@ PKG_GID.cacti=		985
 PKG_UID.cassandra=	984
 PKG_GID.cassandra=	984
 #
-PKG_UID.clamav=		983
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.clamav=		983	# osx _clamav user has clamav alias
 PKG_GID.clamav=		983
+.endif
 #
 PKG_UID.cntlm=		982
 PKG_GID.cntlm=		982
@@ -88,7 +90,9 @@ PKG_UID.defang=		972
 PKG_GID.defang=		972
 #
 PKG_UID.dialer=		971
-PKG_GID.dialer=		971
+.if empty(PKGBUILD:Mosx-*)
+PKG_GID.dialer=		971	# osx _dialer group has dialer alias
+.endif
 #
 PKG_UID.dictd=		970
 PKG_GID.dictd=		970
@@ -189,8 +193,10 @@ PKG_GID.lambdamoo=	939
 PKG_UID.ldap=		938
 PKG_GID.ldap=		938
 #
-PKG_UID.lp=		937
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.lp=		937	# osx _lp user has lp alias
 PKG_GID.lp=		937
+.endif
 #
 PKG_UID.lshellg=	936
 PKG_GID.lshellg=	936
@@ -201,8 +207,10 @@ PKG_UID.mail=		935
 PKG_UID.maildrop=	934
 PKG_GID.maildrop=	934
 #
-PKG_UID.mailman=	933
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.mailman=	933	# osx _mailman user has mailman alias
 PKG_GID.mailman=	933
+.endif
 #
 PKG_UID.majordom=	932
 PKG_GID.majordom=	932
@@ -228,8 +236,10 @@ PKG_GID.munin=		926
 PKG_UID.mydns=		925
 PKG_GID.mydns=		925
 #
-PKG_UID.mysql=		924
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.mysql=		924	# osx _mysql user has mysql alias
 PKG_GID.mysql=		924
+.endif
 #
 PKG_UID.nagios=		923
 PKG_GID.nagios=		923
@@ -249,8 +259,10 @@ PKG_GID.news=		919
 PKG_UID.nginx=		918
 PKG_GID.nginx=		918
 #
+.if empty(PKGBUILD:Mosx-*)
 PKG_UID.nobody=		917
 PKG_GID.nobody=		917
+.endif
 #
 PKG_UID.nofiles=	916
 PKG_GID.nofiles=	916
@@ -297,8 +309,10 @@ PKG_GID.pop=		903
 PKG_UID.popa3d=		902
 PKG_GID.popa3d=		902
 #
-PKG_UID.postfix=	901
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.postfix=	901	# osx _postfix user has postfix alias
 PKG_GID.postfix=	901
+.endif
 #
 PKG_UID.postgrey=	900
 PKG_GID.postgrey=	900
@@ -396,8 +410,10 @@ PKG_GID.sqlgrey=	870
 PKG_UID.squid=		869
 PKG_GID.squid=		869
 #
-PKG_UID.sshd=		868
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.sshd=		868	# osx _sshd user has sshd alias
 PKG_GID.sshd=		868
+.endif
 #
 PKG_UID.stb-admin=	867
 PKG_GID.stb-admin=	867
@@ -459,8 +475,10 @@ PKG_GID.vsftpd=		849
 PKG_UID.wnn=		848
 PKG_GID.wnn=		848
 #
-PKG_UID.www=		847
+.if empty(PKGBUILD:Mosx-*)
+PKG_UID.www=		847	# osx _www user has 'www' alias'
 PKG_GID.www=		847
+.endif
 #
 PKG_UID.xymon=		846
 PKG_GID.xymon=		846
