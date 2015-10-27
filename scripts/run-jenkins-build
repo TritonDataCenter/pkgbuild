@@ -43,6 +43,18 @@ if [ -n "${PI_REQUIRED}" ]; then
 fi
 
 #
+# Set up cleanup handler to ensure chroots are removed for the next run.
+#
+cleanup()
+{
+	if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
+		echo "Removing ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
+		${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+	fi
+}
+trap cleanup EXIT
+
+#
 # Perform the build.
 #
 mkdir -p ${CHROOT_BASEDIR}
@@ -98,6 +110,5 @@ if [ $ret -ne 0 ]; then
 	sleep 10
 fi
 
-echo "Removing ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
-${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+cleanup
 exit ${ret}
