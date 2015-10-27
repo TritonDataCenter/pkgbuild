@@ -79,7 +79,7 @@ if [ $ret -ne 0 ]; then
 			printf "The following unresolvable dependencies are preventing bulk builds\n"
 			printf "from running:\n\n"
 			cat ${matchfile}
-		) | ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/mail-report \
+		) | ${PKGBUILD_BASEDIR}/scripts/mail-report \
 		    -s "Scan failure for ${PKGBUILD} bulk build" ${FAILURE_RECIPIENTS}
 	fi
 	rm -f ${matchfile}

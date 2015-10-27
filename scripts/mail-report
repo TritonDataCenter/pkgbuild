@@ -12,12 +12,19 @@
 # and assume this will always be the case.  The variables report_from_addr and
 # report_from_name are exported from pbulk.conf.
 #
+# We are also called from scripts/run-jenkins-build, and so need to support the
+# pkgbuild.conf style variables too.
+#
 
 shift
 subject=$1; shift
 recipients=$1; shift
 message=$(cat)
 sendmail=/usr/sbin/sendmail
+
+# Support pkgbuild.conf variables when called in that context.
+: ${report_from_addr:=${REPORT_FROM_ADDR}}
+: ${report_from_name:=${REPORT_FROM_NAME}}
 
 ${sendmail} -oi -r"${report_from_addr}" -t <<EOF
 From: ${report_from_name} <${report_from_addr}>
