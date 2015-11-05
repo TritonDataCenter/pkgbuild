@@ -7,12 +7,34 @@ a build environment for developing packages.
 
 ### Getting Started
 
-The easiest way to get going is with the pkgdev image.
+The easiest way to get going is with the pkgbuild image.
+
+```console
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.3.0.json
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.3.0.zfs.gz
+imgadm install -m pkgbuild-15.3.0.json -f pkgbuild-15.3.0.zfs.gz
+```
+
+Once you have a zone running, the `run-sandbox` scripts creates a chrooted
+build environment for the specified configuration, e.g.:
+
+```console
+run-sandbox 2015Q3-x86_64
+```
+
+Then you can build packages as normal:
+
+```console
+: Build vim with the 'perl' option enabled
+echo 'PKG_OPTIONS.vim+= perl' >>/opt/local/etc/mk.conf
+cd /data/pkgsrc/editors/vim
+bmake package
+```
+
+Resulting in a binary package in:
 
 ```
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgdev-15.1.0.json
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgdev-15.1.0.zfs.gz
-imgadm install -m pkgdev-15.1.0.json -f pkgdev-15.1.0.zfs.gz
+/data/packages/SmartOS/2015Q3/x86_64/All/vim-7.4.768.tgz
 ```
 
 ### Layout
