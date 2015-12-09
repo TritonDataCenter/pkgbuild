@@ -23,7 +23,9 @@ PKG_DEFAULT_OPTIONS+=		dv opencore-amr theora x264 xvid
 #
 #  - options grouped by package
 #
-PKG_DEFAULT_OPTIONS+=		bind-json-statistics-server bind-xml-statistics-server
+PKG_DEFAULT_OPTIONS+=		bind-json-statistics-server
+PKG_DEFAULT_OPTIONS+=		bind-xml-statistics-server
+PKG_DEFAULT_OPTIONS+=		exim-auth-dovecot
 PKG_DEFAULT_OPTIONS+=		exim-lookup-redis exim-lookup-sqlite
 PKG_DEFAULT_OPTIONS+=		mutt-hcache mutt-smtp tokyocabinet
 PKG_DEFAULT_OPTIONS+=		privileges suexec
@@ -33,6 +35,7 @@ PKG_DEFAULT_OPTIONS+=		kerberos-prefix-cmds
 PKG_DEFAULT_OPTIONS+=		postfix-milter
 PKG_DEFAULT_OPTIONS+=		nagios-nrpe-args
 PKG_DEFAULT_OPTIONS+=		mysqlnd sphinx
+PKG_DEFAULT_OPTIONS+=		unrealircd-ziplinks
 #
 #  - negate options
 #
@@ -57,7 +60,7 @@ PKG_OPTIONS.ejabberd=		sqlite
 #
 PKG_OPTIONS.clamav+=		milter
 PKG_OPTIONS.dovecot+=		gssapi
-PKG_OPTIONS.exim+=		spf
+PKG_OPTIONS.exim+=		saslauthd spf
 PKG_OPTIONS.ffmpeg+=		tools	# XXX: make default in pkgsrc
 PKG_OPTIONS.freeradius+=	-bdb	# no db4 support
 PKG_OPTIONS.gearmand+=		-memcached
