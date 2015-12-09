@@ -43,6 +43,24 @@ if [ -n "${PI_REQUIRED}" ]; then
 fi
 
 #
+# Ensure, if signed packages are requested, that all build hosts can sign
+# unattended.  This isn't perfect - ideally we'd test we can actually sign
+# something, but we can't do that without creating chroots and that's a bit
+# heavyweight - but testing for the gpg-agent socket (or a file which denotes
+# the host doesn't use the agent) should do for now.
+#
+if [ -n "${GPG_SIGN_AS}" ]; then
+	for ip in ${PBULK_CLIENTS}; do
+		ssh ${ip} "test -S ${ROOT_HOMEDIR}/.gnupg/S.gpg-agent ||
+			    test -f ${ROOT_HOMEDIR}/.gnupg/no-agent"
+		if [ $? -ne 0 ]; then
+			echo "ERROR: ${ip} is not running gpg-agent"
+			exit 1
+		fi
+	done
+fi
+
+#
 # Set up cleanup handler to ensure chroots are removed for the next run.
 #
 cleanup()
