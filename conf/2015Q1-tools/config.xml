@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description/>
   <logRotator class="hudson.tasks.LogRotator">
     <daysToKeep>-1</daysToKeep>
     <numToKeep>20</numToKeep>
@@ -24,8 +24,8 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>PBULK_RESTART</name>
-          <description></description>
-          <defaultValue></defaultValue>
+          <description/>
+          <defaultValue/>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
@@ -64,7 +64,7 @@
       </hudson.plugins.git.extensions.impl.SubmoduleOption>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
-        <reference></reference>
+        <reference/>
       </hudson.plugins.git.extensions.impl.CloneOption>
     </extensions>
   </scm>
