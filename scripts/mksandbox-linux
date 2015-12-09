@@ -53,7 +53,7 @@ mkdir -p ${chrootdir}/root
 rsync -a /root/.ssh ${chrootdir}/root/
 
 mkdir -p ${chrootdir}/home/pbulk
-chown pbulk:pbulk ${chrootdir}/home/pbulk
+chown pbulk:pbulk ${chrootdir}/home/pbulk 2>/dev/null || true
 
 #
 # Unpack tools bootstrap and install required packages for building.
