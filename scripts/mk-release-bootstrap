@@ -83,11 +83,10 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
 	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
-		/^GPG=/d
-		/^GPG_SIGN_AS=/d
-		/^VERIFIED_INSTALLATION=/d
-		\$
-		a
+		g/^GPG=/d
+		g/^GPG_SIGN_AS=/d
+		g/^VERIFIED_INSTALLATION=/d
+		$ a
 		GPG_KEYRING_PKGVULN=${PREFIX}/share/gnupg/pkgsrc-security.gpg
 		PKG_PATH=${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 		.

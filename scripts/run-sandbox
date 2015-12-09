@@ -69,7 +69,7 @@ alias cdwrk='cd \$(bmake show-var VARNAME=WRKSRC)'
 alias cdwrkdir='cd \$(bmake show-var VARNAME=WRKDIR)'
 EOF
 ed ${chrootdir}${PREFIX}/etc/pkg_install.conf >/dev/null 2>&1 <<-EOF
-	/^VERIFIED_INSTALLATION=/d
+	g/^VERIFIED_INSTALLATION=/d
 	w
 	q
 EOF
