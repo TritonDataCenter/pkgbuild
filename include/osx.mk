@@ -19,7 +19,8 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 .if !empty(PKGPATH:Mcross/avr-gcc) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
  || !empty(PKGPATH:Mlang/gcc*) \
- || !empty(PKGPATH:Mlang/mercury)
+ || !empty(PKGPATH:Mlang/mercury) \
+ || !empty(PKGPATH:Mwip/ghc)
 WRKOBJDIR=		/Users/pbulk/build-disk
 .endif
 
