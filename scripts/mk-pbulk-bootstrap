@@ -20,7 +20,7 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	set -ex
 	PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/${PKGSRC_DIR}/bootstrap
-	env ${BOOTSTRAP_ENV} \
+	env ${BOOTSTRAP_ENV} CFLAGS='${BOOTSTRAP_CFLAGS}' \
 	  ./bootstrap \
 	    --abi=${ABI} \
 	    ${BOOTSTRAP_ARG_COMPILER} \

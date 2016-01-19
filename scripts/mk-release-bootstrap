@@ -3,18 +3,41 @@
 # Create the final bootstrap kit for each pkgbuild.
 #
 
-if [ $# -ne 1 ]; then
-	echo "usage: $0 <pkgbuild>" 1>&2
-	exit 2
-else
+usage()
+{
+	echo "usage: $0 [-h] [-d YYYYMMDD] <pkgbuild>" >&2
+}
+
+bootstrap_date=""
+while getopts ":d:h" opt; do
+	case "${opt}" in
+	d)
+		bootstrap_date="-${OPTARG}"
+		;;
+	h)
+		usage
+		exit
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 1 ]; then
 	pkgbuild=$1; shift
+else
+	usage
+	exit 2
 fi
 
 # Load per-pkgbuild config
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
 # Helpful aliases
-RELEASE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}.tar.gz"
+RELEASE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}${bootstrap_date}.tar.gz"
 RELEASE_ASC="${RELEASE_TAR}.asc"
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}

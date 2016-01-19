@@ -5,15 +5,38 @@ create Joyent's SmartOS packages.  The aim here is to provide users with
 everything they may need to replicate those packages, and help them to create
 a build environment for developing packages.
 
-### Getting Started
+While primarily for SmartOS, this repository does also support builds on both
+OSX and Linux.
 
-The easiest way to get going is with the pkgbuild image.
+### Setup
+
+#### SmartOS
+
+For SmartOS we provide a 'pkgbuild' image which contains everything you need to
+get started.
 
 ```console
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.3.0.json
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.3.0.zfs.gz
-imgadm install -m pkgbuild-15.3.0.json -f pkgbuild-15.3.0.zfs.gz
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.4.0.json
+curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.4.0.zfs.gz
+imgadm install -m pkgbuild-15.4.0.json -f pkgbuild-15.4.0.zfs.gz
 ```
+
+#### Generic
+
+If you don't want to use the pkgbuild image, or are running a different
+operating system, the following generic instructions should be followed.
+
+Fetch the `pkgbuild` and `pkgsrc` repositories.
+
+```console
+: The default is to have everything under /data.  If you wish to use a
+: different prefix you'll need to set additional variables later.
+mkdir /data; cd /data
+git clone https://github.com/joyent/pkgbuild.git
+git clone https://github.com/joyent/pkgsrc.git
+```
+
+### Building Packages
 
 Once you have a zone running, the `run-sandbox` scripts creates a chrooted
 build environment for the specified configuration, e.g.:
