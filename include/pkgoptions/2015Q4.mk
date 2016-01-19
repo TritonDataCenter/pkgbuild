@@ -78,7 +78,6 @@ PKG_OPTIONS.openssh+=		hpn-patch
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
-PKG_OPTIONS.proftpd+=		mysql
 PKG_OPTIONS.qmail+=		-sasl -tls
 PKG_OPTIONS.rsyslog+=		file gnutls
 PKG_OPTIONS.scmgit+=		-python
