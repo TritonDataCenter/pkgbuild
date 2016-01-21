@@ -2,8 +2,8 @@
 
 This is an exported repository of configuration files and scripts used to
 create Joyent's SmartOS packages.  The aim here is to provide users with
-everything they may need to replicate those packages, and help them to create
-a build environment for developing packages.
+everything they may need to replicate those packages, and help them to create a
+build environment for developing packages.
 
 While primarily for SmartOS, this repository does also support builds on both
 OSX and Linux.
@@ -13,7 +13,7 @@ OSX and Linux.
 #### SmartOS
 
 For SmartOS we provide a 'pkgbuild' image which contains everything you need to
-get started.
+get started.  Until they are available on the images.joyent.com servers you can download and install them manually.
 
 ```console
 curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.4.0.json
@@ -42,7 +42,7 @@ Once you have a zone running, the `run-sandbox` scripts creates a chrooted
 build environment for the specified configuration, e.g.:
 
 ```console
-run-sandbox 2015Q3-x86_64
+run-sandbox 2015Q4-x86_64
 ```
 
 Then you can build packages as normal:
@@ -57,10 +57,22 @@ bmake package
 Resulting in a binary package in:
 
 ```
-/data/packages/SmartOS/2015Q3/x86_64/All/vim-7.4.768.tgz
+/data/packages/SmartOS/2015Q4/x86_64/All/vim-7.4.768.tgz
 ```
 
-### Layout
+For Linux and OSX, you should use one of the following configurations:
+
+```console
+run-sandbox linux-trunk-i386    # Linux 32-bit
+run-sandbox linux-trunk-x86_64  # Linux 64-bit
+run-sandbox osx-trunk-i386      # OSX 32-bit
+run-sandbox osx-trunk-x86_64    # OSX 64-bit
+```
+
+For further information about builds, see
+<https://pkgsrc.joyent.com/docs/building/>.
+
+### Repository layout
 
 #### `conf/`
 
