@@ -70,7 +70,8 @@ run-sandbox osx-trunk-x86_64    # OSX 64-bit
 ```
 
 For further information about builds, see
-<https://pkgsrc.joyent.com/docs/building/>.
+<https://pkgsrc.joyent.com/docs/building/> (you can skip the initial setup and
+go straight to "Building a package").
 
 ### Repository layout
 
