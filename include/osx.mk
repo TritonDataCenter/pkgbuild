@@ -17,10 +17,21 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 
 # Packages which do not fit in ramdisk build area.
 .if !empty(PKGPATH:Mcross/avr-gcc) \
+ || !empty(PKGPATH:Mdatabases/mariadb55-server) \
+ || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
+ || !empty(PKGPATH:Mham/gnuradio-core) \
+ || !empty(PKGPATH:Mlang/clang*) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Mlang/mercury) \
- || !empty(PKGPATH:Mwip/ghc)
+ || !empty(PKGPATH:Mlang/mono*) \
+ || !empty(PKGPATH:Mwip/ghc) \
+ || !empty(PKGPATH:Mwww/firefox) \
+ || !empty(PKGPATH:Mwww/firefox??) \
+ || !empty(PKGPATH:Mwww/webkit*-gtk*) \
+ || !empty(PKGPATH:Mx11/kdelibs4) \
+ || !empty(PKGPATH:Mx11/qt4-libs) \
+ || !empty(PKGPATH:Mx11/x11/qt5-qtwebkit)
 WRKOBJDIR=		/Users/pbulk/build-disk
 .endif
 
