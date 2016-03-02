@@ -52,6 +52,7 @@ SMF_PROJECT.php53-fpm=		php
 SMF_PROJECT.php54-fpm=		php
 SMF_PROJECT.php55-fpm=		php
 SMF_PROJECT.php56-fpm=		php
+SMF_PROJECT.php70-fpm=		php
 SMF_PROJECT_ATTRS.php=		process.max-file-descriptor=(basic,65536,deny)
 SMF_PROJECT_DESC.php=		PHP FPM service
 
