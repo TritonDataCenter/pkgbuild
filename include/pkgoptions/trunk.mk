@@ -71,7 +71,12 @@ PKG_OPTIONS.libthrift+=		php ruby
 PKG_OPTIONS.lighttpd+=		lua bzip
 PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
-PKG_OPTIONS.nginx+=		spdy gzip headers-more
+PKG_OPTIONS.nginx+=		gzip headers-more
+.if ${NGINX_HTTP_V2:U} == "yes"
+PKG_OPTIONS.nginx+=		v2
+.else
+PKG_OPTIONS.nginx+=		spdy
+.endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.openssh+=		hpn-patch
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
