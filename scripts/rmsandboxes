@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -eu
+
+case "`uname -s`" in
+Darwin)
+	rmsandbox=$(dirname $0)/rmsandbox-osx
+	;;
+Linux)
+	rmsandbox=$(dirname $0)/rmsandbox-linux
+	;;
+SunOS)
+	rmsandbox=$(dirname $0)/rmsandbox
+	;;
+*)
+	echo "Unsupported OS" >&2
+	exit 1
+esac
+
+for chroot; do
+	${rmsandbox} ${chroot}
+done
