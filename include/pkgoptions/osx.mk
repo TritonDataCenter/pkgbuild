@@ -14,6 +14,7 @@ PKG_DEFAULT_OPTIONS+=	dv opencore-amr theora x264 xvid
 #
 PKG_DEFAULT_OPTIONS+=	mutt-hcache mutt-smtp tokyocabinet
 #
+PKG_OPTIONS.gnustep+=	fragile
 PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
 PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl spdy gzip
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses

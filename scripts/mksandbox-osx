@@ -99,6 +99,15 @@ for mount in ${TMPFS_MOUNTS}; do
 	touch ${chrootdir}${mnt}/.metadata_never_index
 done
 
+# On OSX, overlay mounts are used as a final way to override a particular
+# mount, and is used specifically to ensure $PREFIX/qt4 isn't in RAM.
+for mount in ${OVERLAY_MOUNTS}; do
+	mkdir -p ${SHADOW_BASEDIR}/${chrootname}-${mount//\//_}
+	mkdir -p ${chrootdir}${mount}
+	# XXX: hack, sorry, need to find a cleaner way
+	mount_nfs localhost:${SHADOW_BASEDIR}/${chrootname}-${mount//\//_} ${chrootdir}${mount}
+done
+
 # If /tmp is a tmpfs, we want to share it with /var/tmp.  We move it out of
 # the way rather than delete it to avoid unnecessary shadow writes.
 chmod 1777 ${chrootdir}/tmp

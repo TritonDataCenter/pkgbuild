@@ -85,6 +85,17 @@ for pid in $(fuser ${chrootdir} 2>/dev/null); do
 	fi
 done
 
+for mount in ${OVERLAY_MOUNTS}; do
+	while true; do
+		[ -d ${chrootdir}${mount} ] || break
+		umount -f ${chrootdir}${mount} 2>/dev/null
+		rmdir ${chrootdir}${mount} 2>/dev/null && break
+		echo "Stuck unmounting ${chrootdir}${mount}, retrying..."
+		sleep 5
+	done
+	rm -rf ${SHADOW_BASEDIR}/${chrootname}-${mount//\//_}
+done
+
 for mount in ${NFS_MOUNTS}; do
 	dst=${mount#*=}
 	while true; do

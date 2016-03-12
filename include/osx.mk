@@ -21,6 +21,7 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
  || !empty(PKGPATH:Mham/gnuradio-core) \
+ || !empty(PKGPATH:Mjoyent/mariadb10-server) \
  || !empty(PKGPATH:Mlang/clang*) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Mlang/mercury) \
