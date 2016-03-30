@@ -100,7 +100,7 @@ PHP_VERSION_DEFAULT=		56
 PKG_APACHE_DEFAULT=		apache24
 PYTHON_VERSION_DEFAULT=		27
 RUBY_RAILS_DEFAULT=		32
-RUBY_VERSION_DEFAULT=		200
+RUBY_VERSION_DEFAULT=		22
 
 #
 # XXX: This doesn't really belong here, move somewhere more sensible
