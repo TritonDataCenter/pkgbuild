@@ -20,7 +20,7 @@
       <blockingJobs>^pkgsrc-linux-trunk-pbulk32$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11">
-      <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
+      <projectUrl>https://github.com/jsonn/pkgsrc/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -45,7 +45,7 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-        <url>git://github.com/joyent/pkgsrc.git</url>
+        <url>git://github.com/jsonn/pkgsrc.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -55,7 +55,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/joyent/pkgsrc/</url>
+      <url>https://github.com/jsonn/pkgsrc/</url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -81,7 +81,7 @@
         <spec></spec>
     </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
-      <spec></spec>
+      <spec>00 18 * * 2,4,6</spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
