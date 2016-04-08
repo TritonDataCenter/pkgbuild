@@ -37,8 +37,6 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	rm -rf /tmp/pkgsrc-${pkgbuild}
 	cd /
 	touch ${PREFIX}/.dlj_license_accepted
-	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}
-	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
 	if [ -n '${GPG_SIGN_AS}' ]; then
 		mkdir -p ${SYSCONFDIR}/gnupg
 		${GPG} --export ${GPG_SIGN_AS} \
@@ -56,6 +54,23 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}
 	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
+	# Create pkgbuild bootstraps with signing bits removed
+	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+		g/^GPG=/d
+		g/^GPG_SIGN_AS=/d
+		g/^VERIFIED_INSTALLATION=/d
+		w
+		q
+	EOF
+	if [ '${PKGBUILD_BASEDIR}' = '/shared/pbulk' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			g,/shared/pbulk,s,/shared/pbulk,/data/pkgbuild,
+			w
+			q
+		EOF
+	fi
+	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}
+	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
 "
 ret=$?
 if [ $ret -ne 0 -a -d ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}/tmp/pkgsrc-${pkgbuild} ]; then
