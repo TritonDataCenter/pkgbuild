@@ -125,6 +125,22 @@ mv ${chrootdir}/var/folders ${chrootdir}/var/folders.sys
 mkdir -p ${chrootdir}/tmp/folders
 ln -s /tmp/folders ${chrootdir}/var/folders
 
+# Ensure the 'pbulk' user exists
+if [ ! $(id pbulk &> /dev/null) ]; then
+    mkdir /Users/pbulk
+    dscl . -create /Users/pbulk UserShell /bin/bash
+    dscl . -create /Users/pbulk RealName pbulk
+    dscl . -create /Users/pbulk RecordName pbulk
+    dscl . -create /Users/pbulk UniqueID 505
+    dscl . -create /Users/pbulk PrimaryGroupID 20
+    dscl . -create /Users/pbulk NFSHomeDirectory /Users/pbulk
+    dscl . -create /Users/pbulk RecordName pbulk
+    dscl . -create /Users/pbulk RecordType  dsRecTypeStandard:Users
+    dscl . -create /Users/pbulk AppleMetaNodeLocation /Local/Default
+    dscl . passwd /Users/pbulk pbulk
+    chown pbulk:staff /Users/pbulk
+fi
+
 # XXX: hardcoded paths
 mkdir -p ${chrootdir}/Users/pbulk/build{,-disk}
 chown pbulk ${chrootdir}/Users/pbulk/build{,-disk} 2>/dev/null
