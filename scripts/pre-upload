@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Script to sanity check a package set prior to running the upload phase.
+#
+
+#
+# Passed in the environment from the pbulk upload script.  The upload script
+# runs with 'set -e' so we stop the upload phase by exiting with failure.
+#
+. ${PBULK_CONF}
+
+#
+# Perform all tests before exiting so we are made aware of all errors.
+#
+checks_passed=true
+
+#
+# Ensure that core packages are available.  Syncing a package set with these
+# missing could result in end user failure.  Large dependencies like OpenSSL
+# will be spotted by the $pkg_rsync_min check later, so this is more useful
+# for those small but important leaf packages which can go unnoticed.
+#
+# Be careful with pattern matching to avoid the possibility of multiple
+# matches.  Only the first match will be used, so results may be hidden.
+#
+if [ -f "${pkg_rsync_required_pkgs}" ]; then
+	while read pkg; do
+		[[ "${pkg}" =~ ^# ]] && continue
+		pkgstat=$(awk -F'|' '$1 ~ /^'${pkg}'/ { print $2; exit; }' ${loc}/pbuild)
+		if [ "${pkgstat}" != "done" ]; then
+			checks_passed=false
+			echo "ERROR: Core package '${pkg}' unavailable (${pkgstat:-not found})."
+		fi
+	done < ${pkg_rsync_required_pkgs}
+fi
+
+#
+# If something went wrong with the build and we ended up with much fewer
+# packages than expected, we don't want the remote packages to possibly be
+# deleted and pkg_summary truncated.
+#
+if [ -n "${pkg_rsync_min}" ]; then
+	numpkgs=$(wc -l < ${loc}/success)
+	if [ ! ${numpkgs} -gt ${pkg_rsync_min} ]; then
+		checks_passed=false
+		echo "ERROR: Number of packages built (${numpkgs}) did not exceed the minimum threshold (${pkg_rsync_min})."
+	fi
+fi
+
+if ! $checks_passed; then
+	echo "ERROR: Skipping upload phase due to above errors."
+	exit 1
+fi
