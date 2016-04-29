@@ -13,21 +13,29 @@ fi
 # Load per-pkgbuild config
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
+BOOTKIT="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz"
+
 #
-# Do the tests.  For trunk-based builds we want to regularly update the
-# bootstrap to ensure we pick up any changes, currently every 7 days.
+# Always build if an existing kit does not exist.
 #
-rv=0
-BOOTGZ="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz"
-if [ ! -f "${BOOTGZ}" ]; then
-	rv=1
-else
-	days=7
-	case "${pkgbuild}" in
-	trunk-*|upstream-*)
-		found=$(find ${BOOTGZ} -mtime +${days} 2>/dev/null)
-		[ -n "${found}" ] && rv=1
-		;;
-	esac
+if [ ! -f "${BOOTKIT}" ]; then
+	exit 1
 fi
-exit ${rv}
+
+#
+# If we're performing a bulkbuild-restart, don't rebuild the bootstrap even if
+# it is out of date, to avoid nasty surprises or pointless rebuilds.
+#
+if [ -n "${PBULK_RESTART}" ]; then
+	exit 0
+fi
+
+#
+# For trunk-based builds we rebuild the bootstrap kit each time, to ensure
+# there are no conflicts with bootstrap package versions being bumped.  It
+# would be better if there were a way to detect this was necessary, e.g. by
+# checking package versions.
+#
+if [[ "${pkgbuild}" =~ trunk ]]; then
+	exit 1
+fi
