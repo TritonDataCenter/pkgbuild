@@ -66,10 +66,12 @@ PKG_OPTIONS.freeradius+=	-bdb	# no db4 support
 PKG_OPTIONS.gearmand+=		-memcached
 PKG_OPTIONS.gnustep+=		fragile
 PKG_OPTIONS.graphviz+=		-perl	# XXX: multiarch
+PKG_OPTIONS.hunspell+=		-wide-curses
 PKG_OPTIONS.irssi+=		perl
-PKG_OPTIONS.libthrift+=		php ruby
+PKG_OPTIONS.libthrift+=		php
 PKG_OPTIONS.lighttpd+=		lua bzip
 PKG_OPTIONS.mc+=		ncurses
+PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
 .if ${NGINX_HTTP_V2:U} == "yes"
