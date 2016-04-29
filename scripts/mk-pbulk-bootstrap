@@ -55,13 +55,15 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${SU} - ro
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}
 	${TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PREFIX}
 	# Create pkgbuild bootstraps with signing bits removed
-	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
-		g/^GPG=/d
-		g/^GPG_SIGN_AS=/d
-		g/^VERIFIED_INSTALLATION=/d
-		w
-		q
-	EOF
+	if [ -f ${SYSCONFDIR}/pkg_install.conf ]; then
+		ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+			g/^GPG=/d
+			g/^GPG_SIGN_AS=/d
+			g/^VERIFIED_INSTALLATION=/d
+			w
+			q
+		EOF
+	fi
 	if [ '${PKGBUILD_BASEDIR}' = '/shared/pbulk' ]; then
 		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 			g,/shared/pbulk,s,/shared/pbulk,/data/pkgbuild,
