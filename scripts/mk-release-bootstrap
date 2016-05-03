@@ -118,7 +118,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		# All local changes should go into this file, as mk.conf could
 		# be replaced on upgrades.
 		#
-		.sinclude ${SYSCONFDIR}/mk.conf.local
+		.sinclude \"${SYSCONFDIR}/mk.conf.local\"
 	EOF
 	cat >>${SYSCONFDIR}/pkgin/repositories.conf <<-EOF
 		#
