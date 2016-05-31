@@ -19,16 +19,21 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 .if !empty(PKGPATH:Mcross/avr-gcc) \
  || !empty(PKGPATH:Mdatabases/mariadb55-server) \
  || !empty(PKGPATH:Mdatabases/mongodb) \
+ || !empty(PKGPATH:Mdevel/xulrunner*) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
+ || !empty(PKGPATH:Mgraphics/tesseract) \
  || !empty(PKGPATH:Mham/gnuradio-core) \
  || !empty(PKGPATH:Mjoyent/mariadb10-server) \
  || !empty(PKGPATH:Mlang/clang*) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Mlang/mercury) \
  || !empty(PKGPATH:Mlang/mono*) \
+ || !empty(PKGPATH:Mlang/nodejs*) \
+ || !empty(PKGPATH:Mmail/thunderbird*) \
  || !empty(PKGPATH:Mwip/ghc) \
  || !empty(PKGPATH:Mwww/firefox) \
  || !empty(PKGPATH:Mwww/firefox??) \
+ || !empty(PKGPATH:Mwww/seamonkey) \
  || !empty(PKGPATH:Mwww/webkit*-gtk*) \
  || !empty(PKGPATH:Mx11/kdelibs4) \
  || !empty(PKGPATH:Mx11/qt4-libs) \
