@@ -1,3 +1,11 @@
+devel/bmake
+devel/nbpatch
+lang/nawk
+pkgtools/bootstrap-mk-files
+shells/pdksh
+sysutils/bsdinstall
+textproc/nbsed
+
 databases/hiredis
 databases/mysql56-client
 databases/postgresql94-client
