@@ -18,8 +18,8 @@ pkg_rsync_target=""
 report_subject_prefix="pkgsrc-2015Q4-x86_64"
 report_recipients="al.slater@scluk.com"
 
-scan_chroots=8
-build_chroots=4
+scan_chroots=16
+build_chroots=8
  
 bootstrapkit=/data/packages/OmniOS/bootstrap-pbulk/bootstrap-2015Q4-x86_64.tar.gz
  
