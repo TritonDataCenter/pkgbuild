@@ -1,0 +1,151 @@
+#!/bin/bash
+#
+# Create the final bootstrap kit for each pkgbuild.
+#
+
+usage()
+{
+	echo "usage: $0 [-h] [-d YYYYMMDD] <pkgbuild>" >&2
+}
+
+bootstrap_date=""
+while getopts ":d:h" opt; do
+	case "${opt}" in
+	d)
+		bootstrap_date="-${OPTARG}"
+		;;
+	h)
+		usage
+		exit
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 1 ]; then
+	pkgbuild=$1; shift
+else
+	usage
+	exit 2
+fi
+
+# Load per-pkgbuild config
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+# Helpful aliases
+RELEASE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}${bootstrap_date}.tar.gz"
+RELEASE_ASC="${RELEASE_TAR}.asc"
+
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
+/usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
+	set -e
+	PATH=${PBULK_PATH}
+	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
+	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
+	#PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All ${PREFIX}/sbin/pkg_add \
+	    mozilla-rootcerts pkg_alternatives pkgin pkgsrc-gnupg-keys
+	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All ${PREFIX}/sbin/pkg_add \
+	    mozilla-rootcerts pkg_alternatives pkgin
+	# Avoid 'install' as it fails if /etc/ssl/certs exists.
+	(
+		cd ${SYSCONFDIR}/openssl/certs
+		#${PREFIX}/sbin/mozilla-rootcerts extract >/dev/null
+		#${PREFIX}/sbin/mozilla-rootcerts rehash >/dev/null
+	)
+	rm -f ${PREFIX}/.dlj_license_accepted
+	ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+		1,5d
+		i
+		#
+		# Configuration file for building pkgsrc packages from source.  See
+		# http://pkgsrc.joyent.com/docs/building/ for more information.
+		#
+
+		.
+		/^.include/
+		?^.?+1
+		.,$ d
+		g/^TOOLS_PLATFORM/s/\?//
+		g/^TOOLS_PLATFORM/s/		/	/
+		w
+		q
+	EOF
+	# This is only required for legacy builds and could be removed.
+	if [ -n '${PREFER_NATIVE}' -a '${PREFER_NATIVE}' != 'yes' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			/^PREFER_PKGSRC/
+			i
+			PREFER_NATIVE=		${PREFER_NATIVE}
+			.
+			w
+			q
+		EOF
+	fi
+	# SmartOS specific, keyed on GCC_REQD being set.
+	if [ -n '${GCC_REQD}' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			/^PKGSRC_COMPILER/
+			a
+			GCC_REQD=		${GCC_REQD}
+			USE_PKGSRC_GCC=		yes
+			USE_PKGSRC_GCC_RUNTIME=	yes
+			.
+			w
+			q
+		EOF
+	elif [ '${OPSYS}' = 'Darwin' ]; then
+		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			a
+
+			FETCH_USING=		curl
+			MULTILIB_SUPPORTED=	no
+			PKGSRC_FORTRAN=		gfortran
+			X11_TYPE=		modular
+
+			.
+			r ${PKGBUILD_BASEDIR}/include/pkgoptions/osx.mk
+			w
+			q
+		EOF
+	fi
+	cat >>${SYSCONFDIR}/pkgin/repositories.conf <<-EOF
+		#
+		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
+	EOF
+	tarextras=
+	slashprivate=
+	if [ '${OPSYS}' = 'Darwin' ]; then
+		echo '${PREFIX}/sbin' >/etc/paths.d/10-pkgsrc
+		echo '${PREFIX}/bin' >>/etc/paths.d/10-pkgsrc
+		tarextras='./private/etc/paths.d/10-pkgsrc'
+		# Work around El Capitan 'Cannot extract through symlink var'.
+		if [ '${VARBASE}' = '/var' ]; then
+			slashprivate='/private'
+		fi
+	fi
+	mkdir -p \${slashprivate}${VARBASE}/db/pkgin/cache
+	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
+	${TAR} -zc -f ${RELEASE_TAR} -C / \
+	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
+	    .${PREFIX} .\${slashprivate}${VARBASE}/db/pkgin/cache \${tarextras}
+	if [ -n '${GPG_SIGN_AS}' ]; then
+		rm -f ${RELEASE_ASC}
+		${GPG} --armor --sign --detach -u ${GPG_SIGN_AS} ${RELEASE_TAR}
+	fi
+"
+bsret=$?
+${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
+chret=$?
+if [ ${bsret} -eq 0 ]; then
+	echo "Created ${RELEASE_TAR}"
+	if [ -n "${GPG_SIGN_AS}" ]; then
+		echo "Created ${RELEASE_ASC}"
+	fi
+else
+	echo "Bootstrap creation failed."
+fi
+exit $((${bsret} + ${chret}))

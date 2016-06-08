@@ -1,0 +1,137 @@
+#!/bin/bash
+#
+# Script to initiate a Jenkins build.
+#
+# The variable PKGBUILD is required to be set, and is normally set
+# by the Jenkins environment.
+#
+
+
+if [ -z "${PKGBUILD}" ]; then
+	PKGBUILD=${1}
+fi
+
+if [ -z "${PKGBUILD}" ]; then
+	echo "ERROR: Must set PKGBUILD in the environment" >&2
+	exit 2
+fi
+
+#
+# Load per-pkgbuild config
+#
+pkgconf="$(dirname $0)/../conf/${PKGBUILD}/pkgbuild.conf"
+if [ -f ${pkgconf} ]; then
+	. ${pkgconf}
+else
+	echo "ERROR: Could not find ${pkgconf}" >&2
+	exit 1
+fi
+
+#
+# Execute optional pre-build script
+#
+if [ -n "${JENKINS_PRE_BUILD}" ]; then
+	. ${JENKINS_PRE_BUILD}
+fi
+
+#
+# Sanity check that build hosts are running the expected platform image.
+#
+if [ -n "${PI_REQUIRED}" ]; then
+	for ip in ${PBULK_CLIENTS}; do
+		hostpi=$(ssh ${ip} "uname -v")
+		if [ "${hostpi}" != "${PI_REQUIRED}" ]; then
+			echo "ERROR: ${ip} failed platform check, ${hostpi} != ${PI_REQUIRED}"
+			exit 1
+		fi
+	done
+fi
+
+#
+# Ensure, if signed packages are requested, that all build hosts can sign
+# unattended.  This isn't perfect - ideally we'd test we can actually sign
+# something, but we can't do that without creating chroots and that's a bit
+# heavyweight - but testing for the gpg-agent socket (or a file which denotes
+# the host doesn't use the agent) should do for now.
+#
+if [ -n "${GPG_SIGN_AS}" ]; then
+	for ip in ${PBULK_CLIENTS}; do
+		ssh ${ip} "test -S ${ROOT_HOMEDIR}/.gnupg/S.gpg-agent ||
+			    test -f ${ROOT_HOMEDIR}/.gnupg/no-agent"
+		if [ $? -ne 0 ]; then
+			echo "ERROR: ${ip} is not running gpg-agent"
+			exit 1
+		fi
+	done
+fi
+
+#
+# Set up cleanup handler to ensure chroots are removed for the next run.
+#
+cleanup()
+{
+	if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
+		echo "Removing ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
+		${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+	fi
+}
+trap cleanup EXIT
+
+#
+# Perform the build.
+#
+mkdir -p ${CHROOT_BASEDIR}
+if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
+	# Assume that previous job was aborted and try to remove it.
+	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
+	sleep 10
+	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+fi
+echo "Creating ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
+${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
+env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
+	PATH=${PBULK_PATH}
+	echo 'Running bulkbuild${PBULK_RESTART:+-restart} using' \
+	    '${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf'
+	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
+	    ${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf
+"
+#
+# Save the return code of the bulkbuild run so we can correctly report
+# success/failure back to Jenkins.
+#
+ret=$?
+
+#
+# Attempt to automatically report scan failures.
+#
+if [ $ret -ne 0 ]; then
+	matchfile=/tmp/no-match-$$.txt
+	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile} 2>/dev/null
+	if [ -s ${matchfile} ]; then
+		cat ${matchfile}
+		(
+			printf "The following unresolvable dependencies are preventing bulk builds\n"
+			printf "from running:\n\n"
+			cat ${matchfile}
+		) | ${PKGBUILD_BASEDIR}/scripts/mail-report \
+		    -s "Scan failure for ${PKGBUILD} bulk build" ${FAILURE_RECIPIENTS}
+	fi
+	rm -f ${matchfile}
+fi
+
+#
+# Execute optional post-build script
+#
+if [ -n "${JENKINS_POST_BUILD}" ]; then
+	. ${JENKINS_POST_BUILD}
+	ret=$((ret+$?))
+fi
+
+if [ $ret -ne 0 ]; then
+	# Wait a little while on failure to ensure the chroot is unused.
+	sleep 10
+fi
+
+cleanup
+exit ${ret}

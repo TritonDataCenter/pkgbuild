@@ -100,7 +100,7 @@ EOF
 echo "done."
 echo -n "Installing additional tools packages..."
 /usr/sbin/chroot ${chrootdir} /bin/bash -c "
-	${TOOLS_BASEDIR}/sbin/pkg_add git-base grep mozilla-rootcerts pkgdiff pkglint >/dev/null 2>&1
+	${TOOLS_BASEDIR}/sbin/pkg_add git-base grep mozilla-rootcerts pkgdiff pkglint nbpatch >/dev/null 2>&1
 	${TOOLS_BASEDIR}/sbin/mozilla-rootcerts install >/dev/null 2>&1 || true
 "
 echo "done."
