@@ -11,6 +11,7 @@ devel/bmake
 devel/git
 devel/memcached
 devel/mercurial
+devel/php-memcached
 devel/py-pexpect
 devel/py-pip
 devel/py-readline
@@ -31,6 +32,10 @@ net/arping
 net/py-dns
 net/rabbitmq
 net/haproxy
+net/httping
+net/omniORB
+net/omniEvents
+net/proftpd
 net/unison
 pkgtools/bootstrap-mk-files
 pkgtools/pkg_alternatives
@@ -54,3 +59,6 @@ www/curl
 www/lynx
 www/nginx
 www/py-mod_wsgi
+www/squid3
+www/squidGuard
+www/squidview
