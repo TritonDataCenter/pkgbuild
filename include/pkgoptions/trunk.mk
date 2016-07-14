@@ -47,7 +47,7 @@ PKG_DEFAULT_OPTIONS+=		-ruby-build-ri-db
 #    which may conflict with user preference
 #
 PKG_OPTIONS.django=		pgsql sqlite
-PKG_OPTIONS.dovecot=		sqlite
+PKG_OPTIONS.dovecot=		mysql pgsql sqlite
 PKG_OPTIONS.sphinx-search=	mysql pgsql
 PKG_OPTIONS.sqlrelay=		mysql sqlite
 PKG_OPTIONS.sympa=		mysql pgsql
@@ -72,10 +72,10 @@ PKG_OPTIONS.lighttpd+=		lua bzip
 PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
-.if ${NGINX_HTTP_V2:U} == "yes"
-PKG_OPTIONS.nginx+=		v2
-.else
+.if !empty(PKG_SUPPORTED_OPTIONS:U:Mspdy)
 PKG_OPTIONS.nginx+=		spdy
+.else
+PKG_OPTIONS.nginx+=		v2
 .endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.openssh+=		hpn-patch
