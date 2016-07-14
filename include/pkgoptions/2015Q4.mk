@@ -79,7 +79,7 @@ PKG_OPTIONS.nginx+=		v2
 PKG_OPTIONS.nginx+=		spdy
 .endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
-PKG_OPTIONS.openssh+=		hpn-patch
+#PKG_OPTIONS.openssh+=		hpn-patch	# XXX: 7.2p2 no HPN
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
