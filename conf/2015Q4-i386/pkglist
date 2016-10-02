@@ -10,6 +10,7 @@ databases/mysql56-client
 databases/postgresql94-client
 databases/unixodbc
 devel/binutils
+devel/flex
 devel/gdb
 devel/gsoap
 lang/gcc49
