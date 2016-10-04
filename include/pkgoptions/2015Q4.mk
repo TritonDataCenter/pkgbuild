@@ -90,6 +90,11 @@ PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
 PKG_OPTIONS.weechat+=		lua perl python ruby
+PKG_OPTIONS.postgresql91+=	xml
+PKG_OPTIONS.postgresql92+=	xml
+PKG_OPTIONS.postgresql93+=	xml
+PKG_OPTIONS.postgresql94+=	xml
+PKG_OPTIONS.postgresql95+=	xml
 
 #
 # Global version defaults

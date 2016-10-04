@@ -152,7 +152,7 @@ chown uucp:uucp ${chrootdir}/var/spool/locks
 
 # /etc
 mkdir -p ${chrootdir}/etc
-(cd /etc; ${TAR} -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; ${TAR} -xf -)
+(cd /etc; ${CMD_TAR} -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; ${CMD_TAR} -xf -)
 
 # passwd/group files from the overlay to ensure unmodified copies
 cp ${PKGBUILD_BASEDIR}/overlay/{group,passwd,shadow} ${chrootdir}/etc/
@@ -198,7 +198,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
-		${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
+		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		export PKG_SKIP_SMF=yes
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF

@@ -26,9 +26,11 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mjoyent/mariadb10-server) \
  || !empty(PKGPATH:Mlang/clang*) \
  || !empty(PKGPATH:Mlang/gcc*) \
+ || !empty(PKGPATH:Mlang/llvm) \
  || !empty(PKGPATH:Mlang/mercury) \
  || !empty(PKGPATH:Mlang/mono*) \
  || !empty(PKGPATH:Mlang/nodejs*) \
+ || !empty(PKGPATH:Mlang/rust) \
  || !empty(PKGPATH:Mmail/thunderbird*) \
  || !empty(PKGPATH:Mwip/ghc) \
  || !empty(PKGPATH:Mwww/firefox) \
