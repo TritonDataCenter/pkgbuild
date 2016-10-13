@@ -4,3 +4,6 @@ PGSQL_VERSION_DEFAULT=95
 PKG_APACHE_DEFAULT=apache24
 
 PKG_OPTIONS.node = openssl
+
+PKG_OPTIONS.openssl = zlib threads
+
