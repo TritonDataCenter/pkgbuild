@@ -69,6 +69,7 @@ net/py-twisted
 net/py-twisted-docs
 net/rabbitmq
 net/rabbitmq-c
+net/rsync
 net/unison
 pkgtools/bootstrap-mk-files
 pkgtools/pkg_alternatives
