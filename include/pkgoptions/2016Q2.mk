@@ -74,11 +74,7 @@ PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
-.if !empty(PKG_SUPPORTED_OPTIONS:U:Mspdy)
-PKG_OPTIONS.nginx+=		spdy
-.else
 PKG_OPTIONS.nginx+=		v2
-.endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
 #PKG_OPTIONS.openssh+=		hpn-patch	# no hpn-patch for 7.2 yet
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
