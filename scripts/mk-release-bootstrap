@@ -108,7 +108,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 			X11_TYPE=		modular
 
 			.
-			r ${PKGSRC_BASEDIR}/include/pkgoptions/osx.mk
+			r ${PKGBUILD_BASEDIR}/include/pkgoptions/osx.mk
 			w
 			q
 		EOF
@@ -160,7 +160,8 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
 	${CMD_TAR} -zc -f ${RELEASE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
-	    .${PKGSRC_PREFIX} .\${slashprivate}${PKGSRC_VARBASE}/db/pkgin/cache
+	    .${PKGSRC_PREFIX} \
+	    .\${slashprivate}${PKGSRC_VARBASE}/db/pkgin/cache \
 	    \${tarextras}
 	${CMD_TAR} -zc -f ${UPGRADE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
