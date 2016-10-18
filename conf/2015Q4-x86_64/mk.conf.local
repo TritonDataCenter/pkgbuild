@@ -7,3 +7,4 @@ PKG_OPTIONS.node = openssl
 
 PKG_OPTIONS.openssl = zlib threads
 
+PKG_OPTIONS.nginx = dav status realip uwsgi memcache naxsi perl gzip headers-more
