@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Simple script to run a bulk build in a loop at most once per day.
+#
+# Assumes /data/pkgsrc and /data/pkgbuild.
+#
+
+if [ $# -eq 1 ]; then
+	PKGBUILD=$1; shift
+	export PKGBUILD
+else
+	echo "usage: $0 <pkgbuild>" >&2
+	exit 2
+fi
+
+BUILDSTAMP="/var/tmp/pkgbuild-build-stamp"
+PAUSESTAMP="/var/tmp/pkgbuild-pause-stamp"
+
+while true; do
+
+	if [ -f ${PAUSESTAMP} ]; then
+		echo "Pausing for 15 minutes due to ${PAUSESTAMP}..."
+		sleep 900
+		continue
+	fi
+
+	#
+	# Build at most once per day.
+	#
+	timenow="$(date '+%s')"
+	if [ -f ${BUILDSTAMP} ]; then
+		read timelast < ${BUILDSTAMP} 
+		delta="$((${timenow} - ${timelast}))"
+		if [ ${delta} -gt 0 ] && [ ${delta} -lt 86400 ]; then
+			echo "Sleeping for ${delta} seconds..."
+			sleep ${delta}
+		fi
+	fi
+
+	(cd /data/pkgsrc; git pull)
+	if [ $? -ne 0 ]; then
+		echo "Something went wrong, investigate."
+		break
+	fi
+
+	timenow="$(date '+%s')"
+	echo ${timenow} > ${BUILDSTAMP}
+
+	/data/pkgbuild/scripts/run-jenkins-build
+done
