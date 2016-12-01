@@ -76,7 +76,7 @@ while true; do
 			echo "Not a build day, trying again tomorrow"
 			d_hr=$(date '+%H' | sed -e 's,^0,,')
 			d_mn=$(date '+%M' | sed -e 's,^0,,')
-			sleep $((60 * (1400 - ((${d_hr} * 60) + ${d_mn}))))
+			sleep $((60 * (1440 - ((${d_hr} * 60) + ${d_mn}))))
 			continue
 		fi
 	fi
