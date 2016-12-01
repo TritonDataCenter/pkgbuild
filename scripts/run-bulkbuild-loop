@@ -5,11 +5,34 @@
 # Assumes /data/pkgsrc and /data/pkgbuild.
 #
 
+usage()
+{
+	echo "usage: $0 [-d <day[,day..]>] <pkgbuild>" >&2
+}
+
+BUILD_DAYS=
+while getopts ":d:h" opt; do
+	case "${opt}" in
+	d)
+		BUILD_DAYS="${OPTARG//,/ }"
+		;;
+	h)
+		usage
+		exit
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
 if [ $# -eq 1 ]; then
 	PKGBUILD=$1; shift
 	export PKGBUILD
 else
-	echo "usage: $0 <pkgbuild>" >&2
+	usage
 	exit 2
 fi
 
@@ -35,6 +58,26 @@ while true; do
 			waittime="$((86400 - ${delta}))"
 			echo "Sleeping for ${waittime} seconds..."
 			sleep ${waittime}
+		fi
+	fi
+
+	#
+	# Build only on days requested.
+	#
+	if [ -n "${BUILD_DAYS}" ]; then
+		build_today=false
+		daynum=$(date '+%u')
+		for day in ${BUILD_DAYS}; do
+			if [ ${day} -eq ${daynum} ]; then
+				build_today=true
+			fi
+		done
+		if ! ${build_today}; then
+			echo "Not a build day, trying again tomorrow"
+			d_hr=$(date '+%H' | sed -e 's,^0,,')
+			d_mn=$(date '+%M' | sed -e 's,^0,,')
+			sleep $((60 * (1400 - ((${d_hr} * 60) + ${d_mn}))))
+			continue
 		fi
 	fi
 
