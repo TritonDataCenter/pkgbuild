@@ -41,7 +41,7 @@ chrootdir="${CHROOT_BASEDIR}/dev-${PKGBUILD}"
 # Check that we're on the correct set of hosts for the build
 #
 if [ -n "${HOSTS_REQUIRED}" ]; then
-	if ! $force && [[ ! "$(uname -n)" =~ "${HOSTS_REQUIRED}" ]]; then
+	if ! $force && [[ ! "$(uname -n)" =~ ${HOSTS_REQUIRED} ]]; then
 		echo "You must use a host matching ${HOSTS_REQUIRED} for ${pkgbuild}" >&2
 		exit 1
 	fi
