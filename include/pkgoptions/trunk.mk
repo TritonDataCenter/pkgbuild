@@ -13,7 +13,7 @@ PKG_DEFAULT_OPTIONS=		dtrace pam pcre readline ncursesw
 #
 PKG_DEFAULT_OPTIONS+=		unicode utf8 wide-curses
 PKG_DEFAULT_OPTIONS+=		bzip bzip2 lzo
-PKG_DEFAULT_OPTIONS+=		curl geoip inet6 libssh2
+PKG_DEFAULT_OPTIONS+=		curl geoip http2 inet6 libssh2
 PKG_DEFAULT_OPTIONS+=		openssl sasl ssl tls
 PKG_DEFAULT_OPTIONS+=		bdb db4 ldap
 PKG_DEFAULT_OPTIONS+=		unixodbc memcached
