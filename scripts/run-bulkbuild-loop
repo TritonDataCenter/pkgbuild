@@ -81,7 +81,7 @@ while true; do
 		fi
 	fi
 
-	(cd /data/pkgsrc; git pull)
+	(cd /data/pkgsrc && git fetch --all && git reset --hard upstream/trunk)
 	if [ $? -ne 0 ]; then
 		echo "Something went wrong, investigate."
 		break
