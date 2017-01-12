@@ -88,6 +88,13 @@ else
 		BINPKG_SITES=	${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
 	EOF
 fi
+if [ -n ${PKGSRC_GPG_SIGN_AS} ]; then
+	cat >>${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf <<-EOF
+		GPG=${CMD_GPG}
+		GPG_SIGN_AS=${PKGSRC_GPG_SIGN_AS}
+	EOF
+fi
+
 cat >${chrootdir}${ROOT_HOMEDIR}/.curlrc <<-EOF
 	--capath ${TOOLS_BASEDIR}/etc/openssl/certs
 EOF
