@@ -31,6 +31,7 @@ devel/bmake
 devel/gdb
 devel/git
 devel/gsoap
+devel/jq
 devel/memcached
 devel/mercurial
 devel/nbpatch
@@ -57,6 +58,8 @@ meta-pkgs/modular-xorg-fonts
 meta-pkgs/php56-extensions
 meta-pkgs/php70-extensions
 meta-pkgs/pkg_developer
+misc/pinfo
+misc/tmux
 net/arping
 net/haproxy
 net/httping
