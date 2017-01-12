@@ -89,6 +89,12 @@ else
 	EOF
 fi
 if [ -n ${PKGSRC_GPG_SIGN_AS} ]; then
+	ed ${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+		g/^GPG=/d
+		g/^GPG_SIGN_AS=/d
+		w
+		q
+	EOF
 	cat >>${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf <<-EOF
 		GPG=${CMD_GPG}
 		GPG_SIGN_AS=${PKGSRC_GPG_SIGN_AS}
