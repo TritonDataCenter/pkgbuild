@@ -73,6 +73,19 @@ ed ${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 	w
 	q
 EOF
+if [ -n "${CMD_GPG}" -a -n "${PKGSRC_GPG_SIGN_AS}" ]; then
+	ed ${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+		g/^GPG=/d
+		g/^GPG_SIGN_AS=/d
+		i
+		GPG=${CMD_GPG}
+		GPG_SIGN_AS=${PKGSRC_GPG_SIGN_AS}
+		.
+		w
+		q
+	EOF
+fi
+
 if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 	cat >>${chrootdir}${PKGSRC_SYSCONFDIR}/pkg_install.conf <<-EOF
 		PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/All
