@@ -1,0 +1,213 @@
+# $NetBSD: pbulk.conf,v 1.21 2015/09/13 11:45:37 joerg Exp $
+
+# Sanitise PATH, we cannot rely on the environment.
+#
+PATH=@PBULK_PATH@
+
+# Limit processes to an hour of CPU time.  Anything using this much is most
+# likely broken.
+#
+ulimit -t 3600
+
+# Version of the configuration file. This is bumped whenever the default
+# config changes to notify the administrator about updates.
+#
+config_version=@CONFIG_VERSION@
+
+# If set, ensure that the build host is running this exact platform.
+#
+pi_required=@PI_REQUIRED@
+
+# The URL where the build report will be made available. This is only
+# used in the .txt version of the report.
+#
+base_url=http://us-east.manta.joyent.com/@MANTA_USER@/public/reports/@REPORT_DIR@
+
+# If yes, keep the last scan results in ${bulklog}.orig and try to reuse them.
+#
+reuse_scan_results=@REUSE_SCAN@
+
+# The pbulk framework can use multiple machines to build the packages.
+# On a single-processor, non-distributed build, you may want to say "no"
+# here.
+#
+master_mode=@MASTER_MODE@
+master_ip="@MASTER_IP@"
+scan_clients="@PBULK_CLIENTS@"
+build_clients="@PBULK_CLIENTS@"
+
+master_port_scan=${master_ip}:@SCAN_PORT@
+master_port_build=${master_ip}:@BUILD_PORT@
+
+# Manta upload settings
+#
+MANTA_USER="@MANTA_USER@"
+MANTA_SUBUSER="@MANTA_SUBUSER@"
+MANTA_KEY_ID="@MANTA_KEY_ID@"
+MANTA_URL="https://us-east.manta.joyent.com"
+MANTA_PATH="@MANTA_PATH@"
+
+# Some flags for the programs that publish the binary packages and the
+# build report. If you want to disable the publishing at all, see below.
+#
+@RSYNC_PKGS@pkg_rsync_args="-av @RSYNC_ARGS@ -e ssh"
+@RSYNC_PKGS@pkg_rsync_target="@REMOTE_PACKAGE_SERVER@:@REMOTE_PACKAGE_PREFIX@/@REMOTE_PACKAGE_BASEDIR@/@REMOTE_PACKAGE_DIR@"
+# Support for --link-dest and atomic directory updates.
+@RSYNC_PKGS@pkg_rsync_target_host="@REMOTE_PACKAGE_SERVER@"
+@RSYNC_PKGS@pkg_rsync_target_linkdest="@REMOTE_PACKAGE_PREFIX@/@REMOTE_PACKAGE_BASEDIR@/@REMOTE_PACKAGE_DIR@"
+@RSYNC_PKGS@pkg_rsync_target_tmpdest="@REMOTE_PACKAGE_PREFIX@/.@REMOTE_PACKAGE_BASEDIR@/@REMOTE_PACKAGE_DIR@"
+@RSYNC_REPORT@report_rsync_args="-avz --delete-excluded -e ssh"
+@RSYNC_REPORT@report_rsync_target="@REMOTE_PACKAGE_SERVER@:@REMOTE_PACKAGE_PREFIX@/@REMOTE_REPORT_URL@/@REPORT_DIR@"
+@RSYNC_REPORT@report_manta_target="/@MANTA_USER@/public/reports/@REPORT_DIR@"
+report_subject_prefix="pkgsrc-@SUBJECT_SUFFIX@"
+report_recipients="@REPORT_RECIPIENTS@"
+report_from_addr="@REPORT_FROM_ADDR@"
+report_from_name="@REPORT_FROM_NAME@"
+export report_from_addr report_from_name
+
+# This variable allows you to override the platform description used in the
+# report, useful to distinguish between Linux distributions.
+#
+@PBULK_REPORT_PLATFORM@
+
+# Example variables used by an optional pre-upload script to ensure certain
+# criteria are met before publishing.
+#
+# Set a minimum number of successful packages.
+@PKG_RSYNC_MIN@
+#
+# Ensure all packages listed in the file built successfully.
+@PKG_RSYNC_REQUIRED_PKGS@
+
+# Chroot configuration
+#
+chroot_create=@CHROOT_CREATE@
+chroot_delete=@CHROOT_DELETE@
+chroot_dir=@CHROOT_DIR@
+build_chroots=@BUILD_CHROOTS@
+scan_chroots=@SCAN_CHROOTS@
+
+# An archive containing the pkgsrc binary tree after bootstrapping.
+#
+bootstrapkit=@LOCAL_PACKAGE_BASEDIR@/@BOOTSTRAP_PBULK_DIR@/@BOOTSTRAP_KIT@.tar.gz
+
+# Optionally build a subset of the available packages and their dependencies.
+# The file is a newline separated list of package locations (e.g. lang/perl5).
+#
+@LIMITED_LIST@
+
+# Optionally ignore unresolvable dependencies for a full build (e.g.
+# a build without limited_list set).  Default behavior is to bail out.
+#
+ignore_missing_dependencies=@IGNORE_MISSING_DEPS@
+
+# If yes, consider a package up-to-date, if the dependency list matches
+# the existing binary package and the recorded RCS IDs match the pkgsrc
+# tree. Otherwise, additionally require that the package is not older
+# than any of the dependencies.
+#
+skip_age_check=no
+
+report_graph_script_limit=512
+
+# Account used for user-destdir builds. This account should have
+# no special permissions.
+#
+unprivileged_user=pbulk
+
+# If yes, run the checksum phase as unprivileged user.
+# Note: requires DISTDIR to be writeable for the unprivileged user.
+use_unprivileged_checksum=no
+
+# Variables used for the optional cross-compiling of packages.
+#
+cross_compile=no
+target_arch=vax
+target_destdir=/usr/src/destdir.${target_arch}
+
+# The directories where the various files are created.
+#
+bulklog=@BULKLOG_BASEDIR@/@BULKLOG_DIR@
+local_bulklog=@LOCAL_BULKLOG@
+packages=@LOCAL_PACKAGE_BASEDIR@/@LOCAL_PACKAGE_DIR@
+prefix=@PKGSRC_PREFIX@
+pkgsrc=@PKGSRC_BASEDIR@/@PKGSRC_DIR@
+pkgdb=@PKGSRC_PKGDBDIR@
+varbase=@PKGSRC_VARBASE@
+
+# The following programs must NOT be inside ${prefix}
+pkg_info=@PBULK_BASEDIR@/sbin/pkg_info
+pkg_add=@PKG_ADD@
+pkg_delete=@PBULK_BASEDIR@/sbin/pkg_delete
+
+# The tools that are used for building the packages. If you do not want
+# to publish anything at all, set rsync=: and mail=:.
+#
+bzip2=@CMD_BZIP2@
+digest=@PBULK_BASEDIR@/bin/digest
+gzip="@CMD_GZIP@ -nf -9"
+# On non-NetBSD, this should usually point at the bmake in ${prefix}, not the
+# make used to build pbulk itself.
+make=${prefix}/bin/bmake
+mail=@PKGBUILD_BASEDIR@/scripts/mail-report
+neato=@PBULK_BASEDIR@/bin/neato
+rsync=@PBULK_BASEDIR@/bin/rsync
+sed=@PBULK_BASEDIR@/bin/nbsed
+tar=@CMD_TAR@
+xz=@CMD_XZ@
+
+loc=${bulklog}/meta
+
+pbuild=@PBULK_BASEDIR@/bin/pbulk-build
+presolve=@PBULK_BASEDIR@/bin/pbulk-resolve
+pscan=@PBULK_BASEDIR@/bin/pbulk-scan
+
+# When a package build fails, it is often necessary to have a look at
+# the working directory or the installed files. When these options are
+# set to "yes", they will be archived in the log directory.
+#
+keep_wrkdir=no
+keep_prefix=no
+
+chroot_script=@PBULK_BASEDIR@/libexec/pbulk/chroot
+client_prepare=@PBULK_BASEDIR@/libexec/pbulk/client-prepare
+client_prepare_action=@PBULK_BASEDIR@/libexec/pbulk/client-clean
+client_prepare_chroot=:
+pkg_up_to_date_script=@PBULK_BASEDIR@/libexec/pbulk/pkg-up-to-date
+pbuild_script=@PBULK_BASEDIR@/libexec/pbulk/pkg-build
+pbuild_start_script=@PBULK_BASEDIR@/libexec/pbulk/build-client-start
+pscan_prepare=@PBULK_BASEDIR@/libexec/pbulk/client-clean
+pscan_start_script=@PBULK_BASEDIR@/libexec/pbulk/scan-client-start
+report_script=@PBULK_BASEDIR@/libexec/pbulk/create-report
+report_html_script=@PBULK_BASEDIR@/libexec/pbulk/create-report-html
+report_txt_script=@PBULK_BASEDIR@/libexec/pbulk/create-report-txt
+report_graph_script=@PBULK_BASEDIR@/libexec/pbulk/create-broken-graph
+packages_script=@PBULK_BASEDIR@/libexec/pbulk/compute-packages
+
+script_phase_pre_build=@PBULK_BASEDIR@/libexec/pbulk/pre-build
+script_phase_build=@PBULK_BASEDIR@/libexec/pbulk/build
+script_phase_report=@PBULK_BASEDIR@/libexec/pbulk/report
+script_phase_scan=@PBULK_BASEDIR@/libexec/pbulk/scan
+# Optional pre-upload script called from upload.
+script_phase_pre_upload=@PKGBUILD_BASEDIR@/scripts/pre-upload
+script_phase_upload=@PBULK_BASEDIR@/libexec/pbulk/upload
+
+# Arguments are buildlog and pkgname
+@SYNC_BUILDLOG@
+# PKG_SUFX as set in mk.conf
+pkg_sufx=@PKG_SUFFIX@
+# Arguments are path to the temporary package file, the package name
+# and categories.  The default handler just copies the file to ${packages}
+# and creates the symlinks.
+@SYNC_PACKAGE@
+
+# Optional local override scripts.
+#
+@CLIENT_CLEAN_LOCAL@
+
+# Source optional user preferences file.
+#
+userprefs="@PKGBUILD_BASEDIR@/conf/@PKGBUILD@/pbulk.conf.local"
+if [ -f ${userprefs} ]; then
+	. ${userprefs}
+fi

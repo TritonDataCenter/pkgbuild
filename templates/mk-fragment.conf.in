@@ -1,0 +1,1 @@
+.include "@PKGBUILD_BASEDIR@/conf/@PKGBUILD@/mk.conf"
