@@ -13,10 +13,6 @@
 WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH}
 .endif
 .if defined(WIPJOYPKGS)
-#  Hack to remove packages which depend on multimysql.
-.  if !empty(PKGBUILD:Mlinux-trunk*)
-WIPJOYPKGS:=	${WIPJOYPKGS:Njoyent/percona:Njoyent/percona-xtrabackup}
-.  endif
 .  for pkg in ${WIPJOYPKGS}
 USER_ADDITIONAL_PKGS+=	${pkg}
 .  endfor
