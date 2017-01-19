@@ -77,11 +77,8 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <authToken></authToken>
   <triggers>
-    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.11">
-        <spec></spec>
-    </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
-      <spec>00 18 * * 2,4,6</spec>
+      <spec></spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
     </hudson.triggers.SCMTrigger>
   </triggers>
