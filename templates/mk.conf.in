@@ -69,7 +69,7 @@ PKG_COMPRESSION=	@PKG_COMPRESSION@
 #
 # PKG_OPTIONS cache directory.
 #
-PBULK_CACHE_DIRECTORY=	@BULKLOG_BASEDIR@/@BULKLOG_DIR@/cache
+@PBULK_CACHEDIR@
 
 #
 # List of per-PKGPATH MAKE_JOBS definitions.  These are the packages that
