@@ -53,12 +53,14 @@ if [ -d ${chrootdir} ]; then
 fi
 
 echo -n "Creating ${chrootdir}..."
-${CHROOT_CREATE} ${chrootdir} && echo "done."
+${CHROOT_CREATE} ${chrootdir}
+echo "done."
 echo -n "Unpacking ${BOOTSTRAP_KIT} into ${chrootdir}..."
 /usr/sbin/chroot ${chrootdir} /bin/bash -c "
 	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
-" && echo "done."
-echo -n "Setting environment..."
+"
+echo "done."
+echo -n "Setting up environment..."
 cat >${chrootdir}${ROOT_HOMEDIR}/.bash_profile <<EOF
 PATH="${PKGSRC_PREFIX}/sbin:${PKGSRC_PREFIX}/bin:${PBULK_PATH}:${TOOLS_BASEDIR}/sbin:${TOOLS_BASEDIR}/bin"
 PS1="\[\033[0m\]\[\033[1;36m\]-\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;32m\]\u\[\033[0m\]\[\033[1;35m\]@\[\033[0m\]\[\033[0;32m\]\h\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\](\[\033[0m\]\[\033[0;31m\]${chrootdir}\[\033[0m\]\[\033[1;36m\])-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;33m\]\w\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]-\n\[\033[0m\]\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[0;37m\]> \[\033[0m\]"
@@ -84,6 +86,14 @@ if [ -n "${CMD_GPG}" -a -n "${PKGSRC_GPG_SIGN_AS}" ]; then
 		w
 		q
 	EOF
+	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+		${CMD_GPG} --no-default-keyring --primary-keyring \
+		    ${PKGSRC_SYSCONFDIR}/gnupg/pkgsrc.gpg --list-keys ${PKGSRC_GPG_SIGN_AS} >/dev/null 2>&1
+		if [ \$? -ne 0 ]; then
+			${CMD_GPG} --no-default-keyring --primary-keyring \
+			    ${PKGSRC_SYSCONFDIR}/gnupg/pkgsrc.gpg --recv ${PKGSRC_GPG_SIGN_AS} >/dev/null 2>&1
+		fi
+	"
 fi
 
 if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
