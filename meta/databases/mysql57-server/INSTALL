@@ -1,0 +1,17 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if [ ! -f @VARBASE@/log/mysql/error.log ]; then
+		mkdir -p @VARBASE@/log/mysql
+		touch @VARBASE@/log/mysql/error.log
+		chown -R @MYSQL_USER@:@MYSQL_GROUP@ @VARBASE@/log/mysql
+	fi
+	if [ -d @MYSQL_DATADIR@/mysql ]; then
+		echo "Skipping MySQL database initialization, as databases already exist."
+	else
+		# Initialize MySQL
+		${PKG_PREFIX}/sbin/mysqld --user=@MYSQL_USER@ --initialize-insecure
+	fi
+	;;
+esac

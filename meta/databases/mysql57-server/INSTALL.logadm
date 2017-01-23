@@ -1,0 +1,10 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	logadm -C 5 -c -s 100m -z 1 -w '@VARBASE@/log/mysql/*.log'
+	;;
+DEINSTALL)
+	logadm -r '@VARBASE@/log/mysql/*.log'
+	;;
+esac
