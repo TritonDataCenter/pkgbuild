@@ -73,13 +73,9 @@ PKG_OPTIONS.lighttpd+=		lua bzip
 PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
-.if ${NGINX_HTTP_V2:U} == "yes"
 PKG_OPTIONS.nginx+=		v2
-.else
-PKG_OPTIONS.nginx+=		spdy
-.endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
-PKG_OPTIONS.openssh+=		hpn-patch
+#PKG_OPTIONS.openssh+=		hpn-patch	# XXX: 7.2p2 no HPN
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
@@ -90,6 +86,11 @@ PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
 PKG_OPTIONS.weechat+=		lua perl python ruby
+PKG_OPTIONS.postgresql91+=	xml
+PKG_OPTIONS.postgresql92+=	xml
+PKG_OPTIONS.postgresql93+=	xml
+PKG_OPTIONS.postgresql94+=	xml
+PKG_OPTIONS.postgresql95+=	xml
 
 #
 # Global version defaults

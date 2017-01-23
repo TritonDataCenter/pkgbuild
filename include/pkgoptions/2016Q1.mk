@@ -13,8 +13,8 @@ PKG_DEFAULT_OPTIONS=		dtrace pam pcre readline ncursesw
 #
 PKG_DEFAULT_OPTIONS+=		unicode utf8 wide-curses
 PKG_DEFAULT_OPTIONS+=		bzip bzip2 lzo
-PKG_DEFAULT_OPTIONS+=		curl geoip http2 inet6 libssh2
-PKG_DEFAULT_OPTIONS+=		openssl sasl ssl tls
+PKG_DEFAULT_OPTIONS+=		curl geoip inet6 libssh2
+PKG_DEFAULT_OPTIONS+=		sasl ssl tls
 PKG_DEFAULT_OPTIONS+=		bdb db4 ldap
 PKG_DEFAULT_OPTIONS+=		unixodbc memcached
 PKG_DEFAULT_OPTIONS+=		gif jpeg png rsvg
@@ -47,7 +47,9 @@ PKG_DEFAULT_OPTIONS+=		-ruby-build-ri-db
 #    which may conflict with user preference
 #
 PKG_OPTIONS.django=		pgsql sqlite
+PKG_OPTIONS.dovecot=		sqlite
 PKG_OPTIONS.sphinx-search=	mysql pgsql
+PKG_OPTIONS.sqlrelay=		mysql sqlite
 PKG_OPTIONS.sympa=		mysql pgsql
 PKG_OPTIONS.sysbench=		mysql pgsql
 PKG_OPTIONS.ejabberd=		sqlite
@@ -57,6 +59,7 @@ PKG_OPTIONS.ejabberd=		sqlite
 # options to revert defaults or mutually-exclusive selections.
 #
 PKG_OPTIONS.clamav+=		milter
+PKG_OPTIONS.dovecot+=		gssapi
 PKG_OPTIONS.exim+=		saslauthd spf
 PKG_OPTIONS.ffmpeg+=		tools	# XXX: make default in pkgsrc
 PKG_OPTIONS.freeradius+=	-bdb	# no db4 support
@@ -65,29 +68,29 @@ PKG_OPTIONS.gnustep+=		fragile
 PKG_OPTIONS.graphviz+=		-perl	# XXX: multiarch
 PKG_OPTIONS.hunspell+=		-wide-curses
 PKG_OPTIONS.irssi+=		perl
-PKG_OPTIONS.libthrift+=		php ruby
-PKG_OPTIONS.lighttpd+=		lua
+PKG_OPTIONS.libthrift+=		php
+PKG_OPTIONS.lighttpd+=		lua bzip
 PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
+.if ${NGINX_HTTP_V2:U} == "yes"
 PKG_OPTIONS.nginx+=		v2
+.else
+PKG_OPTIONS.nginx+=		spdy
+.endif
 PKG_OPTIONS.openldap-server+=	-unixodbc
-PKG_OPTIONS.openssh+=		hpn-patch
+#PKG_OPTIONS.openssh+=		hpn-patch	# no hpn-patch for 7.2 yet
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
 PKG_OPTIONS.qmail+=		-sasl -tls
+PKG_OPTIONS.rsyslog+=		file gnutls
 PKG_OPTIONS.scmgit+=		-python
 PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
 PKG_OPTIONS.weechat+=		lua perl python ruby
-PKG_OPTIONS.postgresql91+=	xml
-PKG_OPTIONS.postgresql92+=	xml
-PKG_OPTIONS.postgresql93+=	xml
-PKG_OPTIONS.postgresql94+=	xml
-PKG_OPTIONS.postgresql95+=	xml
 
 #
 # Global version defaults
