@@ -589,3 +589,9 @@ PKG_GID.sqlrelay=	811
 #
 PKG_UID.znc=		810
 PKG_GID.znc=		810
+#
+PKG_UID.pgbounce=	809
+PKG_GID.pgbounce=	809
+#
+PKG_UID.zabbix=		808
+PKG_GID.zabbix=		808

@@ -119,7 +119,7 @@ Linux)
 	fi
 	paxprog=""
 	sedprog=/bin/sed
-	sandboxMountDirs="$sandboxMountDirs /lib64 /usr/lib64 /usr/kerberos /run"
+	sandboxMountDirs="$sandboxMountDirs /lib64 /usr/lib64 /usr/kerberos"
 	sandboxWriteDirs="$sandboxWriteDirs /proc"
 	;;
 NetBSD)
@@ -468,6 +468,12 @@ chmod +x $sandbox_script
 case $opsys in
 Darwin)
 	$cpprog /var/run/resolv.conf $sandbox/var/run/resolv.conf
+	;;
+Linux)
+	if [ -f /run/resolvconf/resolv.conf ]; then
+		$mkdirprog $sandbox/run/resolvconf
+		$cpprog /run/resolvconf/resolv.conf $sandbox/run/resolvconf/resolv.conf
+	fi
 	;;
 SunOS)
 	$cpprog /etc/mnttab $sandbox/etc/mnttab

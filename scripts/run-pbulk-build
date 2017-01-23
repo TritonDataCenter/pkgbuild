@@ -6,7 +6,6 @@
 # by the Jenkins environment.
 #
 
-
 if [ -z "${PKGBUILD}" ]; then
 	PKGBUILD=${1}
 fi
@@ -54,7 +53,7 @@ fi
 # heavyweight - but testing for the gpg-agent socket (or a file which denotes
 # the host doesn't use the agent) should do for now.
 #
-if [ -n "${GPG_SIGN_AS}" ]; then
+if [ -n "${PKGSRC_GPG_SIGN_AS}" ]; then
 	for ip in ${PBULK_CLIENTS}; do
 		ssh ${ip} "test -S ${ROOT_HOMEDIR}/.gnupg/S.gpg-agent ||
 			    test -f ${ROOT_HOMEDIR}/.gnupg/no-agent"
@@ -89,7 +88,7 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 fi
 echo "Creating ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
+env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SU} - root -c "
 	PATH=${PBULK_PATH}
 	echo 'Running bulkbuild${PBULK_RESTART:+-restart} using' \
 	    '${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf'

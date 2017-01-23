@@ -39,23 +39,26 @@ fi
 # Helpful aliases
 RELEASE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}${bootstrap_date}.tar.gz"
 RELEASE_ASC="${RELEASE_TAR}.asc"
+UPGRADE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}${bootstrap_date}-upgrade.tar.gz"
+UPGRADE_ASC="${UPGRADE_TAR}.asc"
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
 	set -e
 	PATH=${PBULK_PATH}
-	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
-	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
-	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All ${PREFIX}/sbin/pkg_add \
-	    mozilla-rootcerts pkg_alternatives pkgin pkgsrc-gnupg-keys
+	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
+	PATH=${PKGSRC_PREFIX}/sbin:${PKGSRC_PREFIX}/bin:${PBULK_PATH}
+	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All \
+	    ${PKGSRC_PREFIX}/sbin/pkg_add -U \
+	    mozilla-rootcerts pkg_alternatives pkg_install pkgin pkgsrc-gnupg-keys
 	# Avoid 'install' as it fails if /etc/ssl/certs exists.
 	(
-		cd ${SYSCONFDIR}/openssl/certs
-		${PREFIX}/sbin/mozilla-rootcerts extract >/dev/null
-		${PREFIX}/sbin/mozilla-rootcerts rehash >/dev/null
+		cd ${PKGSRC_SYSCONFDIR}/openssl/certs
+		${PKGSRC_PREFIX}/sbin/mozilla-rootcerts extract >/dev/null
+		${PKGSRC_PREFIX}/sbin/mozilla-rootcerts rehash >/dev/null
 	)
-	rm -f ${PREFIX}/.dlj_license_accepted
-	ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+	rm -f ${PKGSRC_PREFIX}/.dlj_license_accepted
+	ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 		1,5d
 		i
 		#
@@ -74,7 +77,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	EOF
 	# This is only required for legacy builds and could be removed.
 	if [ -n '${PREFER_NATIVE}' -a '${PREFER_NATIVE}' != 'yes' ]; then
-		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 			/^PREFER_PKGSRC/
 			i
 			PREFER_NATIVE=		${PREFER_NATIVE}
@@ -83,20 +86,20 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 			q
 		EOF
 	fi
-	# SmartOS specific, keyed on GCC_REQD being set.
-	if [ -n '${GCC_REQD}' ]; then
-		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+	# SmartOS specific, keyed on PKGSRC_GCC_REQD being set.
+	if [ -n '${PKGSRC_GCC_REQD}' ]; then
+		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 			/^PKGSRC_COMPILER/
 			a
-			GCC_REQD=		${GCC_REQD}
+			GCC_REQD=		${PKGSRC_GCC_REQD}
 			USE_PKGSRC_GCC=		yes
 			USE_PKGSRC_GCC_RUNTIME=	yes
 			.
 			w
 			q
 		EOF
-	elif [ '${OPSYS}' = 'Darwin' ]; then
-		ed ${SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+	elif [ '${PKGSRC_OPSYS}' = 'Darwin' ]; then
+		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 			a
 
 			FETCH_USING=		curl
@@ -110,23 +113,31 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 			q
 		EOF
 	fi
-	cat >>${SYSCONFDIR}/pkgin/repositories.conf <<-EOF
+	cat >>${PKGSRC_SYSCONFDIR}/mk.conf <<-EOF
+
+		#
+		# All local changes should go into this file, as mk.conf could
+		# be replaced on upgrades.
+		#
+		.sinclude \"${PKGSRC_SYSCONFDIR}/mk.conf.local\"
+	EOF
+	cat >>${PKGSRC_SYSCONFDIR}/pkgin/repositories.conf <<-EOF
 		#
 		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
-	ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+	ed ${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 		g/^GPG=/d
 		g/^GPG_SIGN_AS=/d
 		g/^VERIFIED_INSTALLATION=/d
 		$ a
-		GPG_KEYRING_PKGVULN=${PREFIX}/share/gnupg/pkgsrc-security.gpg
+		GPG_KEYRING_PKGVULN=${PKGSRC_PREFIX}/share/gnupg/pkgsrc-security.gpg
 		PKG_PATH=${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 		.
 		w
 		q
 	EOF
-	if [ -n '${GPG_SIGN_AS}' ]; then
-		ed ${SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
+	if [ -n '${PKGSRC_GPG_SIGN_AS}' ]; then
+		ed ${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 			a
 			VERIFIED_INSTALLATION=always
 			.
@@ -136,23 +147,32 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	fi
 	tarextras=
 	slashprivate=
-	if [ '${OPSYS}' = 'Darwin' ]; then
-		echo '${PREFIX}/sbin' >/etc/paths.d/10-pkgsrc
-		echo '${PREFIX}/bin' >>/etc/paths.d/10-pkgsrc
+	if [ '${PKGSRC_OPSYS}' = 'Darwin' ]; then
+		echo '${PKGSRC_PREFIX}/sbin' >/etc/paths.d/10-pkgsrc
+		echo '${PKGSRC_PREFIX}/bin' >>/etc/paths.d/10-pkgsrc
 		tarextras='./private/etc/paths.d/10-pkgsrc'
 		# Work around El Capitan 'Cannot extract through symlink var'.
-		if [ '${VARBASE}' = '/var' ]; then
+		if [ '${PKGSRC_VARBASE}' = '/var' ]; then
 			slashprivate='/private'
 		fi
 	fi
-	mkdir -p \${slashprivate}${VARBASE}/db/pkgin/cache
+	mkdir -p \${slashprivate}${PKGSRC_VARBASE}/db/pkgin/cache
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
-	${TAR} -zc -f ${RELEASE_TAR} -C / \
+	${CMD_TAR} -zc -f ${RELEASE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
-	    .${PREFIX} .\${slashprivate}${VARBASE}/db/pkgin/cache \${tarextras}
-	if [ -n '${GPG_SIGN_AS}' ]; then
-		rm -f ${RELEASE_ASC}
-		${GPG} --armor --sign --detach -u ${GPG_SIGN_AS} ${RELEASE_TAR}
+	    .${PKGSRC_PREFIX} \
+	    .\${slashprivate}${PKGSRC_VARBASE}/db/pkgin/cache \
+	    \${tarextras}
+	${CMD_TAR} -zc -f ${UPGRADE_TAR} -C / \
+	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
+	    .${PKGSRC_SYSCONFDIR}/gnupg/pkgsrc.gpg \
+	    .${PKGSRC_SYSCONFDIR}/mk.conf \
+	    .${PKGSRC_SYSCONFDIR}/pkg_install.conf \
+	    .${PKGSRC_SYSCONFDIR}/pkgin/repositories.conf
+	if [ -n '${PKGSRC_GPG_SIGN_AS}' ]; then
+		rm -f ${RELEASE_ASC} ${UPGRADE_ASC}
+		${CMD_GPG} --armor --sign --detach -u ${PKGSRC_GPG_SIGN_AS} ${RELEASE_TAR}
+		${CMD_GPG} --armor --sign --detach -u ${PKGSRC_GPG_SIGN_AS} ${UPGRADE_TAR}
 	fi
 "
 bsret=$?
@@ -160,8 +180,12 @@ ${CHROOT_DELETE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 chret=$?
 if [ ${bsret} -eq 0 ]; then
 	echo "Created ${RELEASE_TAR}"
-	if [ -n "${GPG_SIGN_AS}" ]; then
+	if [ -n "${PKGSRC_GPG_SIGN_AS}" ]; then
 		echo "Created ${RELEASE_ASC}"
+	fi
+	echo "Created ${UPGRADE_TAR}"
+	if [ -n "${PKGSRC_GPG_SIGN_AS}" ]; then
+		echo "Created ${UPGRADE_ASC}"
 	fi
 else
 	echo "Bootstrap creation failed."

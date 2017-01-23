@@ -107,3 +107,6 @@ PGB_RUN_DIR=			${PGB_LOG_DIR}
 
 #nagios, NAGIOSDIR defaults to /var/spool/nagios
 NAGIOSLOCKDIR=			${NAGIOSDIR}
+
+#couchdb
+COUCH_RUNDIR=			${VARBASE}/spool/couchdb

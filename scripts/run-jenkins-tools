@@ -43,11 +43,11 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${SU} - root -c "
+env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SU} - root -c "
 	PATH=${PBULK_PATH}
 	set -ex
-	${TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
-	PATH=${PREFIX}/sbin:${PREFIX}/bin:${PBULK_PATH}
+	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
+	PATH=${PKGSRC_PREFIX}/sbin:${PKGSRC_PREFIX}/bin:${PBULK_PATH}
 	export DEPENDS_TARGET=bin-install
 	cd ${PKGSRC_BASEDIR}/${PKGSRC_DIR}
 	for pkg in ${TOOLS_BUILD_PACKAGES}; do
