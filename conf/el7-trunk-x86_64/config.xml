@@ -17,7 +17,7 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs>^pkgsrc-rhel-trunk-pbulk64$</blockingJobs>
+      <blockingJobs>^pkgsrc-el7-trunk-pbulk64$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11">
       <projectUrl>https://github.com/jsonn/pkgsrc/</projectUrl>
@@ -86,7 +86,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=rhel-trunk-x86_64
+export PKGBUILD=el7-trunk-x86_64
 /data/pkgbuild/scripts/run-jenkins-build</command>
     </hudson.tasks.Shell>
   </builders>

@@ -86,7 +86,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=rhel-trunk-pbulk64
+export PKGBUILD=el6-trunk-pbulk64
 /data/pkgbuild/scripts/run-jenkins-tools</command>
     </hudson.tasks.Shell>
   </builders>
