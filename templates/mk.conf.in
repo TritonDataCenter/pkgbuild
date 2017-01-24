@@ -1,0 +1,293 @@
+#
+# Additional settings for the '@PKGBUILD@' bulk build.
+#
+
+BRANCH=			@BRANCH@
+PKGBUILD?=		@PKGBUILD@
+PKGBUILD_BASEDIR?=	@PKGBUILD_BASEDIR@
+TOOLS_BASEDIR?=		@TOOLS_BASEDIR@
+
+#
+# ============================================================================
+# Default options which are shared across all builds, including upstream and
+# non-Joyent packages.  This section should not contain anything which might
+# hide issues we would want to fix upstream.
+# ============================================================================
+#
+DISTDIR=		@DISTDIR@
+PACKAGES=		@LOCAL_PACKAGE_BASEDIR@/@LOCAL_PACKAGE_DIR@
+WRKOBJDIR=		@WRKOBJDIR@
+#
+.if !make(distinfo) && !make(mdi) && !make(makedistinfo)
+FAILOVER_FETCH=		yes
+.endif
+FETCH_USING=		curl
+#
+ALLOW_VULNERABLE_PACKAGES=	yes
+PKGSRC_KEEP_BIN_PKGS=		no
+SKIP_LICENSE_CHECK=		yes
+
+#
+# Always enable PKG_DEVELOPER rather than distributing broken packages.  Some
+# branches enable additional checks.
+#
+PKG_DEVELOPER=		yes
+#
+CHECK_WRKREF=			@CHECK_WRKREF@
+CHECK_WRKREF_EXTRA_DIRS=	@CHECK_WRKREF_EXTRA_DIRS@
+#
+PKGSRC_RUN_TEST=	@PKGSRC_RUN_TEST@
+
+#
+# Enable cwrappers on supported branches.
+#
+USE_CWRAPPERS=		@USE_CWRAPPERS@
+#
+# Whether to PGP sign packages.
+#
+SIGN_PACKAGES=		@SIGN_PACKAGES@
+#
+# Default for most branches is PREFER_PKGSRC, if necessary override some
+# specifics.  PREFER_NATIVE=yes is effectively ignored and here only to
+# provide the option to override it.
+#
+PREFER_NATIVE=		@PREFER_NATIVE@
+#
+# This defaults to 'echo >/dev/null' which is at best pointless, and in some
+# cases actively harmful (e.g. OSX mount_devfs occasionally loses /dev/null)
+#
+SHCOMMENT=		:
+#
+# Package compression type.
+#
+PKG_COMPRESSION=	@PKG_COMPRESSION@
+#
+# Manual page compression.  This isn't a yes/no variable, the feature is
+# enabled if the variable is defined.
+#
+@PKGSRC_MANZ@
+#
+# PKG_OPTIONS cache directory.
+#
+@PBULK_CACHEDIR@
+
+#
+# List of per-PKGPATH MAKE_JOBS definitions.  These are the packages that
+# benefit most from having a larger -jN than the default as they are heavily
+# depended upon, or are long builds near the end of the run.
+#
+@PKG_MAKE_JOBS@
+#
+# Use a PKGPATH-based definition or the default
+#
+MAKE_JOBS_DEFAULT=	@MAKE_JOBS_DEFAULT@
+MAKE_JOBS=		${PKG_MAKE_JOBS.${PKGPATH}:U${MAKE_JOBS_DEFAULT}}
+
+#
+# Apply custom CFLAGS.
+#
+CFLAGS+=		@CFLAGS@
+#
+# Whether to strip binaries with install(1).
+#
+INSTALL_UNSTRIPPED=	@INSTALL_UNSTRIPPED@
+#
+# Enable -fstack-protector options on supported branches.
+#
+PKGSRC_USE_SSP=		@PKGSRC_USE_SSP@
+
+#
+# SmartOS GCC settings.  Skip for Linux/OSX builds.
+#
+.if empty(PKGBUILD:Mlinux-*) && empty(PKGBUILD:Mrhel-*) && empty(PKGBUILD:Mosx-*)
+#
+# Always pull in nbpatch as a bootstrap dependency.  This allows us to enable
+# the pbulk reuse_scan_results option, as without doing this pbulk will fail
+# if a package adds patches where previously it didn't have any due to the
+# missing dependency on nbpatch.
+#
+.  if !empty(PKGBUILD:Mupstream-*) \
+   || !empty(PKGBUILD:Mtrunk-*) \
+   || !empty(PKGBUILD:M2014Q[34]-*) \
+   || !empty(PKGBUILD:M201[5-9]Q[1-4]-*)
+TOOLS_PLATFORM.patch=   ${TOOLS_BASEDIR}/bin/nbpatch
+.  else
+.    if empty(PKGPATH:Mdevel/nbpatch)
+BOOTSTRAP_DEPENDS+=	nbpatch-[0-9]*:../../devel/nbpatch
+.    endif
+.  endif
+#
+# Use binutils from external tools which are not provided by the platform.
+# For trunk we are testing whether adding TOOLS_BASEDIR/bin to PATH is a
+# better solution as it helps to avoid hardcoding paths (e.g. granlib in
+# libtool).
+#
+.  if empty(PKGBUILD:Mtrunk-*)
+.    for tool in as objcopy objdump ranlib readelf
+${tool:tu}=		${TOOLS_BASEDIR}/bin/g${tool}
+TOOLS_PATH.${tool}=	${TOOLS_BASEDIR}/bin/g${tool}
+TOOLS_CREATE+=		${tool}
+.    endfor
+.  endif
+#
+# Avoid circular dependencies by using external tools for gcc, where the tool
+# itself depends upon gcc when using USE_PKGSRC_GCC_RUNTIME.
+#
+.  if !empty(PKGPATH:Mlang/gcc*)
+TOOLS_PLATFORM.makeinfo=${TOOLS_BASEDIR}/bin/makeinfo
+TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
+.  endif
+#
+# We need to ensure that libtool can be built with the pkgsrc gcc so that the
+# correct library paths are encoded, and to do that we need to build binutils
+# (a gcc dependency) with an external libtool.   XXX: requires pkgsrc patch.
+#
+.  if !empty(PKGPATH:Mdevel/binutils)
+PKG_LIBTOOL=		${TOOLS_BASEDIR}/bin/libtool
+PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
+.  endif
+#
+# Whether to depend upon the GCC runtime from the current build.  Generally
+# this should be set when binaries are distributed, otherwise they will depend
+# upon the GCC runtime from the tools.
+#
+USE_PKGSRC_GCC_RUNTIME=	@USE_PKGSRC_GCC_RUNTIME@
+#
+# Try to avoid requiring clang for GNUstep
+#
+.  if !empty(PKGBUILD:Mupstream-*)
+PKG_OPTIONS.gnustep+=	fragile
+.  endif
+#
+# Use in-tree GCC except on older branches and upstream builds.  Upstream
+# builds cannot use in-tree yet as there's no way to build binutils using
+# an external libtool without patches at this time.
+#
+.  if empty(PKGBUILD:M2013Q1-*) \
+   && empty(PKGBUILD:M201[012]*) \
+   && empty(PKGBUILD:Mupstream*)
+#
+# Required to avoid circular dependencies with pkg_install vs GCC, we don't
+# need to check for outdated pkg_install as it is always current to branch.
+#
+NO_PKGTOOLS_REQD_CHECK=	yes
+#
+# If enabled GCC will enable --with-local-prefix=${LOCALBASE}, otherwise it
+# will use the default of GCC_PREFIX.  This is required to be disabled for
+# the "tools" build so that bad includes don't leak into a non-tools build.
+#
+USE_GCC_LOCALBASE_PREFIX=	@USE_GCC_LOCALBASE_PREFIX@
+#
+# Use external GCC for GCC itself and its dependencies, otherwise we run into
+# circular dependencies.
+#
+.    if !empty(PKGPATH:Mdevel/binutils) \
+     || !empty(PKGPATH:Mdevel/gmake) \
+     || !empty(PKGPATH:Mdevel/nbpatch) \
+     || !empty(PKGPATH:Mlang/gcc2) \
+     || !empty(PKGPATH:Mlang/gcc3*) \
+     || !empty(PKGPATH:Mlang/gcc??) \
+     || !empty(PKGPATH:Mmisc/root) \
+     || !empty(PKGPATH:Mpkgtools/abiexec) \
+     || !empty(PKGPATH:Mpkgtools/cwrappers) \
+     || !empty(PKGPATH:Mpkgtools/digest) \
+     || !empty(PKGPATH:Mpkgtools/isaexec) \
+     || !empty(PKGPATH:Mpkgtools/pkg_install-info) \
+     || !empty(PKGPATH:Msysutils/checkperms)
+GCCBASE=		@PKGSRC_GCCBASE@
+.    else
+GCC_REQD=		@PKGSRC_GCC_REQD@
+USE_PKGSRC_GCC=		yes
+.    endif
+.  endif
+.endif # !Linux && !OSX
+
+#
+# ============================================================================
+# This section contains mostly Joyent-specific configuration.
+# ============================================================================
+#
+# Skip this entire section for clean upstream builds and Linux/OSX.
+#
+.if empty(PKGBUILD:Mupstream-*) && empty(PKGBUILD:Mlinux-*) && empty(PKGBUILD:Mrhel-*) && empty(PKGBUILD:Mosx-*)
+#
+# We want GNU tools to be default.
+#
+PKGGNUDIR=		# empty
+#
+# Make user creation non-fatal
+#
+PKGINSTALL_IGNORE_UIDGID=	yes
+#
+# Register shells in /etc/shell at package installation time
+#
+PKG_REGISTER_SHELLS=	yes
+#
+# Add -lumem by default, except for packages where it causes issues.
+#
+.if empty(PKGPATH:Mdevel/SOPE) \
+ && empty(PKGPATH:Mdevel/gnustep-base) \
+ && empty(PKGPATH:Mdevel/ncurses) \
+ && empty(PKGPATH:Meditors/emacs*) \
+ && empty(PKGPATH:Mjoyent/haskell-platform) \
+ && empty(PKGPATH:Mlang/go*) \
+ && empty(PKGPATH:Msecurity/aide) \
+ && empty(PKGPATH:M*/beats) \
+ && empty(PKGPATH:M*/consul) \
+ && empty(PKGPATH:M*/ghc*) \
+ && empty(PKGPATH:M*/hs-*) \
+ && empty(PKGPATH:M*/mongo-tools)
+.  if !empty(PKGBUILD:M2013Q1-*) \
+   || !empty(PKGBUILD:M201[012]*)
+LIBS+=			-lumem
+.  else
+_WRAP_EXTRA_LIBS.CC+=	-lumem
+_WRAP_EXTRA_LIBS.CXX+=	-lumem
+_WRAP_EXTRA_LIBS.LD+=	-lumem
+CWRAPPERS_LDADD.cc+=	-lumem
+CWRAPPERS_LDADD.cxx+=	-lumem
+CWRAPPERS_LDADD.ld+=	-lumem
+.  endif
+.endif
+#
+# Pull in override INSTALL files.
+#
+.if exists(${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL)
+INSTALL_TEMPLATES+=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL
+.endif
+#
+# Pull in logadm INSTALL files (to be removed when logadm support is
+# added into pkgsrc
+#
+.if exists(${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.logadm)
+INSTALL_TEMPLATES+=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.logadm
+.endif
+#
+# Include files which contain large, self-contained configuration areas.
+#
+@SMARTOS_RELEASE_INCLUDES@
+#
+# SMF source files. XXX: only used by 2013Q4 and older.
+#
+SMFBASE=		${PKGBUILD_BASEDIR}/meta
+.endif
+
+#
+# ============================================================================
+# Common includes to all builds.  Over time more bits from this file should be
+# moved into separate includes for better organisation.
+# ============================================================================
+#
+.include "${PKGBUILD_BASEDIR}/include/hacks.mk"
+
+#
+# ============================================================================
+# Any additional per-config custom configuration.
+# ============================================================================
+#
+@MK_SPECIFIC_CONFIG@
+
+#
+# Optional user overrides
+#
+.sinclude "${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/mk.conf.local"

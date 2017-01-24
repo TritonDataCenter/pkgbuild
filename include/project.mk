@@ -63,6 +63,7 @@ SMF_PROJECT.postgresql92-server=postgres
 SMF_PROJECT.postgresql93-server=postgres
 SMF_PROJECT.postgresql94-server=postgres
 SMF_PROJECT.postgresql95-server=postgres
+SMF_PROJECT.postgresql96-server=postgres
 SMF_PROJECT_ATTRS.postgres=	process.max-file-descriptor=(basic,10000,deny)
 SMF_PROJECT_DESC.postgres=	PostgreSQL service
 SMF_PROJECT_GROUP.postgres=	${PGGROUP}

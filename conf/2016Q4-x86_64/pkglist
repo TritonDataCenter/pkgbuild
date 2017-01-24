@@ -90,7 +90,7 @@ sysutils/bsdinstall
 sysutils/coreutils
 sysutils/py-psutil
 sysutils/top
-textproc/jsoncpp1
+textproc/jsoncpp
 textproc/libxml2
 textproc/libxslt
 textproc/nbsed

@@ -13,12 +13,15 @@ OSX and Linux.
 #### SmartOS
 
 For SmartOS we provide a 'pkgbuild' image which contains everything you need to
-get started.  Until they are available on the images.joyent.com servers you can download and install them manually.
+get started.  The images currently provided are:
 
 ```console
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.4.0.json
-curl -Os http://us-east.manta.joyent.com/pkgsrc/public/images/pkgbuild-15.4.0.zfs.gz
-imgadm install -m pkgbuild-15.4.0.json -f pkgbuild-15.4.0.zfs.gz
+29c78df0-bed1-11e5-995a-b398d555a1d4 pkgbuild 15.4.0
+c20b4b7c-e1a6-11e5-9a4d-ef590901732e pkgbuild 15.4.1
+65fddecc-0dfb-11e6-8b78-77bb9608a2ab pkgbuild 16.1.0
+4183fce6-49b2-11e6-a1ca-4f007e77f9d5 pkgbuild 16.2.0
+36745198-8bed-11e6-951b-ab8d0c913b14 pkgbuild 16.3.0
+39448a6c-96bc-11e6-a8f9-ab22626c8431 pkgbuild 16.3.1
 ```
 
 #### Generic

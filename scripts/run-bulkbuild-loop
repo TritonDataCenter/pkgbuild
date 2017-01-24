@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# Simple script to run a bulk build in a loop at most once per day.
+#
+# Assumes /data/pkgsrc and /data/pkgbuild.
+#
+
+usage()
+{
+	echo "usage: $0 [-d <day[,day..]>] <pkgbuild>" >&2
+}
+
+BUILD_DAYS=
+while getopts ":d:h" opt; do
+	case "${opt}" in
+	d)
+		BUILD_DAYS="${OPTARG//,/ }"
+		;;
+	h)
+		usage
+		exit
+		;;
+	*)
+		usage
+		exit 2
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 1 ]; then
+	PKGBUILD=$1; shift
+	export PKGBUILD
+else
+	usage
+	exit 2
+fi
+
+BUILDSTAMP="/var/tmp/pkgbuild-build-stamp"
+PAUSESTAMP="/var/tmp/pkgbuild-pause-stamp"
+
+while true; do
+
+	if [ -f ${PAUSESTAMP} ]; then
+		echo "Pausing for 15 minutes due to ${PAUSESTAMP}..."
+		sleep 900
+		continue
+	fi
+
+	#
+	# Build at most once per day.
+	#
+	timenow="$(date '+%s')"
+	if [ -f ${BUILDSTAMP} ]; then
+		read timelast < ${BUILDSTAMP} 
+		delta="$((${timenow} - ${timelast}))"
+		if [ ${delta} -gt 0 ] && [ ${delta} -lt 86400 ]; then
+			waittime="$((86400 - ${delta}))"
+			echo "Sleeping for ${waittime} seconds..."
+			sleep ${waittime}
+		fi
+	fi
+
+	#
+	# Build only on days requested.
+	#
+	if [ -n "${BUILD_DAYS}" ]; then
+		build_today=false
+		daynum=$(date '+%u')
+		for day in ${BUILD_DAYS}; do
+			if [ ${day} -eq ${daynum} ]; then
+				build_today=true
+			fi
+		done
+		if ! ${build_today}; then
+			echo "Not a build day, trying again tomorrow"
+			d_hr=$(date '+%H' | sed -e 's,^0,,')
+			d_mn=$(date '+%M' | sed -e 's,^0,,')
+			sleep $((60 * (1440 - ((${d_hr} * 60) + ${d_mn}))))
+			continue
+		fi
+	fi
+
+	(cd /data/pkgsrc && git fetch --all && git reset --hard upstream/trunk)
+	if [ $? -ne 0 ]; then
+		echo "Something went wrong, investigate."
+		break
+	fi
+
+	timenow="$(date '+%s')"
+	echo ${timenow} > ${BUILDSTAMP}
+
+	/data/pkgbuild/scripts/run-jenkins-build
+done

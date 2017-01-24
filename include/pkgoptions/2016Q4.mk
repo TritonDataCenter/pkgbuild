@@ -88,6 +88,7 @@ PKG_OPTIONS.postgresql92+=	xml
 PKG_OPTIONS.postgresql93+=	xml
 PKG_OPTIONS.postgresql94+=	xml
 PKG_OPTIONS.postgresql95+=	xml
+PKG_OPTIONS.postgresql96+=	xml
 
 #
 # Global version defaults

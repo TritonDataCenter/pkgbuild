@@ -210,5 +210,12 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
 			EOF
 		fi
+		if [ -z '${VERIFIED_INSTALLATION_PBULK}' ]; then
+			ed ${TOOLS_BASEDIR}/etc/pkg_install.conf >/dev/null 2>&1 <<-EOF
+				g/^VERIFIED_INSTALLATION=/d
+				w
+				q
+			EOF
+		fi
 		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_COMPILER} ${tools_packages} >/dev/null 2>&1"
 fi
