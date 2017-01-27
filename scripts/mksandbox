@@ -201,6 +201,13 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		export PATH=$PATH:/usr/gnu/i386-pc-solaris2.11/bin:/opt/gcc-4.8.1/bin
 		export PKG_SKIP_SMF=yes
+                if grep -q PKG_PATH ${TOOLS_BASEDIR}/etc/pkg_install.conf; then
+			ed ${TOOLS_BASEDIR}/etc/pkg_install.conf >/dev/null 2>&1 <<-EOF
+				g/^PKG_PATH=/d
+				w
+				q
+			EOF
+                fi
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
