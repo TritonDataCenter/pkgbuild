@@ -1,9 +1,9 @@
 # SCL overrides
 
 base_url=""
- 
-scan_clients=""
-build_clients=""
+
+#scan_clients=""
+#build_clients=""
  
 MANTA_USER=""
 MANTA_KEY_ID=""
