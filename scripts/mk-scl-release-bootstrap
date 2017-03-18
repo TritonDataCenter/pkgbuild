@@ -166,9 +166,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	${CMD_TAR} -zc -f ${UPGRADE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
 	    .${PKGSRC_SYSCONFDIR}/gnupg/pkgsrc.gpg \
-	    .${PKGSRC_SYSCONFDIR}/mk.conf \
-	    .${PKGSRC_SYSCONFDIR}/pkg_install.conf \
-	    .${PKGSRC_SYSCONFDIR}/pkgin/repositories.conf
+	    .${PKGSRC_SYSCONFDIR}/mk.conf 
 	if [ -n '${PKGSRC_GPG_SIGN_AS}' ]; then
 		rm -f ${RELEASE_ASC} ${UPGRADE_ASC}
 		${CMD_GPG} --armor --sign --detach -u ${PKGSRC_GPG_SIGN_AS} ${RELEASE_TAR}
