@@ -1,0 +1,1 @@
+PKG_OPTIONS.qt4-libs += gtk2
