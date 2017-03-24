@@ -13,8 +13,10 @@ POST-INSTALL)
                 echo "Skipping MySQL database initialization, as databases" \
                      "already exist."
         else
-		# Initialize MySQL
-		${PKG_PREFIX}/sbin/mysqld --user=@MYSQL_USER@ --initialize-insecure
-	fi
+                @LOCALBASE@/bin/mysql_install_db \
+                    --basedir=@LOCALBASE@ \
+                    --datadir=@MYSQL_DATADIR@ \
+                    --user=@MYSQL_USER@
+        fi
 	;;
 esac
