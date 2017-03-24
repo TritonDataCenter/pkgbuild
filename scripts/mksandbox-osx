@@ -49,7 +49,7 @@ if [ -z "${rootdev}" ]; then
 	exit 1
 fi
 
-mkdir -p ${SHADOW_BASEDIR}
+mkdir -p ${SHADOW_BASEDIR} ${chrootdir}
 chrootdev=$(hdiutil attach \
     -shadow ${SHADOW_BASEDIR}/${chrootname}.shadow \
     -mountpoint ${chrootdir} \
