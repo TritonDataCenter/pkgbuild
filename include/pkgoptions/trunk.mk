@@ -68,6 +68,7 @@ PKG_OPTIONS.irssi+=		perl
 PKG_OPTIONS.libthrift+=		php ruby
 PKG_OPTIONS.lighttpd+=		lua
 PKG_OPTIONS.mc+=		ncurses
+PKG_OPTIONS.memcached+=		-dtrace # XXX: illumos#6653
 PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
