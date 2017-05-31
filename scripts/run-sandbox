@@ -128,6 +128,6 @@ echo -n "Installing additional tools packages..."
 "
 echo "done."
 echo "Logging in.  WARNING: On logout the sandbox will be destroyed."
-/usr/sbin/chroot ${chrootdir} /bin/bash --login
+/usr/sbin/chroot ${chrootdir} ${CMD_SU} - root -c "/bin/bash --login"
 echo "Cleaning ${chrootdir}..."
 ${CHROOT_DELETE} ${chrootdir} && echo "done."
