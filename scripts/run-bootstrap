@@ -1,24 +1,42 @@
 #!/bin/sh
-#
-# Pre-build script to set up hosts for pbulk.
-#
 
 #
-# Handle client setup.  If WORKSPACE is set from Jenkins then rsync the
-# pkgsrc area to all clients.
+# This is a pre-build script intended to be called from a primary bulkbuild
+# script that has set up the environment.  If PKGBUILD is not set then bail
+# out.  This script is sourced so there's no need to load our pkgbuild.conf
 #
-if [ -n "${WORKSPACE}" ]; then
-	rsync_cmd="rsync -aq --delete --exclude=.git --exclude=.nfs*"
-	for m in ${PBULK_CLIENTS}; do
-		echo "Syncing workspace to ${m}:${PKGSRC_BASEDIR}/${WORKSPACE}..."
-		${rsync_cmd} ${WORKSPACE} ${m}:${PKGSRC_BASEDIR}/ &
+if [ -z "${PKGBUILD}" ]; then
+	echo "ERROR: PKGBUILD unset. This is not a standalone script." >&2
+	exit 2
+fi
+
+rsync_cmd="rsync -aq --delete --exclude=.git --exclude=.nfs*"
+
+#
+# If running in a Jenkins environment we need to sync its workspace over to
+# where we expect pkgsrc to be.
+#
+if [ -n "${WORKSPACE}" -a -d "${WORKSPACE}" ]; then
+	echo "Syncing Jenkins workspace ${WORKSPACE} to ${PKGSRC_BASEDIR}/"
+	${rsync_cmd} ${WORKSPACE} ${PKGSRC_BASEDIR}/
+fi
+
+#
+# Sync required directories (e.g. pkgsrc) to all clients.
+#
+for dir in ${PBULK_RSYNC_DIRS}; do
+	pdir=$(dirname ${dir})
+	for client in ${PBULK_CLIENTS}; do
+		echo "Syncing ${dir} to ${client}"
+		ssh ${client} "mkdir -p ${pdir}"
+		${rsync_cmd} ${dir} ${client}:${pdir}/ &
 	done
 	wait
 	if [ $? -ne 0 ]; then
-		echo "ERROR: Unable to rsync workspace to all machines."
+		echo "ERROR: Unable to rsync ${dir} to all clients."
 		exit 1
 	fi
-fi
+done
 
 #
 # Build the bootstrap if necessary.
