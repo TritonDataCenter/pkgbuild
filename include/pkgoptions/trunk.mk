@@ -74,7 +74,6 @@ PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
 PKG_OPTIONS.nginx+=		gzip headers-more
 PKG_OPTIONS.nginx+=		v2
 PKG_OPTIONS.openldap-server+=	-unixodbc
-PKG_OPTIONS.openssh+=		hpn-patch
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
