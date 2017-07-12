@@ -48,9 +48,12 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	PATH=${PBULK_PATH}
 	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PKGSRC_PREFIX}/sbin:${PKGSRC_PREFIX}/bin:${PBULK_PATH}
+	# Ensure bootstrap packages are upgraded as well as installing extra
+	# packages to ensure we use main ones and not limited bootstrap ones.
 	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All \
 	    ${PKGSRC_PREFIX}/sbin/pkg_add -U \
-	    mozilla-rootcerts pkg_alternatives pkg_install pkgin pkgsrc-gnupg-keys
+	    bmake bsdinstall mozilla-rootcerts nawk nbsed \
+	    pkg_alternatives pkg_install pkgin pkgsrc-gnupg-keys
 	# Avoid 'install' as it fails if /etc/ssl/certs exists.
 	(
 		cd ${PKGSRC_SYSCONFDIR}/openssl/certs
