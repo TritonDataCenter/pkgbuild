@@ -17,7 +17,7 @@
       <blockingJobs>^pkgsrc-osx-trunk-pbulk64$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11">
-      <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
+      <projectUrl>https://github.com/joyent/pkgsrc-legacy/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -35,7 +35,7 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-        <url>git://github.com/joyent/pkgsrc.git</url>
+        <url>git://github.com/joyent/pkgsrc-legacy.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -45,7 +45,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/joyent/pkgsrc/</url>
+      <url>https://github.com/joyent/pkgsrc-legacy/</url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>

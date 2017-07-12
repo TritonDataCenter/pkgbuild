@@ -17,7 +17,7 @@
       <blockingJobs>^pkgsrc-el6-trunk-pbulk64$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11">
-      <projectUrl>https://github.com/jsonn/pkgsrc/</projectUrl>
+      <projectUrl>https://github.com/NetBSD/pkgsrc/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -35,7 +35,7 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-        <url>git://github.com/jsonn/pkgsrc.git</url>
+        <url>git://github.com/NetBSD/pkgsrc.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -45,7 +45,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/jsonn/pkgsrc/</url>
+      <url>https://github.com/NetBSD/pkgsrc/</url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
