@@ -198,10 +198,6 @@ INSTALL_TEMPLATES+=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL
 .if exists(${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.logadm)
 INSTALL_TEMPLATES+=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.logadm
 .endif
-#
-# Include files which contain large, self-contained configuration areas.
-#
-@SMARTOS_RELEASE_INCLUDES@
 .endif
 
 #
