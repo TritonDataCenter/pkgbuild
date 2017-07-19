@@ -51,14 +51,8 @@ MASTER_SITE_OVERRIDE=	http://ftp.NetBSD.org/pub/pkgsrc/distfiles/
 MULTILIB_SUPPORTED=	no
 PKGSRC_FORTRAN=		gfortran
 
-# X11 selection.  2015Q3 and earlier use Xquartz, 2015Q4 and onwards use
-# modular-xorg from pkgsrc.
-.if !empty(BRANCH:M*trunk)
-X11_TYPE=	modular
-.else
-X11_TYPE=	native
-X11BASE=	/opt/X11
-.endif
+# Use modular-xorg since 2015Q4.
+X11_TYPE=		modular
 
 # Native curl SIGBUS's when accessing HTTPS in a chroot.
 .if exists(${TOOLS_BASEDIR}/bin/curl)
