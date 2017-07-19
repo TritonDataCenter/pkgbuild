@@ -1,12 +1,7 @@
 #
-# Load the branch-specific PKG_OPTIONS file.  For branches older than 2013Q2
-# we use the shared legacy file.
+# Load the branch-specific PKG_OPTIONS file.
 #
-.if exists(${PKGBUILD_BASEDIR}/include/pkgoptions/${BRANCH}.mk)
-.  include "${PKGBUILD_BASEDIR}/include/pkgoptions/${BRANCH}.mk"
-.else
-.  include "${PKGBUILD_BASEDIR}/include/pkgoptions/legacy.mk"
-.endif
+.include "${PKGBUILD_BASEDIR}/include/pkgoptions/${BRANCH}.mk"
 
 #
 # Generic package-specific configuration options.  May need to be moved to
