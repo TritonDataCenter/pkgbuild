@@ -78,17 +78,6 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		w
 		q
 	EOF
-	# This is only required for legacy builds and could be removed.
-	if [ -n '${PREFER_NATIVE}' -a '${PREFER_NATIVE}' != 'yes' ]; then
-		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
-			/^PREFER_PKGSRC/
-			i
-			PREFER_NATIVE=		${PREFER_NATIVE}
-			.
-			w
-			q
-		EOF
-	fi
 	# SmartOS specific, keyed on PKGSRC_GCC_REQD being set.
 	if [ -n '${PKGSRC_GCC_REQD}' ]; then
 		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
