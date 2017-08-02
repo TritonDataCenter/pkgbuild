@@ -78,12 +78,12 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		w
 		q
 	EOF
-	# SmartOS specific, keyed on PKGSRC_GCC_REQD being set.
-	if [ -n '${PKGSRC_GCC_REQD}' ]; then
+	# SmartOS specific, keyed on PKGBUILD_GCC_REQD being set.
+	if [ -n '${PKGBUILD_GCC_REQD}' ]; then
 		ed ${PKGSRC_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 			/^PKGSRC_COMPILER/
 			a
-			GCC_REQD=		${PKGSRC_GCC_REQD}
+			GCC_REQD=		${PKGBUILD_GCC_REQD}
 			USE_PKGSRC_GCC=		yes
 			USE_PKGSRC_GCC_RUNTIME=	yes
 			.
