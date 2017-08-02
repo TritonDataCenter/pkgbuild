@@ -49,7 +49,7 @@ fi
 # heavyweight - but testing for the gpg-agent socket (or a file which denotes
 # the host doesn't use the agent) should do for now.
 #
-if [ -n "${PKGSRC_GPG_SIGN_AS}" ]; then
+if [ -n "${PKGBUILD_GPG_SIGN_AS}" ]; then
 	for ip in ${PBULK_CLIENTS}; do
 		ssh ${ip} "test -S ${ROOT_HOMEDIR}/.gnupg/S.gpg-agent ||
 			    test -f ${ROOT_HOMEDIR}/.gnupg/no-agent"

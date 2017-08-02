@@ -130,10 +130,10 @@ target_destdir=/usr/src/destdir.${target_arch}
 bulklog=@BULKLOG_BASEDIR@/@BULKLOG_DIR@
 local_bulklog=@LOCAL_BULKLOG@
 packages=@LOCAL_PACKAGE_BASEDIR@/@LOCAL_PACKAGE_DIR@
-prefix=@PKGSRC_PREFIX@
+prefix=@PKGBUILD_LOCALBASE@
 pkgsrc=@PKGSRC_BASEDIR@/@PKGSRC_DIR@
-pkgdb=@PKGSRC_PKGDBDIR@
-varbase=@PKGSRC_VARBASE@
+pkgdb=@PKGBUILD_PKGDBDIR@
+varbase=@PKGBUILD_VARBASE@
 
 # The following programs must NOT be inside ${prefix}
 pkg_info=@PBULK_BASEDIR@/sbin/pkg_info
