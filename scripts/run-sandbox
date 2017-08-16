@@ -64,6 +64,7 @@ echo -n "Setting up environment..."
 cat >${chrootdir}${ROOT_HOMEDIR}/.bash_profile <<EOF
 PATH="${PKGBUILD_LOCALBASE}/sbin:${PKGBUILD_LOCALBASE}/bin:${PBULK_PATH}:${TOOLS_BASEDIR}/sbin:${TOOLS_BASEDIR}/bin"
 PS1="\[\033[0m\]\[\033[1;36m\]-\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;32m\]\u\[\033[0m\]\[\033[1;35m\]@\[\033[0m\]\[\033[0;32m\]\h\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\](\[\033[0m\]\[\033[0;31m\]${chrootdir}\[\033[0m\]\[\033[1;36m\])-\[\033[0m\]\[\033[1;36m\]<\[\033[0m\]\[\033[0;33m\]\w\[\033[0m\]\[\033[1;36m\]>\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[1;36m\]-\n\[\033[0m\]\[\033[0m\]\[\033[0;36m\]-\[\033[0m\]\[\033[0;37m\]> \[\033[0m\]"
+export GPG_TTY=\$(tty)
 export DEPENDS_TARGET=bin-install
 export PKG_SKIP_SMF=yes
 set -o vi
