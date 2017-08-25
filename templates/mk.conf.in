@@ -19,7 +19,7 @@ WRKOBJDIR=		@WRKOBJDIR@
 # General pkgsrc variables mostly set on a per-pkgbuild basis.
 #
 ALLOW_VULNERABLE_PACKAGES=	yes
-CFLAGS=				@CFLAGS@
+CFLAGS+=			@CFLAGS@
 FETCH_USING=			curl
 INSTALL_UNSTRIPPED=		@INSTALL_UNSTRIPPED@
 @MANZ@
