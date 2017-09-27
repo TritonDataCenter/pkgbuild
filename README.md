@@ -1,4 +1,4 @@
-## pkgbuild
+## pkgbuild
 
 This is an exported repository of configuration files and scripts used to
 create Joyent's SmartOS packages.  The aim here is to provide users with
