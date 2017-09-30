@@ -62,6 +62,7 @@ lang/nodejs4
 lang/openjdk8
 lang/oracle-jdk8
 lang/oracle-jre8
+lang/pear
 lang/python27
 lang/sun-jre7
 lang/sun-jdk7
@@ -96,6 +97,7 @@ net/py-twisted-docs
 net/rabbitmq
 net/rabbitmq-c
 net/rsync
+net/socat
 net/tightvnc
 net/unison
 pkgtools/bootstrap-mk-files
@@ -106,6 +108,7 @@ scl/oracle-client
 scl/oracle-sdk
 scl/oracle-sqlplus
 scl/stu
+security/ap-modsecurity2
 security/gnupg2
 security/mozilla-rootcerts
 security/openssh
