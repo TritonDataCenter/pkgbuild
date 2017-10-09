@@ -4,10 +4,14 @@
 .if empty(PKGPATH:Mdevel/SOPE) \
  && empty(PKGPATH:Mdevel/gnustep-base) \
  && empty(PKGPATH:Mdevel/ncurses) \
+ && empty(PKGPATH:Mdevel/valgrind) \
  && empty(PKGPATH:Meditors/emacs*) \
  && empty(PKGPATH:Mjoyent/haskell-platform) \
  && empty(PKGPATH:Mlang/go*) \
- && empty(PKGPATH:Msecurity/aide) \
+ && empty(PKGPATH:Msecurity/aide*) \
+ && empty(PKGPATH:Mwm/xmonad) \
+ && empty(PKGPATH:Mwww/grafana) \
+ && empty(PKGPATH:Mx11/gnustep-back) \
  && empty(PKGPATH:M*/beats) \
  && empty(PKGPATH:M*/consul) \
  && empty(PKGPATH:M*/ghc*) \
