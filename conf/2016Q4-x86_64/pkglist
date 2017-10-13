@@ -71,6 +71,7 @@ mail/dovecot2
 mail/dovecot2-antispam-plugin
 mail/dovecot2-pgsql
 mail/dovecot2-sqlite
+mail/spamassassin
 meta-pkgs/boost
 meta-pkgs/gnome
 meta-pkgs/modular-xorg
