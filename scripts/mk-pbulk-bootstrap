@@ -35,6 +35,15 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 	    --mk-fragment=${PKGBUILD_BASEDIR}/conf/${pkgbuild}/mk-fragment.conf \
 	    --workdir=/tmp/pkgsrc-${pkgbuild}
 	rm -rf /tmp/pkgsrc-${pkgbuild}
+	tardirs='.${PKGBUILD_LOCALBASE}'
+	addetc=false
+	if [ '${PKGBUILD_PKGDBDIR#${PKGBUILD_LOCALBASE}}' = '${PKGBUILD_PKGDBDIR}' ]; then
+		tardirs=\"\${tardirs} ${PKGBUILD_PKGDBDIR}\"
+	fi
+	if [ '${PKGBUILD_SYSCONFDIR#${PKGBUILD_LOCALBASE}}' = '${PKGBUILD_SYSCONFDIR}' ]; then
+		addetc=true
+		tardirs=\"\${tardirs} .${PKGBUILD_SYSCONFDIR}/mk.conf\"
+	fi
 	cd /
 	touch ${PKGBUILD_LOCALBASE}/.dlj_license_accepted
 	if [ -n '${PKGBUILD_GPG_SIGN_AS}' ]; then
@@ -51,9 +60,13 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 				VERIFIED_INSTALLATION=${VERIFIED_INSTALLATION_PBULK}
 			EOF
 		fi
+		if \${addetc}; then
+			tardirs=\"\${tardirs} .${PKGBUILD_SYSCONFDIR}/gnupg\"
+			tardirs=\"\${tardirs} .${PKGBUILD_SYSCONFDIR}/pkg_install.conf\"
+		fi
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}
-	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PKGBUILD_LOCALBASE}
+	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz \${tardirs}
 	# Create pkgbuild bootstraps with signing bits removed
 	if [ -f ${PKGBUILD_SYSCONFDIR}/pkg_install.conf ]; then
 		ed ${PKGBUILD_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
@@ -72,7 +85,7 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 		EOF
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}
-	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}/${BOOTSTRAP_KIT}.tar.gz .${PKGBUILD_LOCALBASE}
+	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}/${BOOTSTRAP_KIT}.tar.gz \${tardirs}
 "
 ret=$?
 if [ $ret -ne 0 -a -d ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}/tmp/pkgsrc-${pkgbuild} ]; then
