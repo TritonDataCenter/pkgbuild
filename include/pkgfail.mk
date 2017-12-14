@@ -13,3 +13,12 @@
 PKGFAILPKGS!=		cat ${PKGBUILD_BASEDIR}/pkgfail/${PKGBUILD}
 PKG_FAIL_REASON+=	${"${PKGFAILPKGS:M${PKGNAME}}" != "":?"Known pkgfail for ${PKGBUILD}":}
 .endif
+
+#
+# Common list of packages we want to explicitly exclude for various reasons.
+#
+PKGFAIL.lang/ruby=	"Conflicts with pkg_alternatives"
+
+.if defined(PKGFAIL.${PKGPATH})
+PKG_FAIL_REASON+=	${PKGFAIL.${PKGPATH}}
+.endif
