@@ -10,6 +10,7 @@
 .if !empty(PKGPATH:Mdevel/binutils) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
+ || !empty(PKGPATH:Mjoyent/ctftools) \
  || !empty(PKGPATH:Mlang/gcc2) \
  || !empty(PKGPATH:Mlang/gcc3*) \
  || !empty(PKGPATH:Mlang/gcc??) \
