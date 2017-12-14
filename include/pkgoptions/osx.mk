@@ -22,6 +22,14 @@ PKG_OPTIONS.vim+=	lua perl python ruby
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses
 
 #
+# Avoid circular dependencies with GCC.
+#
+.if ${PKGBUILD} == "osx-trunk-i386"
+PKG_OPTIONS.gcc49=	gcc-inplace-math
+PKG_OPTIONS.xz=		-nls
+.endif
+
+#
 # XXX: Not the ideal place for this, still fleshing it out though.
 #
 PREFER_PKGSRC=		bzip2 xz zlib

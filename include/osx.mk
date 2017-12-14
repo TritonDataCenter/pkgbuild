@@ -58,3 +58,10 @@ X11_TYPE=		modular
 .if exists(${TOOLS_BASEDIR}/bin/curl)
 TOOLS_PATH.curl=	${TOOLS_BASEDIR}/bin/curl
 .endif
+
+# This is duplicated from exttools.mk, should do it properly at some point.
+.if ${PKGBUILD} == "osx-trunk-i386"
+.  if !empty(PKGPATH:Mlang/gcc*)
+TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
+.  endif
+.endif
