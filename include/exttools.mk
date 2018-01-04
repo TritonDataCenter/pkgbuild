@@ -43,3 +43,11 @@ TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
 PKG_LIBTOOL=		${TOOLS_BASEDIR}/bin/libtool
 PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 .endif
+
+#
+# Use ctfconvert from tools so that we can use it for all packages and avoid
+# bootstrap issues.  Ignored for branches which don't support PKGSRC_USE_CTF.
+# We also need to configure gstrip for STRIP_DEBUG.
+#
+TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert-altexec
+TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
