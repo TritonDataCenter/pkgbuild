@@ -59,6 +59,7 @@ lang/gcc49-libs
 lang/nawk
 lang/nodejs
 lang/nodejs4
+lang/nodejs8
 lang/openjdk8
 lang/oracle-jdk8
 lang/oracle-jre8
@@ -66,11 +67,13 @@ lang/pear
 lang/python27
 lang/sun-jre7
 lang/sun-jdk7
-mail/postfix
 mail/dovecot2
 mail/dovecot2-antispam-plugin
 mail/dovecot2-pgsql
 mail/dovecot2-sqlite
+mail/p5-Mail-POP3Client
+mail/p5-MIME-tools
+mail/postfix
 mail/spamassassin
 meta-pkgs/boost
 meta-pkgs/gnome
@@ -98,9 +101,11 @@ net/py-twisted-docs
 net/rabbitmq
 net/rabbitmq-c
 net/rsync
+net/samba4
 net/socat
 net/tightvnc
 net/unison
+net/vpnc
 pkgtools/bootstrap-mk-files
 pkgtools/pkg_alternatives
 pkgtools/pkgin
