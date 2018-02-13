@@ -64,6 +64,7 @@ PKG_OPTIONS.freeradius+=	-bdb	# no db4 support
 PKG_OPTIONS.gearmand+=		-memcached
 PKG_OPTIONS.gnustep+=		fragile
 PKG_OPTIONS.graphviz+=		-perl	# XXX: multiarch
+PKG_OPTIONS.gs_type+=		ghostscript-agpl
 PKG_OPTIONS.hunspell+=		-wide-curses
 PKG_OPTIONS.irssi+=		perl
 PKG_OPTIONS.libthrift+=		php ruby
