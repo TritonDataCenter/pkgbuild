@@ -8,6 +8,6 @@
 
 #
 # Clean out any files in /tmp owned by pbulk.  Use -maxdepth to avoid files
-# under /var/folders (which we symlink to /tmp) such as the xcode xcrun_db.
+# under /var/folders (which we symlink to /tmp) such as the xcode xcrun_db.
 #
 find /tmp -user pbulk -maxdepth 1 -exec rm -rf -- {} + || true

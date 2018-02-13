@@ -3,7 +3,7 @@
 # Script to initiate a Jenkins build.
 #
 # The variable PKGBUILD is required to be set, and is normally set
-# by the Jenkins environment.
+# by the Jenkins environment.
 #
 
 if [ -z "${PKGBUILD}" ]; then
