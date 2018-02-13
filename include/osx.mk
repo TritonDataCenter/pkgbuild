@@ -16,10 +16,11 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 .endif
 
 # Packages which do not fit in ramdisk build area.
-.if !empty(PKGPATH:Mcross/avr-gcc) \
+.if !empty(PKGPATH:Mcross/*gcc*) \
  || !empty(PKGPATH:Mdatabases/mariadb55-server) \
  || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mdevel/xulrunner*) \
+ || !empty(PKGPATH:Mfonts/noto-ttf) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
  || !empty(PKGPATH:Mgraphics/tesseract) \
  || !empty(PKGPATH:Mham/gnuradio-core) \
