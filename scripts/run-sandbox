@@ -88,10 +88,12 @@ if [ -n "${CMD_GPG}" -a -n "${PKGBUILD_GPG_SIGN_AS}" ]; then
 	EOF
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
 		${CMD_GPG} --no-default-keyring --primary-keyring \
-		    ${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg --list-keys ${PKGBUILD_GPG_SIGN_AS} >/dev/null 2>&1
+		    ${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg \
+		    --list-keys ${PKGBUILD_GPG_SIGN_AS} >/dev/null 2>&1
 		if [ \$? -ne 0 ]; then
 			${CMD_GPG} --no-default-keyring --primary-keyring \
-			    ${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg --recv ${PKGBUILD_GPG_SIGN_AS} >/dev/null 2>&1
+			    ${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg \
+			    --recv-keys ${PKGBUILD_GPG_SIGN_AS} >/dev/null 2>&1
 		fi
 	"
 fi
