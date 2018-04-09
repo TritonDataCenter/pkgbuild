@@ -7,6 +7,7 @@ joyent/celt051
 joyent/cgatools
 joyent/changepass
 joyent/chef-client
+joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
 joyent/duo-unix
@@ -64,11 +65,9 @@ joyent/php-mailparse
 joyent/php-sphinx
 joyent/pkgsrc-gnupg-keys
 joyent/postgresql-pg_top
-joyent/py-svn
 joyent/qpress
 joyent/quickbackup-mongodb
 joyent/quickbackup-percona
-joyent/ree
 joyent/restdown
 joyent/rethinkdb
 joyent/ruby-bunny
@@ -98,7 +97,6 @@ wip/mtop
 wip/munin-common
 wip/munin-master
 wip/munin-node
-wip/mysql-proxy
 wip/ncbi
 wip/ncbi-bin
 wip/ncbi-blast
