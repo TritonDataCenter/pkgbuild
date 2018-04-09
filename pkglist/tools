@@ -1,5 +1,11 @@
+joyent/clang6
+joyent/compiler-rt6
 joyent/ctftools
 joyent/gnupg20
+joyent/libcxx6
+joyent/libcxxabi6
+joyent/libunwind6
+joyent/llvm6
 joyent/node08
 joyent/pkgsrc-gnupg-keys
 joyent/sun-jre6
