@@ -115,6 +115,7 @@ scl/oracle-sdk
 scl/oracle-sqlplus
 scl/stu
 security/ap-modsecurity2
+security/ap-modsecurity29
 security/gnupg2
 security/mozilla-rootcerts
 security/openssh
@@ -128,6 +129,7 @@ security/stunnel
 shells/bash
 shells/pdksh
 shells/zsh
+sysutils/beats
 sysutils/bsdinstall
 sysutils/coreutils
 sysutils/py-psutil
