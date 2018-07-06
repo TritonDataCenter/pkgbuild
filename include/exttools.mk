@@ -32,6 +32,8 @@ TOOLS_CREATE+=		${tool}
 .if !empty(PKGPATH:Mlang/gcc*)
 TOOLS_PLATFORM.makeinfo=${TOOLS_BASEDIR}/bin/makeinfo
 TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
+TOOLS_PLATFORM.xz=	${TOOLS_BASEDIR}/bin/xz
+TOOLS_PLATFORM.xzcat=	${TOOLS_BASEDIR}/bin/xzcat
 .endif
 
 #
