@@ -9,7 +9,6 @@ joyent/changepass
 joyent/dtracetools
 joyent/duo-unix
 joyent/enstratus-agent
-joyent/galera
 joyent/handlersocket
 joyent/instantclient
 joyent/libsass

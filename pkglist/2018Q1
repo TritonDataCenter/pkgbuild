@@ -12,9 +12,7 @@ joyent/compiler-rt6
 joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
-joyent/duo-unix
 joyent/enstratus-agent
-joyent/galera
 joyent/gnupg20
 joyent/handlersocket
 joyent/instantclient
@@ -141,7 +139,6 @@ wip/ruby-therubyracer
 wip/ruby-xmpp4r
 wip/runit
 wip/smstools
-wip/spidermonkey185
 wip/spidermonkey24
 wip/spread4
 wip/swftools

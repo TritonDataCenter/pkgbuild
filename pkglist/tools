@@ -1,6 +1,7 @@
 joyent/clang6
 joyent/compiler-rt6
 joyent/ctftools
+joyent/duo-unix
 joyent/gnupg20
 joyent/libcxx6
 joyent/libcxxabi6

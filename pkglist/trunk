@@ -1,7 +1,5 @@
 joyent/GeoLiteCity
 joyent/ap2-usdt
-joyent/apache-cassandra
-joyent/apache-cassandra21
 joyent/build-essential
 joyent/celt051
 joyent/cgatools
@@ -12,9 +10,7 @@ joyent/compiler-rt6
 joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
-joyent/duo-unix
 joyent/enstratus-agent
-joyent/galera
 joyent/gnupg20
 joyent/handlersocket
 joyent/instantclient
@@ -34,6 +30,7 @@ joyent/nicstat
 joyent/node010
 joyent/node012
 joyent/node08
+joyent/node4
 joyent/nodejs
 joyent/nrsysmond
 joyent/nutcracker
@@ -141,7 +138,6 @@ wip/ruby-therubyracer
 wip/ruby-xmpp4r
 wip/runit
 wip/smstools
-wip/spidermonkey185
 wip/spidermonkey24
 wip/spread4
 wip/swftools
@@ -154,3 +150,19 @@ wip/vmware-sercons
 wip/wackamole
 wip/wkhtmltopdf
 wip/znc
+wip/cinnamon
+wip/cinnamon-control-center
+wip/cinnamon-desktop
+wip/cinnamon-menus
+wip/cinnamon-nemo
+wip/cinnamon-nemo
+wip/cinnamon-screensaver
+wip/cinnamon-session
+wip/cinnamon-settings-daemon
+wip/cjs
+wip/muffin
+wip/nemo
+wip/py-pam
+wip/py-xapp
+wip/system-config-printer
+wip/xapps
