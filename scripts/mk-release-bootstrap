@@ -140,7 +140,8 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	if [ '${PKGBUILD_OPSYS}' = 'Darwin' ]; then
 		echo '${PKGBUILD_LOCALBASE}/sbin' >/etc/paths.d/10-pkgsrc
 		echo '${PKGBUILD_LOCALBASE}/bin' >>/etc/paths.d/10-pkgsrc
-		tarextras='./private/etc/paths.d/10-pkgsrc'
+		echo '${PKGBUILD_LOCALBASE}/share/man' >/etc/manpaths.d/10-pkgsrc
+		tarextras='./private/etc/paths.d/10-pkgsrc ./private/etc/manpaths.d/10-pkgsrc'
 		# Work around El Capitan 'Cannot extract through symlink var'.
 		if [ '${PKGBUILD_VARBASE}' = '/var' ]; then
 			slashprivate='/private'
