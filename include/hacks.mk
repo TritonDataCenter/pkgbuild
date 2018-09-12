@@ -13,3 +13,7 @@
 .if !empty(PKGPATH:Mwww/webkit-gtk*) || !empty(PKGPATH:Mwww/webkit24-gtk*)
 CFLAGS:=	${CFLAGS:C/-g.*//}
 .endif
+
+.if !empty(PKGPATH:Mlang/gcc*)
+CFLAGS:=	${CFLAGS:C/-msave-args//}
+.endif
