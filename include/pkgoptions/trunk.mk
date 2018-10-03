@@ -68,7 +68,6 @@ PKG_OPTIONS.graphviz+=		-perl	# XXX: multiarch
 PKG_OPTIONS.gs_type+=		ghostscript-agpl
 PKG_OPTIONS.hunspell+=		-wide-curses
 PKG_OPTIONS.irssi+=		perl
-PKG_OPTIONS.libthrift+=		php ruby
 PKG_OPTIONS.lighttpd+=		lua
 PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.memcached+=		-dtrace # XXX: illumos#6653
