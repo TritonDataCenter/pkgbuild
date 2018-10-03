@@ -63,7 +63,6 @@ joyent/percona57-cluster
 joyent/percona57-server
 joyent/pgagent
 joyent/phantomjs-static
-joyent/php-ioncube
 joyent/php-mailparse
 joyent/php-sphinx
 joyent/pkgsrc-gnupg-keys
@@ -137,7 +136,6 @@ wip/ruby-therubyracer
 wip/ruby-xmpp4r
 wip/runit
 wip/smstools
-wip/spidermonkey24
 wip/spread4
 wip/swftools
 wip/tftp-hpa
