@@ -115,28 +115,27 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		#
 		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
 	EOF
-	ed ${PKGBUILD_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
-		g/^GPG=/d
-		g/^GPG_SIGN_AS=/d
-		g/^VERIFIED_INSTALLATION=/d
-		$ a
+	cat >>${PKGBUILD_SYSCONFDIR}/pkg_install.conf <<-EOF
 		GPG_KEYRING_PKGVULN=${PKGBUILD_LOCALBASE}/share/gnupg/pkgsrc-security.gpg
 		PKG_PATH=${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
-		.
-		w
-		q
 	EOF
 	if [ -n '${PKGBUILD_GPG_SIGN_AS}' ]; then
 		ed ${PKGBUILD_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
-			a
-			VERIFIED_INSTALLATION=always
-			.
+			g/^GPG=/d
+			g/^GPG_SIGN_AS=/d
+			/^VERIFIED_INSTALLATION=/s/=.*/=always/
 			w
 			q
 		EOF
 	fi
+	sort ${PKGBUILD_SYSCONFDIR}/pkg_install.conf >/tmp/pi-$$.conf
+	mv /tmp/pi-$$.conf ${PKGBUILD_SYSCONFDIR}/pkg_install.conf
 	tarextras=
+	ugtarextras=
 	slashprivate=
+	if [ -n '${PKGBUILD_GPG_SIGN_AS}' ]; then
+		ugtarextras='.${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg'
+	fi
 	if [ '${PKGBUILD_OPSYS}' = 'Darwin' ]; then
 		echo '${PKGBUILD_LOCALBASE}/sbin' >/etc/paths.d/10-pkgsrc
 		echo '${PKGBUILD_LOCALBASE}/bin' >>/etc/paths.d/10-pkgsrc
@@ -156,10 +155,10 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	    \${tarextras}
 	${CMD_TAR} -zc -f ${UPGRADE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
-	    .${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg \
 	    .${PKGBUILD_SYSCONFDIR}/mk.conf \
 	    .${PKGBUILD_SYSCONFDIR}/pkg_install.conf \
-	    .${PKGBUILD_SYSCONFDIR}/pkgin/repositories.conf
+	    .${PKGBUILD_SYSCONFDIR}/pkgin/repositories.conf \
+	    \${ugtarextras}
 	if [ -n '${PKGBUILD_GPG_SIGN_AS}' ]; then
 		rm -f ${RELEASE_ASC} ${UPGRADE_ASC}
 		${CMD_GPG} --armor --sign --detach -u ${PKGBUILD_GPG_SIGN_AS} ${RELEASE_TAR}
