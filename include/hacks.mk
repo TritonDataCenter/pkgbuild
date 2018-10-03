@@ -11,9 +11,9 @@
 # For now, remove -g* for those packages to keep the file size down.
 #
 .if !empty(PKGPATH:Mwww/webkit-gtk*) || !empty(PKGPATH:Mwww/webkit24-gtk*)
-CFLAGS:=	${CFLAGS:C/-g.*//}
+CFLAGS:=	${CFLAGS:C/^-g.*//}
 .endif
 
 .if !empty(PKGPATH:Mlang/gcc*)
-CFLAGS:=	${CFLAGS:C/-msave-args//}
+CFLAGS:=	${CFLAGS:C/^-m.*//}
 .endif
