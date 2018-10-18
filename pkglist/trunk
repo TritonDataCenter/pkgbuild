@@ -5,8 +5,6 @@ joyent/celt051
 joyent/cgatools
 joyent/changepass
 joyent/chef-client
-joyent/clang6
-joyent/compiler-rt6
 joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
@@ -14,12 +12,8 @@ joyent/enstratus-agent
 joyent/gnupg20
 joyent/handlersocket
 joyent/instantclient
-joyent/libcxx6
-joyent/libcxxabi6
 joyent/libsass
 joyent/libspice
-joyent/libunwind6
-joyent/llvm6
 joyent/mariadb100-client
 joyent/mariadb100-server
 joyent/mms-agent
@@ -95,9 +89,6 @@ wip/leveldb
 wip/libcouchbase
 wip/libeio
 wip/mtop
-wip/munin-common
-wip/munin-master
-wip/munin-node
 wip/ncbi
 wip/ncbi-bin
 wip/ncbi-blast
