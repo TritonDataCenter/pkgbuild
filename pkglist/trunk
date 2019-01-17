@@ -28,6 +28,9 @@ joyent/node4
 joyent/nodejs
 joyent/nrsysmond
 joyent/nutcracker
+joyent/openjdk9
+joyent/openjdk10
+joyent/openjdk11
 joyent/ossec-agent
 joyent/ossec-local
 joyent/ossec-server
@@ -71,6 +74,7 @@ joyent/ruby-httpclient
 joyent/ruby-memcache-client
 joyent/ruby-rest-client
 joyent/ruby-soap4r
+joyent/rust129
 joyent/scmgit
 joyent/scmgit-base
 joyent/scmgit-docs
@@ -93,7 +97,6 @@ wip/ncbi
 wip/ncbi-bin
 wip/ncbi-blast
 wip/ncbi-lib
-wip/netatalk
 wip/oce
 wip/p5-Frontier-RPC
 wip/p5-Imager
@@ -122,8 +125,6 @@ wip/py-scikits_timeseries
 wip/py-scikits_vectorplot
 wip/pyzor
 wip/riak
-wip/ruby-libv8
-wip/ruby-therubyracer
 wip/ruby-xmpp4r
 wip/runit
 wip/smstools
@@ -132,8 +133,6 @@ wip/swftools
 wip/tftp-hpa
 wip/truecrypt
 wip/u-boot
-wip/v8
-wip/v8-316
 wip/vmware-sercons
 wip/wackamole
 wip/wkhtmltopdf
