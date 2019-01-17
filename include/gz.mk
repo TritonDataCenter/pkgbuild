@@ -16,6 +16,9 @@ APACHE_GROUP=	webservd	# No special requirements.
 CACTI_USER=	root		# No SPECIAL_PERMS, but requires valid shell.
 CACTI_GROUP=	root		# No SPECIAL_PERMS.
 #
+COLLECTD_USER=	daemon		# No special requirements.
+COLLECTD_GROUP=	daemon		# No special requirements.
+#
 CYRUS_USER=	root		# No SPECIAL_PERMS, but requires valid shell.
 #CYRUS_GROUP=	mail		# Already set to 'mail'.
 #
@@ -40,6 +43,9 @@ NUT_GROUP=	root		# No SPECIAL_PERMS.
 #
 RRDCACHED_USER=	daemon		# No special requirements.
 RRDCACHED_GROUP=daemon		# No special requirements.
+#
+ZABBIX_USER=	daemon		# No special requirements.
+ZABBIX_GROUP=	daemon		# No special requirements.
 #
 ZBXUSER=	root		# No SPECIAL_PERMS, but requires valid shell.
 ZBXGROUP=	root		# No SPECIAL_PERMS.
