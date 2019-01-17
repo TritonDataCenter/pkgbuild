@@ -7,7 +7,8 @@
 # Use external GCC for GCC itself and its dependencies, otherwise we run into
 # circular dependencies.
 #
-.if !empty(PKGPATH:Mdevel/binutils) \
+.if !empty(PKGPATH:Marchivers/bsdtar) \
+ || !empty(PKGPATH:Mdevel/binutils) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
  || !empty(PKGPATH:Mjoyent/ctftools) \

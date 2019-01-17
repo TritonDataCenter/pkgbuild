@@ -9,7 +9,8 @@
 #
 # This also aids packages which do not yet have USE_GCC_RUNTIME set.
 #
-.if !empty(PKGPATH:Marchivers/pax) \
+.if !empty(PKGPATH:Marchivers/bsdtar) \
+ || !empty(PKGPATH:Marchivers/pax) \
  || !empty(PKGPATH:Mdevel/binutils) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
