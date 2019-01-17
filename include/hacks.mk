@@ -14,6 +14,7 @@
 CFLAGS:=	${CFLAGS:C/^-g.*//}
 .endif
 
-.if !empty(PKGPATH:Mlang/gcc*)
+.if !empty(PKGPATH:Mlang/gcc*) \
+ || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
 CFLAGS:=	${CFLAGS:C/^-m.*//}
 .endif
