@@ -85,6 +85,7 @@ PKG_OPTIONS.scmgit+=		-python
 PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
+PKG_OPTIONS.vim+=		perl python
 PKG_OPTIONS.weechat+=		lua perl python ruby
 
 #
