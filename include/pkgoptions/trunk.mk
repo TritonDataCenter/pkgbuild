@@ -63,6 +63,7 @@ PKG_OPTIONS.exim+=		saslauthd spf
 PKG_OPTIONS.ffmpeg+=		tools	# XXX: make default in pkgsrc
 PKG_OPTIONS.freeradius+=	-bdb	# no db4 support
 PKG_OPTIONS.gearmand+=		-memcached
+PKG_OPTIONS.gitea+=		-pam
 PKG_OPTIONS.gnustep+=		fragile
 PKG_OPTIONS.graphviz+=		-perl	# XXX: multiarch
 PKG_OPTIONS.gs_type+=		ghostscript-agpl
