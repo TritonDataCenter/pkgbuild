@@ -28,6 +28,7 @@ joyent/node4
 joyent/nodejs
 joyent/nrsysmond
 joyent/nutcracker
+joyent/openjdk11
 joyent/ossec-agent
 joyent/ossec-local
 joyent/ossec-server

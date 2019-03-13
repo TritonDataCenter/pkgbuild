@@ -89,6 +89,7 @@ wip/bioruby
 wip/erlang-basho
 wip/fswatch
 wip/gecode
+wip/gitea
 wip/leveldb
 wip/libcouchbase
 wip/libeio
