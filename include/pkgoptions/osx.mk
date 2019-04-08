@@ -25,7 +25,7 @@ PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses
 #
 # Avoid circular dependencies with GCC.
 #
-.if ${PKGBUILD} == "osx-trunk-i386"
+.if ${PKGBUILD:Unone} == "osx-trunk-i386"
 PKG_OPTIONS.gcc49=	gcc-inplace-math
 PKG_OPTIONS.xz=		-nls
 .endif
