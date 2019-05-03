@@ -2,6 +2,7 @@ databases/hiredis
 databases/mysql56-client
 databases/mysql56-server
 databases/php-redis
+databases/php-redis3
 databases/postgresql94-adminpack
 databases/postgresql94-client
 databases/postgresql94-monitoring
@@ -24,8 +25,10 @@ databases/py-psycopg2
 databases/py-pymysql
 databases/py-redis-py
 databases/py-sqlite3
+databases/py-cx_Oracle
 databases/redis
 databases/unixodbc
+devel/aws-sdk-cpp
 devel/binutils
 devel/bmake
 devel/gdb
@@ -54,8 +57,10 @@ graphics/adwaita-icon-theme
 graphics/gnome-icon-theme
 graphics/gnome-icon-theme-symbolic
 graphics/gnome-icon-theme-extras
+lang/clang
 lang/gcc49
 lang/gcc49-libs
+lang/llvm
 lang/nawk
 lang/nodejs
 lang/nodejs4
@@ -65,10 +70,10 @@ lang/oracle-jdk8
 lang/oracle-jre8
 lang/pear
 lang/python27
+lang/rust
 lang/sun-jre7
 lang/sun-jdk7
 mail/dovecot2
-mail/dovecot2-antispam-plugin
 mail/dovecot2-pgsql
 mail/dovecot2-sqlite
 mail/p5-Mail-POP3Client
@@ -80,6 +85,9 @@ meta-pkgs/gnome
 meta-pkgs/modular-xorg
 meta-pkgs/php56-extensions
 meta-pkgs/php70-extensions
+meta-pkgs/php71-extensions
+meta-pkgs/php72-extensions
+meta-pkgs/php73-extensions
 meta-pkgs/pkg_developer
 meta-pkgs/xfce4
 meta-pkgs/xfce4-extras
@@ -110,9 +118,12 @@ pkgtools/bootstrap-mk-files
 pkgtools/pkg_alternatives
 pkgtools/pkgin
 print/cups
+print/poppler-utils
+scl/py-auditmonitor
 scl/oracle-client
 scl/oracle-sdk
 scl/oracle-sqlplus
+scl/ossec-agent
 scl/stu
 security/ap-modsecurity2
 security/ap-modsecurity29
@@ -121,7 +132,6 @@ security/mozilla-rootcerts
 security/openssh
 security/pinentry-gtk2
 security/pinentry-qt4
-security/py-gnupg
 security/py-gnupg
 security/py-paramiko
 security/py-passlib
@@ -133,7 +143,14 @@ sysutils/beats
 sysutils/bsdinstall
 sysutils/coreutils
 sysutils/py-psutil
+sysutils/py-watchdog
+sysutils/rsyslog
+sysutils/rsyslog-elasticsearch
+sysutils/rsyslog-gnutls
+sysutils/rsyslog-rabbitmq
 sysutils/top
+textproc/antiwordA
+textproc/catdoc
 textproc/glimpse
 textproc/jsoncpp
 textproc/libxml2
@@ -162,6 +179,5 @@ x11/gtk2-theme-switch
 x11/gtk3
 x11/xauth
 x11/xinit
-x11/xf86-
 x11/xscreensaver
 x11/xscreensaver-demo
