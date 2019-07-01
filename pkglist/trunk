@@ -74,11 +74,6 @@ joyent/ruby-httpclient
 joyent/ruby-memcache-client
 joyent/ruby-rest-client
 joyent/ruby-soap4r
-joyent/rust129
-joyent/scmgit
-joyent/scmgit-base
-joyent/scmgit-docs
-joyent/scmgit-gitk
 joyent/smtools
 joyent/spice-protocol
 joyent/trafficserver
@@ -122,7 +117,6 @@ wip/py-scikits_optimization
 wip/py-scikits_samplerate
 wip/py-scikits_scattpy
 wip/py-scikits_talkbox
-wip/py-scikits_timeseries
 wip/py-scikits_vectorplot
 wip/pyzor
 wip/riak
