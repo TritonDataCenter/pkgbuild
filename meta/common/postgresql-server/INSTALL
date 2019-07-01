@@ -1,0 +1,37 @@
+# $NetBSD$
+
+case ${STAGE} in
+POST-INSTALL)
+	if [ ! -f @VARBASE@/log/postgresql.log ]; then
+		@MKDIR@ @VARBASE@/log
+		@TOUCH@ @VARBASE@/log/postgresql.log
+		@CHOWN@ @PGUSER@:@PGGROUP@ @VARBASE@/log/postgresql.log
+	fi
+
+	if [ -d @PGHOME@/data ]; then
+		echo "Skipping database initialization, data directory already exists."
+		break
+	fi
+
+	printf "\nInitializing the PostgreSQL database cluster.\n\n"
+
+	echo "postgres" > /tmp/.pgpasswd
+
+	if [ ! -d @PGHOME@ ]; then
+		@MKDIR@ @PGHOME@
+		@CHOWN@ @PGUSER@:@PGGROUP@ @PGHOME@
+	fi
+
+	@SU@ - @PGUSER@ -c "@PREFIX@/bin/initdb \
+		--pgdata=@PGHOME@/data \
+		--encoding=UTF8 \
+		--locale=en_US.UTF-8 \
+		--auth=password \
+		--pwfile=/tmp/.pgpasswd" >/dev/null
+
+	rm /tmp/.pgpasswd
+
+	printf "The PostgreSQL database cluster has been initialized.\n\n"
+	printf "The default password for the '@PGUSER@' user is 'postgres'\n\n"
+	;;
+esac

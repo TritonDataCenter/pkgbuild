@@ -1,4 +1,7 @@
 # $NetBSD$
+#
+# Shared logadm script between mysql{51,55,56}-server.
+#
 
 case ${STAGE} in
 POST-INSTALL)
