@@ -90,6 +90,7 @@ wip/gecode
 wip/leveldb
 wip/libcouchbase
 wip/libeio
+wip/libvips
 wip/mtop
 wip/ncbi
 wip/ncbi-bin
