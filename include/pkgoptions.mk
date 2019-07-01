@@ -29,6 +29,7 @@ MYSQL_COLLATION=		utf8_general_ci
 PGHOME=				/var/pgsql
 PGUSER=				postgres
 PGGROUP=			postgres
+PKG_SHELL.${PGUSER}=		/usr/bin/pfbash
 
 # PHP
 PHP_MYSQL_DRIVER=		mysqlnd
