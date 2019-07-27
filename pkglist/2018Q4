@@ -72,7 +72,6 @@ joyent/ruby-httpclient
 joyent/ruby-memcache-client
 joyent/ruby-rest-client
 joyent/ruby-soap4r
-joyent/rust129
 joyent/scmgit
 joyent/scmgit-base
 joyent/scmgit-docs
