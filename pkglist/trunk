@@ -58,6 +58,8 @@ joyent/percona56-server
 joyent/percona57-client
 joyent/percona57-cluster
 joyent/percona57-server
+joyent/percona80-client
+joyent/percona80-server
 joyent/pgagent
 joyent/phantomjs-static
 joyent/php-mailparse
