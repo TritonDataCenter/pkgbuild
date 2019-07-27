@@ -7,9 +7,15 @@
 #
 .if !empty(PKGPATH:M*/postgresql*server)
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/postgresql-server
-.elif !empty(PKGPATH:M*/mysql5[156]-server)
+.elif !empty(PKGPATH:M*/mysql5[156]-server) \
+   || !empty(PKGPATH:M*/percona5[56]-server) \
+   || !empty(PKGPATH:M*/mariadb10-server) \
+   || !empty(PKGPATH:M*/mariadb100-server)
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/mysql5-server
-.elif !empty(PKGPATH:M*/mysql57-server) || !empty(PKGPATH:M*/mysql8*-server)
+.elif !empty(PKGPATH:M*/mysql57-server) \
+   || !empty(PKGPATH:M*/mysql8*-server) \
+   || !empty(PKGPATH:M*/percona57-server) \
+   || !empty(PKGPATH:M*/percona8*-server)
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/mysql8-server
 .else
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}
