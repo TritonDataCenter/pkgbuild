@@ -2,6 +2,7 @@
 # Add -lumem by default, except for packages where it causes issues.
 #
 .if empty(PKGPATH:Mdevel/SOPE) \
+ && empty(PKGPATH:Mdevel/SOPE4) \
  && empty(PKGPATH:Mdevel/gnustep-base) \
  && empty(PKGPATH:Mdevel/ncurses) \
  && empty(PKGPATH:Mdevel/valgrind) \
