@@ -76,6 +76,7 @@ joyent/scmgit
 joyent/scmgit-base
 joyent/scmgit-docs
 joyent/scmgit-gitk
+joyent/smartos-build-tools
 joyent/smtools
 joyent/spice-protocol
 joyent/trafficserver
