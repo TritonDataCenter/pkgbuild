@@ -1,8 +1,9 @@
 #
 # Add -lumem by default, except for packages where it causes issues.
 #
-.if empty(PKGPATH:Mdevel/SOPE) \
+.if empty(PKGPATH:Mdevel/SOPE*) \
  && empty(PKGPATH:Mdevel/gnustep-base) \
+ && empty(PKGPATH:Mdevel/gperftools) \
  && empty(PKGPATH:Mdevel/ncurses) \
  && empty(PKGPATH:Mdevel/valgrind) \
  && empty(PKGPATH:Meditors/emacs*) \
