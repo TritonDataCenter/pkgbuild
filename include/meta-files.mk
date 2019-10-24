@@ -7,6 +7,8 @@
 #
 .if !empty(PKGPATH:M*/postgresql*server)
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/postgresql-server
+.elif !empty(PKGPATH:M*/percona*-cluster)
+PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/percona-cluster
 .elif !empty(PKGPATH:M*/mysql5[156]-server) \
    || !empty(PKGPATH:M*/percona5[56]-server) \
    || !empty(PKGPATH:M*/mariadb10-server) \
