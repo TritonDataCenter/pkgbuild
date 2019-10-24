@@ -180,8 +180,11 @@ fi
 # .include path in the bootstrap mk.conf
 #
 if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
-	mkdir -p ${chrootdir}/shared
-	ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/shared/pbulk
+	if [ ! -e ${chrootdir}/shared/pbulk ]; then
+		mkdir -p ${chrootdir}/shared
+		ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/shared/pbulk
+		>${chrootdir}/shared/.sandbox_created_symlink
+	fi
 fi
 
 #

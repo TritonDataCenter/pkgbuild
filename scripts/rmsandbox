@@ -119,8 +119,9 @@ if [ -d "${chrootdir}" ]; then
 	#
 	# Compat symlink.
 	#
-	if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
+	if [ -f ${chrootdir}/shared/.sandbox_created_symlink ]; then
 		rm ${chrootdir}/shared/pbulk
+		rm ${chrootdir}/shared/.sandbox_created_symlink
 		rmdir ${chrootdir}/shared
 	fi
 
