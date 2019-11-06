@@ -89,7 +89,7 @@ while true; do
 		fi
 	fi
 
-	(cd ${PKGSRCDIR} && git fetch --all && git reset --hard upstream/trunk)
+	(cd ${PKGSRCDIR} && git fetch --all && git reset --hard netbsd/trunk)
 	if [ $? -ne 0 ]; then
 		echo "Something went wrong, investigate."
 		break
