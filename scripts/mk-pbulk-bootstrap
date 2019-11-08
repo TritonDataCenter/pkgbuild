@@ -77,9 +77,9 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 			q
 		EOF
 	fi
-	if [ '${PKGBUILD_BASEDIR}' = '/shared/pbulk' ]; then
+	if [ '${PKGBUILD_BASEDIR}' != '/data/pkgbuild' ]; then
 		ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
-			g,/shared/pbulk,s,/shared/pbulk,/data/pkgbuild,
+			g,${PKGBUILD_BASEDIR},s,${PKGBUILD_BASEDIR},/data/pkgbuild,
 			w
 			q
 		EOF
