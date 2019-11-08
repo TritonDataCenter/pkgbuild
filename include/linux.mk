@@ -26,6 +26,11 @@ GCC_REQD+=	7
 # Work around broken libgcc handling
 PKG_DEFAULT_OPTIONS+=	always-libgcc
 
+# XXX: Fix properly upstream.  Native binutils too old.
+.if ${PKGBUILD} == "el6-trunk-pbulk64" && !empty(PKGPATH:Mlang/nodejs)
+CONFIGURE_ARGS+=	--openssl-no-asm
+.endif
+
 # Use native Xorg, except libXft (XXX: forgot why, upstream?).
 #PREFER_PKGSRC=	libXft
 X11_TYPE=	modular
