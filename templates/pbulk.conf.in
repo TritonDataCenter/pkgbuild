@@ -46,6 +46,7 @@ MANTA_SUBUSER="@MANTA_SUBUSER@"
 MANTA_KEY_ID="@MANTA_KEY_ID@"
 MANTA_URL="https://us-east.manta.joyent.com"
 MANTA_PATH="@MANTA_PATH@"
+MANTA_SYNC_ARGS="@MANTA_SYNC_ARGS@"
 
 # Some flags for the programs that publish the binary packages and the
 # build report. If you want to disable the publishing at all, see below.
