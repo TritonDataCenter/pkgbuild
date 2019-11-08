@@ -126,6 +126,14 @@ if [ -d "${chrootdir}" ]; then
 	fi
 
 	#
+	# When mounting individual directories under /data we need to clean
+	# up afterwards.  Yes, this is terrible, and should be parameterised.
+	#
+	if [ -d ${chrootdir}/data ]; then
+		rmdir ${chrootdir}/data
+	fi
+
+	#
 	# chrootdir should now be empty, if not print what's left.
 	#
 	rmdir ${chrootdir}
