@@ -63,8 +63,8 @@ lang/gcc49-libs
 lang/llvm
 lang/nawk
 lang/nodejs
-lang/nodejs4
 lang/nodejs8
+lang/npm
 lang/openjdk8
 lang/oracle-jdk8
 lang/oracle-jre8
@@ -91,6 +91,7 @@ meta-pkgs/php73-extensions
 meta-pkgs/pkg_developer
 meta-pkgs/xfce4
 meta-pkgs/xfce4-extras
+misc/byobu
 misc/pinfo
 misc/tmux
 net/arping
