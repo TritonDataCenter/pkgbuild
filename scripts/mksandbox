@@ -199,7 +199,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
-		export PATH=$PATH:/usr/gnu/i386-pc-solaris2.11/bin:/opt/gcc-4.8.1/bin
+		export PATH=$PATH:/usr/gnu/i386-pc-solaris2.11/bin:/opt/gcc-7/bin
 		export PKG_SKIP_SMF=yes
                 if grep -q PKG_PATH ${TOOLS_BASEDIR}/etc/pkg_install.conf; then
 			ed ${TOOLS_BASEDIR}/etc/pkg_install.conf >/dev/null 2>&1 <<-EOF

@@ -42,9 +42,10 @@ RELEASE_ASC="${RELEASE_TAR}.asc"
 UPGRADE_TAR="${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}/${BOOTSTRAP_KIT}${bootstrap_date}-upgrade.tar.gz"
 UPGRADE_ASC="${UPGRADE_TAR}.asc"
 
+	#set -e
+	#trap 'echo "Error : Last was $LAST"; exit' ERR
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} /bin/bash -c "
-	set -e
 	PATH=${PBULK_PATH}
 	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PKGSRC_PREFIX}/sbin:${PKGSRC_PREFIX}/bin:${PBULK_PATH}
@@ -137,6 +138,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		q
 	EOF
 	if [ -n '${PKGSRC_GPG_SIGN_AS}' ]; then
+		echo "Signing..."
 		ed ${PKGSRC_SYSCONFDIR}/pkg_install.conf >/dev/null 2>&1 <<-EOF
 			a
 			VERIFIED_INSTALLATION=always
@@ -165,7 +167,6 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	    \${tarextras}
 	${CMD_TAR} -zc -f ${UPGRADE_TAR} -C / \
 	    --exclude '.fseventsd' --exclude '.metadata_never_index' \
-	    .${PKGSRC_SYSCONFDIR}/gnupg/pkgsrc.gpg \
 	    .${PKGSRC_SYSCONFDIR}/mk.conf 
 	if [ -n '${PKGSRC_GPG_SIGN_AS}' ]; then
 		rm -f ${RELEASE_ASC} ${UPGRADE_ASC}
@@ -186,6 +187,6 @@ if [ ${bsret} -eq 0 ]; then
 		echo "Created ${UPGRADE_ASC}"
 	fi
 else
-	echo "Bootstrap creation failed."
+	echo "Bootstrap creation failed. ${bsret}"
 fi
 exit $((${bsret} + ${chret}))
