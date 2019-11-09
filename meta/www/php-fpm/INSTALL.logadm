@@ -3,10 +3,11 @@
 case ${STAGE} in
 POST-INSTALL)
 	# Add log rotation
-	logadm -C 5 -c -s 50m -z 1 -w /var/log/php-fpm.log
+	logadm -C 5 -c -s 50m -z 1 -w /opt/scl64/var/log/php-fpm.log
 ;;
 DEINSTALL)
 	# Remove log rotation
 	logadm -r /var/log/php-fpm.log
+	logadm -r /opt/scl64/var/log/php-fpm.log
 ;;
 esac
