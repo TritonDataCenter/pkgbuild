@@ -9,7 +9,9 @@
 # Additional packages for branch builds.  Pull in all additional packages
 # currently defined in the branch-specific pkglist file.
 #
-.if exists(${PKGBUILD_BASEDIR}/pkglist/${BRANCH})
+.if exists(${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD})
+WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD}
+.elif exists(${PKGBUILD_BASEDIR}/pkglist/${BRANCH})
 WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH}
 .endif
 .if defined(WIPJOYPKGS)
