@@ -3,17 +3,17 @@
 # Create a shadowed sandbox from the root file system ready for builds.
 #
 
+if [ "$(uname -s)" != "Darwin" ]; then
+	echo "ERROR: Script is only suitable for OSX." >&2
+	exit 1
+fi
+
 if [ $# -eq 1 ]; then
 	chrootdir=$1; shift
 	chrootname=$(basename ${chrootdir})
 else
 	echo "usage: $0 <chrootdir>" >&2
 	exit 2
-fi
-
-if [ "$(uname -s)" != "Darwin" ]; then
-        echo "ERROR: Script is only suitable for OSX." >&2
-        exit 1
 fi
 
 while true; do

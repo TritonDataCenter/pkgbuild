@@ -3,9 +3,14 @@
 # Unmount a shadowed sandbox
 #
 
+if [ "$(uname -s)" != "Darwin" ]; then
+	echo "ERROR: Script is only suitable for OSX." >&2
+	exit 1
+fi
+
 if [ $# -eq 1 ]; then
 	chrootdir="${1%%/}"; shift
-        chrootname=$(basename ${chrootdir})
+	chrootname=$(basename ${chrootdir})
 else
 	echo "usage: $0 <chrootdir>" >&2
 	exit 2
@@ -14,11 +19,6 @@ fi
 if [ ! -d ${chrootdir} ]; then
 	echo "ERROR: ${chrootdir} does not exist." >&2
 	exit 1
-fi
-
-if [ "$(uname -s)" != "Darwin" ]; then
-        echo "ERROR: Script is only suitable for OSX." >&2
-        exit 1
 fi
 
 # Calculate pkgbuild based on chroot name.

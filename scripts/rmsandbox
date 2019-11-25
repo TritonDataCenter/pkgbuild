@@ -3,6 +3,11 @@
 # Delete a per-pkgbuild chroot area.
 #
 
+if [ "$(uname -s)" != "SunOS" ]; then
+	echo "ERROR: Script is only suitable for SunOS." >&2
+	exit 1
+fi
+
 PATH=/sbin:/usr/sbin:/usr/bin
 
 if [ $# -eq 1 ]; then
