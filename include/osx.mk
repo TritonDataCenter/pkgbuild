@@ -3,9 +3,11 @@
 #
 
 # Packages which currently hang the build
-.if !empty(PKGPATH:Mgraphics/rayshade) \
+.if !empty(PKGPATH:Mgames/crimsonfields) \
+ || !empty(PKGPATH:Mgraphics/rayshade) \
  || !empty(PKGPATH:Mlang/jamvm) \
  || !empty(PKGPATH:Mmail/elm) \
+ || !empty(PKGPATH:Mmultimedia/dumpmpeg) \
  || !empty(PKGPATH:Mnet/gtk-gnutella) \
  || !empty(PKGPATH:Mnews/knews) \
  || !empty(PKGPATH:Mshells/pdksh) \
