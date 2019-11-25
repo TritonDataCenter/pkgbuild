@@ -48,7 +48,7 @@ WRKOBJDIR=		/Users/pbulk/build-disk
 
 # OSX does not perform name resolution in a chroot, so we need to hardcode
 # entries in /etc/hosts and override the default site.
-MASTER_SITE_OVERRIDE=	http://ftp.NetBSD.org/pub/pkgsrc/distfiles/
+MASTER_SITE_OVERRIDE=	http://cdn.NetBSD.org/pub/pkgsrc/distfiles/
 
 # Fix GCC builds
 MULTILIB_SUPPORTED=	no
