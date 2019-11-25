@@ -4,10 +4,10 @@
 #
 PATH=@PBULK_PATH@
 
-# Limit processes to an hour of CPU time.  Anything using this much is most
-# likely broken.
+# Limit processes by CPU time.  Really this should be moved to mk.conf and set
+# on a per-package basis, as some (e.g. Rust) may require more than others.
 #
-ulimit -t 3600
+ulimit -t @CPU_TIME@
 
 # Version of the configuration file. This is bumped whenever the default
 # config changes to notify the administrator about updates.
