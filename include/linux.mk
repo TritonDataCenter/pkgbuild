@@ -19,8 +19,9 @@ MULTILIB_SUPPORTED=	no
 #
 .if (!empty(PKGBUILD:Mel6*) && !empty(GCC_REQD:M4.[5-9]*)) \
  || (!empty(PKGBUILD:Mel7*) && !empty(GCC_REQD:M4.9*)) \
- || !empty(GCC_REQD:M[56].*)
-GCC_REQD+=	7
+ || !empty(GCC_REQD:M[56]*)
+GCC_REQD+=		7
+USE_PKGSRC_GCC_RUNTIME=	yes
 .endif
 
 # Work around broken libgcc handling
