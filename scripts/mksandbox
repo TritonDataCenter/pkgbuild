@@ -82,6 +82,13 @@ done
 #
 # NFS mounts.
 #
+for mount in ${NFS_RO_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount -F nfs -o ro ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+done
+
 for mount in ${NFS_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
