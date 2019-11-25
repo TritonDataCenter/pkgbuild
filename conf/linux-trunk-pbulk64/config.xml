@@ -84,13 +84,13 @@ export PKGBUILD=linux-trunk-pbulk64
   <publishers>
     <jenkins.plugins.mattermost.MattermostNotifier plugin="mattermost@2.7.1">
       <startNotification>false</startNotification>
-      <notifySuccess>true</notifySuccess>
-      <notifyAborted>true</notifyAborted>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
       <notifyNotBuilt>false</notifyNotBuilt>
       <notifyUnstable>false</notifyUnstable>
       <notifyFailure>true</notifyFailure>
-      <notifyBackToNormal>false</notifyBackToNormal>
-      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <notifyBackToNormal>true</notifyBackToNormal>
+      <notifyRepeatedFailure>true</notifyRepeatedFailure>
       <includeTestSummary>false</includeTestSummary>
       <commitInfoChoice>NONE</commitInfoChoice>
       <includeCustomAttachmentMessage>false</includeCustomAttachmentMessage>
