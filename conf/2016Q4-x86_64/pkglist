@@ -70,6 +70,7 @@ lang/oracle-jdk8
 lang/oracle-jre8
 lang/pear
 lang/python27
+lang/python36
 lang/rust
 lang/sun-jre7
 lang/sun-jdk7
@@ -100,11 +101,14 @@ net/httping
 net/iftop
 net/mosh
 net/omniEvents
+net/omniEvents42
 net/omniORB
+net/omniORB42
 net/proftpd
 net/py-boto
 net/py-dns
 net/py-omniORBpy
+net/py-omniORBpy42
 net/py-twisted
 net/py-twisted-docs
 net/rabbitmq
