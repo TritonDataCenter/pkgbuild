@@ -11,5 +11,10 @@
 # For now, remove -g* for those packages to keep the file size down.
 #
 .if !empty(PKGPATH:Mwww/webkit-gtk*) || !empty(PKGPATH:Mwww/webkit24-gtk*)
-CFLAGS:=	${CFLAGS:C/-g.*//}
+CFLAGS:=	${CFLAGS:C/^-g.*//}
+.endif
+
+.if !empty(PKGPATH:Mlang/gcc*) \
+ || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
+CFLAGS:=	${CFLAGS:C/^-m.*//}
 .endif

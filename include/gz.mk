@@ -16,6 +16,9 @@ APACHE_GROUP=	webservd	# No special requirements.
 CACTI_USER=	root		# No SPECIAL_PERMS, but requires valid shell.
 CACTI_GROUP=	root		# No SPECIAL_PERMS.
 #
+COLLECTD_USER=	daemon		# No special requirements.
+COLLECTD_GROUP=	daemon		# No special requirements.
+#
 CYRUS_USER=	root		# No SPECIAL_PERMS, but requires valid shell.
 #CYRUS_GROUP=	mail		# Already set to 'mail'.
 #
@@ -41,5 +44,15 @@ NUT_GROUP=	root		# No SPECIAL_PERMS.
 RRDCACHED_USER=	daemon		# No special requirements.
 RRDCACHED_GROUP=daemon		# No special requirements.
 #
+ZABBIX_USER=	daemon		# No special requirements.
+ZABBIX_GROUP=	daemon		# No special requirements.
+#
 ZBXUSER=	root		# No SPECIAL_PERMS, but requires valid shell.
 ZBXGROUP=	root		# No SPECIAL_PERMS.
+
+#
+# Apply some custom build settings that make sense for the GZ.
+#
+.if !empty(PKGPATH:Mlang/nodejs*) || !empty(PKGPATH:Mjoyent/node*)
+PYTHON_FOR_BUILD_ONLY=	yes	# Only required by gyp for building modules
+.endif

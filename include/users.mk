@@ -595,3 +595,9 @@ PKG_GID.pgbounce=	809
 #
 PKG_UID.zabbix=		808
 PKG_GID.zabbix=		808
+#
+PKG_UID.rspamd=		807
+PKG_GID.rspamd=		807
+#
+PKG_UID.influxdb=	806
+PKG_GID.influxdb=	806

@@ -28,4 +28,3 @@ PKGSRC_USE_SSP=	no
 .else
 _USE_GCC_SHLIB=	yes
 .endif
-
