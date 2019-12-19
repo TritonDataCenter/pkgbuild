@@ -1,14 +1,11 @@
 databases/hiredis
 databases/mysql56-client
 databases/mysql56-server
-databases/php-redis
 databases/php-redis3
-databases/postgresql94-adminpack
 databases/postgresql94-client
 databases/postgresql94-monitoring
 databases/postgresql94-pgcrypto
 databases/postgresql94-server
-databases/postgresql95-adminpack
 databases/postgresql95-client
 databases/postgresql95-datatypes
 databases/postgresql95-dblink
@@ -41,7 +38,6 @@ devel/memcached
 devel/mercurial
 devel/nbpatch
 devel/php-memcached
-devel/py-hgview
 devel/py-idle
 devel/py-pexpect
 devel/py-pip
@@ -60,6 +56,8 @@ graphics/gnome-icon-theme-extras
 lang/clang
 lang/gcc49
 lang/gcc49-libs
+lang/gcc8
+lang/gcc8-libs
 lang/llvm
 lang/nawk
 lang/nodejs
@@ -71,6 +69,8 @@ lang/oracle-jre8
 lang/pear
 lang/python27
 lang/python36
+lang/python37
+lang/python38
 lang/rust
 lang/sun-jre7
 lang/sun-jdk7
@@ -84,8 +84,6 @@ mail/spamassassin
 meta-pkgs/boost
 meta-pkgs/gnome
 meta-pkgs/modular-xorg
-meta-pkgs/php56-extensions
-meta-pkgs/php70-extensions
 meta-pkgs/php71-extensions
 meta-pkgs/php72-extensions
 meta-pkgs/php73-extensions
@@ -174,7 +172,7 @@ www/py-cherrypy
 www/py-django
 www/py-flask
 www/py-mod_wsgi
-www/squid3
+www/squid4
 www/squidGuard
 www/squidview
 x11/gdm

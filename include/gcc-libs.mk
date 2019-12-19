@@ -9,10 +9,12 @@
 #
 # This also aids packages which do not yet have USE_GCC_RUNTIME set.
 #
-.if !empty(PKGPATH:Marchivers/pax) \
+.if !empty(PKGPATH:Marchivers/bsdtar) \
+ || !empty(PKGPATH:Marchivers/pax) \
  || !empty(PKGPATH:Mdevel/binutils) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
+ || !empty(PKGPATH:Mjoyent/ctftools) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Mmisc/root) \
  || !empty(PKGPATH:Mpkgtools/abiexec) \
@@ -26,3 +28,4 @@ PKGSRC_USE_SSP=	no
 .else
 _USE_GCC_SHLIB=	yes
 .endif
+
