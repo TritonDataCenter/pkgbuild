@@ -295,6 +295,10 @@ esac
 
 echo "Make empty dirs upon which to mount the null mounts"
 for d in $sandboxMountDirs; do
+	if [ -L $d ]; then
+		$cpprog -P $d $sandbox$d
+		continue
+	fi
 	test -d $d || continue;
 	case $d in
 	*X11*)	test "$with_x" = "yes" || continue ;;

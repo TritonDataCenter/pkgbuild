@@ -3,6 +3,11 @@
 # Delete a per-pkgbuild chroot area.
 #
 
+if [ "$(uname -s)" != "SunOS" ]; then
+	echo "ERROR: Script is only suitable for SunOS." >&2
+	exit 1
+fi
+
 PATH=/sbin:/usr/sbin:/usr/bin
 
 if [ $# -eq 1 ]; then
@@ -77,7 +82,7 @@ if [ -d "${chrootdir}" ]; then
 	# NFS mounts, carefully avoiding an rm -rf if the unmount fails for
 	# any reason.
 	#
-	for mount in ${NFS_MOUNTS}; do
+	for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
 		dst=${mount#*=}
 		unmount ${chrootdir}${dst}
 		rmdir ${chrootdir}${dst}
@@ -119,9 +124,18 @@ if [ -d "${chrootdir}" ]; then
 	#
 	# Compat symlink.
 	#
-	if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
+	if [ -f ${chrootdir}/shared/.sandbox_created_symlink ]; then
 		rm ${chrootdir}/shared/pbulk
+		rm ${chrootdir}/shared/.sandbox_created_symlink
 		rmdir ${chrootdir}/shared
+	fi
+
+	#
+	# When mounting individual directories under /data we need to clean
+	# up afterwards.  Yes, this is terrible, and should be parameterised.
+	#
+	if [ -d ${chrootdir}/data ]; then
+		rmdir ${chrootdir}/data
 	fi
 
 	#

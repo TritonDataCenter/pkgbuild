@@ -2,16 +2,18 @@
 #
 # Simple script to run a bulk build in a loop at most once per day.
 #
-# Assumes /data/pkgsrc and /data/pkgbuild.
+# Assumes /data/pkgsrc unless -p is specified.
 #
 
 usage()
 {
-	echo "usage: $0 [-d <day[,day..]>] <pkgbuild>" >&2
+	echo "usage: $0 [-d <day[,day..]>] [-p <pkgsrc>] [-w <wait>] <pkgbuild>" >&2
 }
 
 BUILD_DAYS=
-while getopts ":d:h" opt; do
+PKGSRCDIR=/data/pkgsrc
+WAITTIME=86400
+while getopts ":d:hp:w:" opt; do
 	case "${opt}" in
 	d)
 		BUILD_DAYS="${OPTARG//,/ }"
@@ -19,6 +21,12 @@ while getopts ":d:h" opt; do
 	h)
 		usage
 		exit
+		;;
+	p)
+		PKGSRCDIR=${OPTARG}
+		;;
+	w)
+		WAITTIME=${OPTARG}
 		;;
 	*)
 		usage
@@ -36,8 +44,8 @@ else
 	exit 2
 fi
 
-BUILDSTAMP="/var/tmp/pkgbuild-build-stamp"
-PAUSESTAMP="/var/tmp/pkgbuild-pause-stamp"
+BUILDSTAMP="/var/tmp/pkgbuild-${PKGBUILD}-build-stamp"
+PAUSESTAMP="/var/tmp/pkgbuild-${PKGBUILD}-pause-stamp"
 
 while true; do
 
@@ -48,16 +56,16 @@ while true; do
 	fi
 
 	#
-	# Build at most once per day.
+	# Build at most once per $WAITTIME.
 	#
 	timenow="$(date '+%s')"
 	if [ -f ${BUILDSTAMP} ]; then
 		read timelast < ${BUILDSTAMP} 
 		delta="$((${timenow} - ${timelast}))"
-		if [ ${delta} -gt 0 ] && [ ${delta} -lt 86400 ]; then
-			waittime="$((86400 - ${delta}))"
-			echo "Sleeping for ${waittime} seconds..."
-			sleep ${waittime}
+		if [ ${delta} -gt 0 ] && [ ${delta} -lt ${WAITTIME} ]; then
+			builddelay="$((${WAITTIME} - ${delta}))"
+			echo "Sleeping for ${builddelay} seconds..."
+			sleep ${builddelay}
 		fi
 	fi
 
@@ -81,7 +89,7 @@ while true; do
 		fi
 	fi
 
-	(cd /data/pkgsrc && git fetch --all && git reset --hard upstream/trunk)
+	(cd ${PKGSRCDIR} && git fetch --all && git reset --hard netbsd/trunk)
 	if [ $? -ne 0 ]; then
 		echo "Something went wrong, investigate."
 		break
@@ -90,5 +98,5 @@ while true; do
 	timenow="$(date '+%s')"
 	echo ${timenow} > ${BUILDSTAMP}
 
-	/data/pkgbuild/scripts/run-jenkins-build
+	$(dirname $0)/run-jenkins-build
 done

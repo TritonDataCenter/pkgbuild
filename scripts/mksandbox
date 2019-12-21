@@ -3,6 +3,11 @@
 # Create a per-pkgbuild chroot area.
 #
 
+if [ "$(uname -s)" != "SunOS" ]; then
+	echo "ERROR: Script is only suitable for SunOS." >&2
+	exit 1
+fi
+
 set -e
 
 PATH=/sbin:/usr/sbin:/usr/bin
@@ -77,11 +82,18 @@ done
 #
 # NFS mounts.
 #
+for mount in ${NFS_RO_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount -F nfs -o ro ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+done
+
 for mount in ${NFS_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
 	mkdir -p ${chrootdir}${dst}
-	mount -F nfs ${src} ${chrootdir}${dst}
+	mount -F nfs ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
 done
 
 #
@@ -175,8 +187,11 @@ fi
 # .include path in the bootstrap mk.conf
 #
 if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
-	mkdir -p ${chrootdir}/shared
-	ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/shared/pbulk
+	if [ ! -e ${chrootdir}/shared/pbulk ]; then
+		mkdir -p ${chrootdir}/shared
+		ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/shared/pbulk
+		>${chrootdir}/shared/.sandbox_created_symlink
+	fi
 fi
 
 #
@@ -184,30 +199,36 @@ fi
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	tools_packages="gtexinfo nbpatch pbulk"
+	case "${pkgbuild}" in
+	trunk-*|2017Q3-[imx]*|2017Q4-*|201[89]Q*|20[2-9][0-9]Q*)
+		gpgpkg="gnupg20"
+		;;
+	*)
+		gpgpkg="gnupg2"
+		;;
+	esac
+	case "${pkgbuild}" in
+	2017Q4-*|201[89]Q*|20[2-9][0-9]Q*|trunk-*)
+		tools_packages="${tools_packages} ctftools"
+		;;
+	esac
 	case "${chrootname}" in
 	bootstrap*)
-		tools_packages="${tools_packages} gnupg2"
+		tools_packages="${tools_packages} ${gpgpkg}"
 		;;
 	*-build|*-build-[0-9]*)
-		tools_packages="${tools_packages} gnupg2 libtool-base"
+		tools_packages="${tools_packages} ${gpgpkg} libtool-base"
 		;;
 	*-scan*)
 		;;
 	*)
-		tools_packages="${tools_packages} gnupg2 libtool-base nodejs"
+		tools_packages="${tools_packages} ${gpgpkg} libtool-base nodejs"
 		;;
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		export PATH=$PATH:/usr/gnu/i386-pc-solaris2.11/bin:/opt/gcc-7/bin
 		export PKG_SKIP_SMF=yes
-                if grep -q PKG_PATH ${TOOLS_BASEDIR}/etc/pkg_install.conf; then
-			ed ${TOOLS_BASEDIR}/etc/pkg_install.conf >/dev/null 2>&1 <<-EOF
-				g/^PKG_PATH=/d
-				w
-				q
-			EOF
-                fi
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
@@ -224,5 +245,6 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 				q
 			EOF
 		fi
-		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_COMPILER} ${tools_packages} >/dev/null 2>&1"
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_COMPILER} ${tools_packages} >/dev/null 2>&1
+	"
 fi
