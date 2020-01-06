@@ -8,6 +8,7 @@ joyent/libunwind6
 joyent/llvm6
 joyent/node08
 joyent/pkgsrc-gnupg-keys
+joyent/smartos-build-tools
 joyent/sun-jre6
 wip/munin-common
 wip/munin-master

@@ -53,3 +53,10 @@ PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 #
 TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert-altexec
 TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
+
+#
+# rpcgen isn't always available as it requires smartos-build-tools, but if a
+# package is calling rpcgen then it is going to fail anyway and this makes it
+# easier to find.
+#
+TOOLS_PATH.rpcgen=		${TOOLS_BASEDIR}/bin/rpcgen

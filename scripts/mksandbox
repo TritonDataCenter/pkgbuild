@@ -212,6 +212,15 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 		tools_packages="${tools_packages} ctftools"
 		;;
 	esac
+	#
+	# This is currently only configured for trunk-x86_64 and 2019Q4
+	# onwards, but should really be cleaner.  Required for rpcgen.
+	#
+	case "${pkgbuild}" in
+	2019Q4-x86_64|20[2-9]Q*-x86_64|trunk-x86_64)
+		tools_packages="${tools_packages} smartos-build-tools"
+		;;
+	esac
 	case "${chrootname}" in
 	bootstrap*)
 		tools_packages="${tools_packages} ${gpgpkg}"

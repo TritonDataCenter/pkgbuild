@@ -3,4 +3,5 @@ joyent/gnupg20
 joyent/node08
 joyent/node4
 joyent/pkgsrc-gnupg-keys
+joyent/smartos-build-tools
 joyent/sun-jre6
