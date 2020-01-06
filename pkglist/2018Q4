@@ -11,6 +11,7 @@ joyent/dtracetools
 joyent/enstratus-agent
 joyent/gnupg20
 joyent/handlersocket
+joyent/haproxy18
 joyent/instantclient
 joyent/libsass
 joyent/libspice
