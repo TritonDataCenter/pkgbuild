@@ -28,6 +28,7 @@ databases/unixodbc
 devel/aws-sdk-cpp
 devel/binutils
 devel/bmake
+devel/doxygen
 devel/gdb
 devel/geany
 devel/git
@@ -37,6 +38,7 @@ devel/meld
 devel/memcached
 devel/mercurial
 devel/nbpatch
+devel/nss
 devel/php-memcached
 devel/py-idle
 devel/py-pexpect
@@ -59,6 +61,7 @@ lang/gcc49-libs
 lang/gcc8
 lang/gcc8-libs
 lang/llvm
+lang/mono
 lang/nawk
 lang/nodejs
 lang/nodejs8
@@ -82,11 +85,12 @@ mail/p5-MIME-tools
 mail/postfix
 mail/spamassassin
 meta-pkgs/boost
-meta-pkgs/gnome
+#meta-pkgs/gnome
+meta-pkgs/mate
 meta-pkgs/modular-xorg
-meta-pkgs/php71-extensions
 meta-pkgs/php72-extensions
 meta-pkgs/php73-extensions
+meta-pkgs/php74-extensions
 meta-pkgs/pkg_developer
 meta-pkgs/xfce4
 meta-pkgs/xfce4-extras
@@ -162,7 +166,6 @@ textproc/nbsed
 textproc/py-jinja2
 textproc/py-lxml
 textproc/py-pygments
-www/ap-fastcgi
 www/apache24
 www/cronolog
 www/curl
@@ -180,6 +183,7 @@ x11/gnome-terminal
 x11/gtk2-engines
 x11/gtk2-theme-switch
 x11/gtk3
+x11/qt5-qscintilla
 x11/xauth
 x11/xinit
 x11/xscreensaver
