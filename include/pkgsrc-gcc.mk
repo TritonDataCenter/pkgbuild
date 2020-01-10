@@ -25,15 +25,8 @@
  || !empty(PKGPATH:Msysutils/checkperms)
 GCCBASE=	${PKGBUILD_GCCBASE}
 .else
-#
-# This should have been += all along to avoid issues where we overwrite a newer
-# requirement, but we can't change releases now that didn't use it to begin
-# with, otherwise dependencies will change.
-#
-.  if !empty(PKGBUILD:M201[4567]Q?-*)
-GCC_REQD=	${PKGBUILD_GCC_REQD}
-.  else
+
 GCC_REQD+=	${PKGBUILD_GCC_REQD}
-.  endif
+
 USE_PKGSRC_GCC=	yes
 .endif
