@@ -18,7 +18,7 @@ TOOLS_PLATFORM.patch=   ${TOOLS_BASEDIR}/bin/nbpatch
 # libtool).
 #
 .if empty(PKGBUILD:Mtrunk-*)
-.  for tool in as objcopy objdump ranlib readelf
+.  for tool in as objcopy objdump ranlib readelf ar
 ${tool:tu}=		${TOOLS_BASEDIR}/bin/g${tool}
 TOOLS_PATH.${tool}=	${TOOLS_BASEDIR}/bin/g${tool}
 TOOLS_CREATE+=		${tool}
