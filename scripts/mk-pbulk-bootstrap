@@ -65,7 +65,7 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 			tardirs=\"\${tardirs} .${PKGBUILD_SYSCONFDIR}/pkg_install.conf\"
 		fi
 	fi
-	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}
+	#mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}
 	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz \${tardirs}
 	# Create pkgbuild bootstraps with signing bits removed
 	if [ -f ${PKGBUILD_SYSCONFDIR}/pkg_install.conf ]; then
