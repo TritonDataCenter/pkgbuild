@@ -88,6 +88,7 @@ wip/erlang-basho
 wip/fswatch
 wip/gecode
 wip/gitea
+wip/kea-git
 wip/leveldb
 wip/libcouchbase
 wip/libeio
