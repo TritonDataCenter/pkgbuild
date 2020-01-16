@@ -4,9 +4,12 @@
 
 # Packages which currently hang the build
 .if !empty(PKGPATH:Mgames/crimsonfields) \
+ || !empty(PKGPATH:Mgames/freeciv-client) \
  || !empty(PKGPATH:Mgraphics/rayshade) \
  || !empty(PKGPATH:Mlang/jamvm) \
+ || !empty(PKGPATH:Mlang/mono6) \
  || !empty(PKGPATH:Mmail/elm) \
+ || !empty(PKGPATH:Mmultimedia/acidrip) \
  || !empty(PKGPATH:Mmultimedia/dumpmpeg) \
  || !empty(PKGPATH:Mnet/gtk-gnutella) \
  || !empty(PKGPATH:Mnews/knews) \
