@@ -21,11 +21,6 @@ joyent/mongodb26
 joyent/mongodb30
 joyent/neo4j
 joyent/nicstat
-joyent/node010
-joyent/node012
-joyent/node08
-joyent/node4
-joyent/nodejs
 joyent/nrsysmond
 joyent/nutcracker
 joyent/openjdk9
