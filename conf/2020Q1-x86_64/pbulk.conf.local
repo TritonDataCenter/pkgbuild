@@ -1,0 +1,45 @@
+# SCL overrides
+
+base_url=""
+
+#scan_clients=""
+#build_clients=""
+ 
+MANTA_USER=""
+MANTA_KEY_ID=""
+MANTA_URL=""
+MANTA_PATH=""
+
+pkgsrc=/data/pkgsrc-2020Q1
+ 
+#pkg_rsync_args="-av  -e ssh"
+pkg_rsync_target=""
+
+report_subject_prefix="pkgsrc-2020Q1-x86_64"
+report_recipients="al.slater@scluk.com"
+
+scan_chroots=12
+build_chroots=12
+#scan_chroots=4
+#build_chroots=4
+ 
+bootstrapkit=/data/packages/OmniOS/bootstrap-pbulk/bootstrap-2020Q1-x86_64.tar.gz
+ 
+limited_list=/data/pkgbuild/conf/2020Q1-x86_64/pkglist
+ 
+#local_bulklog=${bulklog}
+local_bulklog=""
+keep_prefix=yes
+keep_wrkdir=yes
+
+packages=/data/packages/OmniOS/2020Q1/x86_64
+prefix=/opt/essiell/
+pkgdb=${prefix}/var/db/pkg
+varbase=${prefix}/var
+
+rsync=:
+make=${prefix}/bin/bmake
+
+# Need the gnu path to allow objcopy to be found, binutils only installs gobjcopy
+# and make a gcc available for scanning 
+PATH=${PATH}:/usr/gnu/i386-pc-solaris2.11/bin:/opt/tools/sbin:/opt/tools/bin:/opt/tools/gcc7/bin

@@ -1,0 +1,5 @@
+PKG_OPTIONS.qt4-libs += gtk2
+PKG_OPTIONS.memcached += -dtrace
+PKG_OPTIONS.qt5 += -llvm
+
+
