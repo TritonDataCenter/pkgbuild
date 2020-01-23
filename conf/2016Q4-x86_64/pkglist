@@ -3,18 +3,9 @@ databases/mysql56-client
 databases/mysql56-server
 databases/php-redis3
 databases/postgresql94-client
-databases/postgresql94-monitoring
-databases/postgresql94-pgcrypto
 databases/postgresql94-server
 databases/postgresql95-client
-databases/postgresql95-datatypes
-databases/postgresql95-dblink
 databases/postgresql95-docs
-databases/postgresql95-fuzzystrmatch
-databases/postgresql95-monitoring
-databases/postgresql95-plpython
-databases/postgresql95-pgcrypto
-databases/postgresql95-replicationtools
 databases/postgresql95-server
 databases/py-elasticsearch
 databases/py-postgresql
@@ -156,7 +147,7 @@ sysutils/rsyslog-elasticsearch
 sysutils/rsyslog-gnutls
 sysutils/rsyslog-rabbitmq
 sysutils/top
-textproc/antiwordA
+textproc/antiword
 textproc/catdoc
 textproc/glimpse
 textproc/jsoncpp
@@ -183,6 +174,8 @@ x11/gnome-terminal
 x11/gtk2-engines
 x11/gtk2-theme-switch
 x11/gtk3
+x11/qt4
+x11/qt5
 x11/qt5-qscintilla
 x11/xauth
 x11/xinit
