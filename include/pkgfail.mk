@@ -8,6 +8,12 @@
 #  $ awk -F\| '$2 == "failed" {print $1}' \
 #      /shared/bulklog/2014Q1/i386/meta/pbuild | sort > pkgfail/2014Q1-i386
 #
+# If you only want to add certain packages that take a long time and will
+# likely not be fixed, then something like:
+#
+#  $ cd pkgtimes
+#  $ grep . $(awk '{print $0 ".pkgtime"}' /path/to/meta/error) | sort -t: -k2n
+#
 
 .if exists(${PKGBUILD_BASEDIR}/pkgfail/${PKGBUILD})
 PKGFAILPKGS!=		cat ${PKGBUILD_BASEDIR}/pkgfail/${PKGBUILD}
