@@ -86,7 +86,7 @@ export PKGBUILD=2015Q3-x86_64
       <startNotification>false</startNotification>
       <notifySuccess>false</notifySuccess>
       <notifyAborted>false</notifyAborted>
-      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyNotBuilt>true</notifyNotBuilt>
       <notifyUnstable>false</notifyUnstable>
       <notifyFailure>true</notifyFailure>
       <notifyBackToNormal>true</notifyBackToNormal>
