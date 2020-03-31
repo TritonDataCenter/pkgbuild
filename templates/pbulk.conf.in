@@ -139,6 +139,7 @@ varbase=@PKGBUILD_VARBASE@
 # The following programs must NOT be inside ${prefix}
 pkg_info=@PBULK_BASEDIR@/sbin/pkg_info
 pkg_add=@PKG_ADD@
+pkg_admin=@PBULK_BASEDIR@/sbin/pkg_admin
 pkg_delete=@PBULK_BASEDIR@/sbin/pkg_delete
 
 # The tools that are used for building the packages. If you do not want
