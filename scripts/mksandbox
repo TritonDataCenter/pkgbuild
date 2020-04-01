@@ -217,7 +217,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	# onwards, but should really be cleaner.  Required for rpcgen.
 	#
 	case "${pkgbuild}" in
-	2019Q4-x86_64|20[2-9]Q*-x86_64|trunk-x86_64)
+	2019Q4-[imx]*|20[2-9]Q*-[imx]*|trunk-x86_64)
 		tools_packages="${tools_packages} smartos-build-tools"
 		;;
 	esac
