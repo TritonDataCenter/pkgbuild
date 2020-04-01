@@ -28,7 +28,7 @@ USE_PKGSRC_GCC_RUNTIME=	yes
 PKG_DEFAULT_OPTIONS+=	always-libgcc
 
 # XXX: Fix properly upstream.  Native binutils too old.
-.if ${PKGBUILD} == "el6-trunk-pbulk64" && !empty(PKGPATH:Mlang/nodejs)
+.if ${PKGBUILD} == "el6-trunk-tools" && !empty(PKGPATH:Mlang/nodejs)
 CONFIGURE_ARGS+=	--openssl-no-asm
 .endif
 

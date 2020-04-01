@@ -8,10 +8,10 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs>^pkgsrc-el6-trunk-tools$</blockingJobs>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.29.5">
-      <projectUrl>https://github.com/NetBSD/pkgsrc/</projectUrl>
+      <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
@@ -31,17 +31,17 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-        <url>git://github.com/NetBSD/pkgsrc.git</url>
+        <url>git://github.com/joyent/pkgsrc.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>origin/trunk</name>
+        <name>origin/joyent/feature/pbulk/trunk</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/NetBSD/pkgsrc/</url>
+      <url>https://github.com/joyent/pkgsrc/</url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -77,8 +77,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=el6-trunk-x86_64
-/data/pkgbuild/scripts/run-jenkins-build</command>
+export PKGBUILD=el7-trunk-tools
+/data/pkgbuild/scripts/run-jenkins-tools</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

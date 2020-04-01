@@ -4,7 +4,7 @@ set -eu
 
 case "`uname -s`" in
 Darwin)
-	rmsandbox=$(dirname $0)/rmsandbox-osx
+	rmsandbox=$(dirname $0)/rmsandbox-macos
 	;;
 Linux)
 	rmsandbox=$(dirname $0)/rmsandbox-linux

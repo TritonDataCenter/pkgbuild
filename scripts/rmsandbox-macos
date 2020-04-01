@@ -1,0 +1,125 @@
+#!/bin/bash
+#
+# Unmount a shadowed sandbox
+#
+
+if [ "$(uname -s)" != "Darwin" ]; then
+	echo "ERROR: Script is only suitable for macOS." >&2
+	exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	chrootdir="${1%%/}"; shift
+	chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+if [ ! -d ${chrootdir} ]; then
+	echo "ERROR: ${chrootdir} does not exist." >&2
+	exit 1
+fi
+
+# Calculate pkgbuild based on chroot name.
+pkgbuild=${chrootname}
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build}
+pkgbuild=${pkgbuild%%-scan}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+#
+# Disable name resolution via mDNSResponder
+#
+PB="/usr/libexec/PlistBuddy"
+PLIST="/var/run/com.apple.mDNSResponder.plist"
+ENTRY="Sockets:Listeners"
+
+while true; do
+	# No need to do anything if we're cleaning up after a reboot.
+	[ -f ${PLIST} ] || break
+
+	# Ensure only one process updates the plist at a time.
+	mkdir /tmp/updatemdns.lock 2>/dev/null
+	if [ $? -ne 0 ]; then
+		sleep 1
+		continue
+	fi
+	entries=$(${PB} -c "Print ${ENTRY}" ${PLIST} 2>/dev/null | grep -c " Dict {")
+	e=0
+	while [ ${e} -lt ${entries} ]; do
+		sockpath="$(${PB} -c 'Print '${ENTRY}':'$e':SockPathName' ${PLIST})"
+		if [ "${sockpath}" = "${chrootdir}/var/run/mDNSResponder" ]; then
+			break
+		fi
+		e=$((e + 1))
+	done
+	if [ ${e} -ne ${entries} ]; then
+		${PB} -c "Delete ${ENTRY}:${e}" ${PLIST}
+		launchctl unload ${PLIST} 2>/dev/null
+		launchctl load -w ${PLIST}
+	fi
+	rm -rf /tmp/updatemdns.lock
+	break
+done
+
+#
+# Kill off processes inside the chroot.
+#
+for pid in $(fuser ${chrootdir} 2>/dev/null); do
+	# Skip mount processes.  Disabling mds helps too.
+	ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
+	if [ $? -ne 0 ]; then
+		kill -9 ${pid}
+	fi
+done
+
+for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
+	dst=${mount#*=}
+	while true; do
+		[ -d ${chrootdir}${dst} ] || break
+		umount -f ${chrootdir}${dst} 2>/dev/null
+		rmdir ${chrootdir}${dst} 2>/dev/null && break
+		sleep 5
+	done
+done
+
+case "$(uname -r)" in
+10.8.*)	unmountcmd="umount -f" ;;
+*)	unmountcmd="diskutil unmount" ;;
+esac
+
+for mount in ${TMPFS_MOUNTS}; do
+	mnt=${mount%=*}
+	while true; do
+		[ -d ${chrootdir}${mnt} ] || break
+		mntpoint=$(mount | awk '$3 == "'${chrootdir}${mnt}'" {print}')
+		[ -n "${mntpoint}" ] || break
+		${unmountcmd} ${chrootdir}${mnt} >/dev/null
+	done
+done
+
+if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
+	while read disk; do
+		hdiutil eject ${disk} >/dev/null
+	done < ${SHADOW_BASEDIR}/${chrootname}.ramfs
+fi
+
+umount -f ${chrootdir}/dev 2>/dev/null
+
+rm -f ${SHADOW_BASEDIR}/${chrootname}.dev
+rm -f ${SHADOW_BASEDIR}/${chrootname}.ramfs
+rm -f ${SHADOW_BASEDIR}/${chrootname}.shadow
+umount ${chrootdir} 2>/dev/null
+rm -rf ${chrootdir}

@@ -1,0 +1,191 @@
+#!/bin/bash
+#
+# Create a shadowed sandbox from the root file system ready for builds.
+#
+
+if [ "$(uname -s)" != "Darwin" ]; then
+	echo "ERROR: Script is only suitable for macOS." >&2
+	exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	chrootdir=$1; shift
+	chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+while true; do
+	if [ -d ${chrootdir} ]; then
+		#echo "${chrootdir} already exists, retrying or ^C" >&2
+		sleep 5
+	else
+		break
+	fi
+done
+
+# Calculate pkgbuild based on chroot name.
+pkgbuild=${chrootname#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build}
+pkgbuild=${pkgbuild%%-scan}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+mkdir -p ${chrootdir}/dev
+mount_devfs devfs ${chrootdir}/dev
+
+#
+# Ramdisk mounts come first, we may require NFS mounts to go on top, but so
+# far do not require the other way around.
+#
+for mount in ${TMPFS_MOUNTS}; do
+	mnt=${mount%=*}
+	size=${mount#*=}
+	mkdir -p ${chrootdir}${mnt}
+	rd=$(hdid -nomount ram://$((${size} * 1024 * 2)))
+	newfs_hfs -s ${rd} >/dev/null
+	mount_hfs -o noatime,nobrowse ${rd} ${chrootdir}${mnt}
+	echo ${rd} >>${SHADOW_BASEDIR}/${chrootname}.ramfs
+	mkdir -p ${chrootdir}${mnt}/.fseventsd
+	touch ${chrootdir}${mnt}/.fseventsd/no_log
+	touch ${chrootdir}${mnt}/.metadata_never_index
+done
+
+for mount in ${NFS_RO_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount_nfs -o ro ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+done
+
+for mount in ${NFS_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount_nfs ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+done
+
+#
+# Ensure some required directories are created and have the correct
+# permissions.
+#
+mkdir -p -m 0775 ${chrootdir}/var/mail
+chown root:mail ${chrootdir}/var/mail
+
+mkdir -p ${chrootdir}/tmp ${chrootdir}/var/tmp
+chmod 1777 ${chrootdir}/tmp ${chrootdir}/var/tmp
+
+# XXX hardcoded
+mkdir -p ${chrootdir}/Users/pbulk/build
+chown -R pbulk:staff ${chrootdir}/Users/pbulk
+tmpdir=$(su - pbulk -c 'dirname $(getconf DARWIN_USER_TEMP_DIR)')
+if [ -n "${tmpdir}" ]; then
+	mkdir -p ${chrootdir}${tmpdir}
+	chown pbulk:staff ${chrootdir}${tmpdir}
+fi
+
+#
+# Enable DNS resolution via an mDNSResponder socket
+#
+PB="/usr/libexec/PlistBuddy"
+PLIST="/var/run/com.apple.mDNSResponder.plist"
+PLIST_SYSTEM="/System/Library/LaunchDaemons/com.apple.mDNSResponder.plist"
+ENTRY="Sockets:Listeners"
+
+while true; do
+	# Ensure only one process updates the plist at a time.
+	mkdir /tmp/updatemdns.lock 2>/dev/null
+	if [ $? -ne 0 ]; then
+		sleep 1
+		continue
+	fi
+	#
+	# Modify a copy of the plist.  This supports SPI which would prevent us
+	# from modifying the original, but also ensures that on (re)boot we get
+	# a working configuration as mDNSResponder doesn't like non-existant
+	# sockets.  /var/run is wiped on each boot.
+	#
+	if [ ! -f ${PLIST} ]; then
+		cp ${PLIST_SYSTEM} ${PLIST}
+		launchctl unload ${PLIST_SYSTEM} 2>/dev/null
+		launchctl load -w ${PLIST}
+	fi
+	# Ensure Sockets:Listeners is an array.
+	${PB} -c "Print ${ENTRY}:0" ${PLIST} >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		tmplist="/tmp/import.$$.plist"
+		${PB} -x -c "Print ${ENTRY}" ${PLIST} >${tmplist}
+		${PB} -c "Delete ${ENTRY}" ${PLIST}
+		${PB} -c "Add ${ENTRY} array" ${PLIST}
+		${PB} -c "Add ${ENTRY}:0 dict" ${PLIST}
+		${PB} -c "Merge ${tmplist} ${ENTRY}:0" ${PLIST}
+		rm -f ${tmplist}
+	fi
+	addlist="/tmp/add.$$.plist"
+	cat >${addlist} <<-EOF
+	<array>
+		<dict>
+			<key>SockFamily</key>
+			<string>Unix</string>
+			<key>SockPathName</key>
+			<string>${chrootdir}/var/run/mDNSResponder</string>
+			<key>SockPathMode</key>
+			<integer>438</integer>
+		</dict>
+	</array>
+	EOF
+	${PB} -c "Merge ${addlist} ${ENTRY}" ${PLIST}
+	rm -f ${addlist}
+	mkdir -p ${chrootdir}/var/run
+	launchctl unload ${PLIST} 2>/dev/null
+	launchctl load -w ${PLIST}
+	rm -rf /tmp/updatemdns.lock
+	break
+done
+
+#
+# Unpack tools bootstrap and install required packages for building.
+#
+if [ -n "${TOOLS_BOOTSTRAP}" ]; then
+	tools_packages="nbpatch pbulk perl"
+	case "${chrootname}" in
+	bootstrap*)
+		tools_packages="${tools_packages} gnupg20"
+		;;
+	*-build|*-build-[0-9]*)
+		tools_packages="${tools_packages} curl gnupg20 mozilla-rootcerts"
+		;;
+	*-scan*)
+		;;
+	*)
+		tools_packages="${tools_packages} gnupg20 nodejs"
+		;;
+	esac
+	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
+		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		else
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		fi
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_COMPILER} ${tools_packages} >/dev/null 2>&1
+		if ${TOOLS_BASEDIR}/sbin/pkg_info -qE mozilla-rootcerts; then
+			${TOOLS_BASEDIR}/sbin/mozilla-rootcerts install >/dev/null
+		fi
+	"
+fi

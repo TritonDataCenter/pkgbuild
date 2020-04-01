@@ -98,7 +98,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 			X11_TYPE=		modular
 
 			.
-			r ${PKGBUILD_BASEDIR}/include/pkgoptions/osx.mk
+			r ${PKGBUILD_BASEDIR}/include/pkgoptions/macos.mk
 			w
 			q
 		EOF

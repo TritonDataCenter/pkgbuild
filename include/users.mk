@@ -51,8 +51,8 @@ PKG_GID.cacti=		985
 PKG_UID.cassandra=	984
 PKG_GID.cassandra=	984
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.clamav=		983	# osx _clamav user has clamav alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.clamav=		983	# macOS _clamav user has clamav alias
 PKG_GID.clamav=		983
 .endif
 #
@@ -90,8 +90,8 @@ PKG_UID.defang=		972
 PKG_GID.defang=		972
 #
 PKG_UID.dialer=		971
-.if empty(PKGBUILD:Mosx-*)
-PKG_GID.dialer=		971	# osx _dialer group has dialer alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_GID.dialer=		971	# macOS _dialer group has dialer alias
 .endif
 #
 PKG_UID.dictd=		970
@@ -193,8 +193,8 @@ PKG_GID.lambdamoo=	939
 PKG_UID.ldap=		938
 PKG_GID.ldap=		938
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.lp=		937	# osx _lp user has lp alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.lp=		937	# macOS _lp user has lp alias
 PKG_GID.lp=		937
 .endif
 #
@@ -207,8 +207,8 @@ PKG_UID.mail=		935
 PKG_UID.maildrop=	934
 PKG_GID.maildrop=	934
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.mailman=	933	# osx _mailman user has mailman alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.mailman=	933	# macOS _mailman user has mailman alias
 PKG_GID.mailman=	933
 .endif
 #
@@ -236,8 +236,8 @@ PKG_GID.munin=		926
 PKG_UID.mydns=		925
 PKG_GID.mydns=		925
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.mysql=		924	# osx _mysql user has mysql alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.mysql=		924	# macOS _mysql user has mysql alias
 PKG_GID.mysql=		924
 .endif
 #
@@ -259,7 +259,7 @@ PKG_GID.news=		919
 PKG_UID.nginx=		918
 PKG_GID.nginx=		918
 #
-.if empty(PKGBUILD:Mosx-*)
+.if empty(PKGBUILD:Mmacos-*)
 PKG_UID.nobody=		917
 PKG_GID.nobody=		917
 .endif
@@ -309,8 +309,8 @@ PKG_GID.pop=		903
 PKG_UID.popa3d=		902
 PKG_GID.popa3d=		902
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.postfix=	901	# osx _postfix user has postfix alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.postfix=	901	# macOS _postfix user has postfix alias
 PKG_GID.postfix=	901
 .endif
 #
@@ -410,8 +410,8 @@ PKG_GID.sqlgrey=	870
 PKG_UID.squid=		869
 PKG_GID.squid=		869
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.sshd=		868	# osx _sshd user has sshd alias
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.sshd=		868	# macOS _sshd user has sshd alias
 PKG_GID.sshd=		868
 .endif
 #
@@ -475,8 +475,8 @@ PKG_GID.vsftpd=		849
 PKG_UID.wnn=		848
 PKG_GID.wnn=		848
 #
-.if empty(PKGBUILD:Mosx-*)
-PKG_UID.www=		847	# osx _www user has 'www' alias'
+.if empty(PKGBUILD:Mmacos-*)
+PKG_UID.www=		847	# macOS _www user has 'www' alias'
 PKG_GID.www=		847
 .endif
 #
