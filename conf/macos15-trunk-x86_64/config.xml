@@ -25,7 +25,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.12.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.2.2">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -51,6 +51,7 @@
         <trackingSubmodules>false</trackingSubmodules>
         <reference></reference>
         <parentCredentials>false</parentCredentials>
+	<shallow>false</shallow>
       </hudson.plugins.git.extensions.impl.SubmoduleOption>
       <hudson.plugins.git.extensions.impl.CloneOption>
         <shallow>true</shallow>
@@ -82,11 +83,14 @@ export PKGBUILD=macos15-trunk-x86_64
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <jenkins.plugins.mattermost.MattermostNotifier plugin="mattermost@2.7.1">
+    <jenkins.plugins.mattermost.MattermostNotifier plugin="mattermost@3.1.0">
+      <endpoint></endpoint>
+      <room></room>
+      <icon></icon>
       <startNotification>false</startNotification>
       <notifySuccess>false</notifySuccess>
       <notifyAborted>false</notifyAborted>
-      <notifyNotBuilt>true</notifyNotBuilt>
+      <notifyNotBuilt>false</notifyNotBuilt>
       <notifyUnstable>false</notifyUnstable>
       <notifyFailure>true</notifyFailure>
       <notifyBackToNormal>true</notifyBackToNormal>
