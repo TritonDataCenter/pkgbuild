@@ -17,9 +17,14 @@ MULTILIB_SUPPORTED=	no
 # lang/gcc5 due to inlining bugs, so if GCC_REQD is set to a higher version
 # than native then bump up to 7.x which works fine.
 #
+# This doesn't work for every package, as if bsd.prefs.mk is included prior
+# to GCC_REQD being set then the tests below will always fail, so we need to
+# also force certain packages.
+#
 .if (!empty(PKGBUILD:Mel6*) && !empty(GCC_REQD:M4.[5-9]*)) \
  || (!empty(PKGBUILD:Mel7*) && !empty(GCC_REQD:M4.9*)) \
- || !empty(GCC_REQD:M[56]*)
+ || !empty(GCC_REQD:M[56]*) \
+ || !empty(PKGPATH:Mlang/nodejs*)
 GCC_REQD+=		7
 USE_PKGSRC_GCC_RUNTIME=	yes
 .endif
