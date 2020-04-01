@@ -137,9 +137,11 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		ugtarextras='.${PKGBUILD_SYSCONFDIR}/gnupg/pkgsrc.gpg'
 	fi
 	if [ '${PKGBUILD_OPSYS}' = 'Darwin' ]; then
-		echo '${PKGBUILD_LOCALBASE}/sbin' >/etc/paths.d/10-pkgsrc
-		echo '${PKGBUILD_LOCALBASE}/bin' >>/etc/paths.d/10-pkgsrc
-		echo '${PKGBUILD_LOCALBASE}/share/man' >/etc/manpaths.d/10-pkgsrc
+		# /etc is mounted read-only so we need to fake-up /private/etc
+		mkdir -p /private/etc/paths.d /private/etc/manpaths.d
+		echo '${PKGBUILD_LOCALBASE}/sbin' >/private/etc/paths.d/10-pkgsrc
+		echo '${PKGBUILD_LOCALBASE}/bin' >>/private/etc/paths.d/10-pkgsrc
+		echo '${PKGBUILD_LOCALBASE}/share/man' >/private/etc/manpaths.d/10-pkgsrc
 		tarextras='./private/etc/paths.d/10-pkgsrc ./private/etc/manpaths.d/10-pkgsrc'
 		# Work around El Capitan 'Cannot extract through symlink var'.
 		if [ '${PKGBUILD_VARBASE}' = '/var' ]; then
