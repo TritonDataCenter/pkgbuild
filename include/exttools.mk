@@ -29,7 +29,7 @@ TOOLS_CREATE+=		${tool}
 # Avoid circular dependencies by using external tools for gcc, where the tool
 # itself depends upon gcc when using USE_PKGSRC_GCC_RUNTIME.
 #
-.if !empty(PKGPATH:Mlang/gcc*)
+.if !empty(PKGPATH:Mdevel/binutils) || !empty(PKGPATH:Mlang/gcc*)
 TOOLS_PLATFORM.makeinfo=${TOOLS_BASEDIR}/bin/makeinfo
 TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
 TOOLS_PLATFORM.xz=	${TOOLS_BASEDIR}/bin/xz
