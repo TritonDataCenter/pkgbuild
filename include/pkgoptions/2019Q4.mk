@@ -21,6 +21,8 @@ PKG_DEFAULT_OPTIONS+=		gif jpeg png rsvg
 PKG_DEFAULT_OPTIONS+=		faad lame mad vorbis
 PKG_DEFAULT_OPTIONS+=		dv opencore-amr theora x264 xvid
 PKG_DEFAULT_OPTIONS+=		opus x265
+PKG_DEFAULT_OPTIONS+=		prometheus
+PKG_DEFAULT_OPTIONS+=		dso
 #
 #  - options grouped by package
 #

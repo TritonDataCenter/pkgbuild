@@ -21,6 +21,7 @@ PKG_DEFAULT_OPTIONS+=		gif jpeg png rsvg
 PKG_DEFAULT_OPTIONS+=		faad lame mad vorbis
 PKG_DEFAULT_OPTIONS+=		dv opencore-amr theora x264 xvid
 PKG_DEFAULT_OPTIONS+=		opus x265
+PKG_DEFAULT_OPTIONS+=		prometheus
 #
 #  - options grouped by package
 #
@@ -74,8 +75,7 @@ PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.memcached+=		-dtrace # XXX: illumos#6653
 PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.nginx+=		dav status realip uwsgi memcache naxsi perl
-PKG_OPTIONS.nginx+=		gzip headers-more
-PKG_OPTIONS.nginx+=		v2
+PKG_OPTIONS.nginx+=		gzip headers-more v2 slice
 PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
