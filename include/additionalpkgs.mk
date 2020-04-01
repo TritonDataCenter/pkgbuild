@@ -10,9 +10,9 @@
 # currently defined in the branch-specific pkglist file.
 #
 .if exists(${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD})
-WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD}
+WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD} || true
 .elif exists(${PKGBUILD_BASEDIR}/pkglist/${BRANCH})
-WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH}
+WIPJOYPKGS!=	egrep '^(joyent|private|wip)' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH} || true
 .endif
 .if defined(WIPJOYPKGS)
 .  for pkg in ${WIPJOYPKGS}
