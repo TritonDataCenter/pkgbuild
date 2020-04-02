@@ -79,7 +79,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 export PKGBUILD=macos14-trunk-x86_64
-/data/pkgbuild/scripts/run-jenkins-build</command>
+/Volumes/data/pkgbuild/scripts/run-jenkins-build</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

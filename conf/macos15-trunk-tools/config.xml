@@ -79,7 +79,7 @@
     <hudson.tasks.Shell>
       <command>#!/bin/bash
 export PKGBUILD=macos15-trunk-tools
-/data/pkgbuild/scripts/run-jenkins-tools</command>
+/Volumes/data/pkgbuild/scripts/run-jenkins-tools</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
