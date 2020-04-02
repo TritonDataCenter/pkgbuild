@@ -77,12 +77,22 @@ env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} 
 			q
 		EOF
 	fi
-	if [ '${PKGBUILD_BASEDIR}' != '/data/pkgbuild' ]; then
-		ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
-			g,${PKGBUILD_BASEDIR},s,${PKGBUILD_BASEDIR},/data/pkgbuild,
-			w
-			q
-		EOF
+	if [ '${PKGBUILD_OPSYS}' = 'Darwin' ]; then
+		if [ '${PKGBUILD_BASEDIR}' != '/Volumes/data/pkgbuild' ]; then
+			ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+				g,${PKGBUILD_BASEDIR},s,${PKGBUILD_BASEDIR},/Volumes/data/pkgbuild,
+				w
+				q
+			EOF
+		fi
+	else
+		if [ '${PKGBUILD_BASEDIR}' != '/data/pkgbuild' ]; then
+			ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+				g,${PKGBUILD_BASEDIR},s,${PKGBUILD_BASEDIR},/data/pkgbuild,
+				w
+				q
+			EOF
+		fi
 	fi
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}
 	${CMD_TAR} zcf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PKGBUILD_DIR}/${BOOTSTRAP_KIT}.tar.gz \${tardirs}
