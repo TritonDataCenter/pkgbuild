@@ -14,7 +14,14 @@
 CFLAGS:=	${CFLAGS:C/^-g.*//}
 .endif
 
-.if !empty(PKGPATH:Mlang/gcc*) \
+#
+# Packages which need to remove -msave-args, usually because at some point
+# during the build they legitimately use -m32 for multiarch libraries, which
+# is incompatible with -msave-args.
+#
+.if !empty(PKGPATH:Mjoyent/gcc*) \
+ || !empty(PKGPATH:Mlang/compiler-rt) \
+ || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
-CFLAGS:=	${CFLAGS:C/^-m.*//}
+CFLAGS:=	${CFLAGS:N-msave-args}
 .endif

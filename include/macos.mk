@@ -7,6 +7,7 @@
  || !empty(PKGPATH:Mgames/freeciv-client) \
  || !empty(PKGPATH:Mgames/xclannad) \
  || !empty(PKGPATH:Mgraphics/rayshade) \
+ || !empty(PKGPATH:Mlang/ghc88) \
  || !empty(PKGPATH:Mlang/jamvm) \
  || !empty(PKGPATH:Mlang/mono6) \
  || !empty(PKGPATH:Mmail/elm) \

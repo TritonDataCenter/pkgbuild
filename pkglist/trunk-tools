@@ -1,4 +1,6 @@
 joyent/ctftools
+joyent/gcc9
+joyent/gcc9-libs
 joyent/gnupg20
 joyent/pkgsrc-gnupg-keys
 joyent/smartos-build-tools

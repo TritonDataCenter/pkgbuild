@@ -12,6 +12,7 @@
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
  || !empty(PKGPATH:Mjoyent/ctftools) \
+ || !empty(PKGPATH:Mjoyent/gcc9) \
  || !empty(PKGPATH:Mlang/gcc2) \
  || !empty(PKGPATH:Mlang/gcc3*) \
  || !empty(PKGPATH:Mlang/gcc4?) \
@@ -36,4 +37,12 @@ GCC_REQD=	${PKGBUILD_GCC_REQD}
 GCC_REQD+=	${PKGBUILD_GCC_REQD}
 .  endif
 USE_PKGSRC_GCC=	yes
+.endif
+#
+# The lang/gcc9* packages are incredibly broken, so we've forked our own
+# versions in joyent/gcc9*, but also need to ensure the broken ones aren't
+# picked as the best pbulk match if they happen to have newer PKGREVISIONs.
+#
+.if !empty(PKGPATH:Mlang/gcc9*)
+NOT_FOR_BULK_PLATFORM=	SunOS-*-*
 .endif

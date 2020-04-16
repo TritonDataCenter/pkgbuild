@@ -198,7 +198,7 @@ fi
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
-	tools_packages="gtexinfo nbpatch pbulk"
+	tools_packages="flex gtexinfo nbpatch pbulk"
 	case "${pkgbuild}" in
 	trunk-*|2017Q3-[imx]*|2017Q4-*|201[89]Q*|20[2-9][0-9]Q*)
 		gpgpkg="gnupg20"

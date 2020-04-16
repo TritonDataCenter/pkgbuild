@@ -9,6 +9,8 @@ joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
 joyent/enstratus-agent
+joyent/gcc9
+joyent/gcc9-libs
 joyent/gnupg20
 joyent/handlersocket
 joyent/instantclient

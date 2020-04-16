@@ -15,6 +15,7 @@
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
  || !empty(PKGPATH:Mjoyent/ctftools) \
+ || !empty(PKGPATH:Mjoyent/gcc*) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Mmisc/root) \
  || !empty(PKGPATH:Mpkgtools/abiexec) \
