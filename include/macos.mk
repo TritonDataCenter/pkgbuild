@@ -7,7 +7,6 @@
  || !empty(PKGPATH:Mgames/freeciv-client) \
  || !empty(PKGPATH:Mgames/xclannad) \
  || !empty(PKGPATH:Mgraphics/rayshade) \
- || !empty(PKGPATH:Mlang/ghc88) \
  || !empty(PKGPATH:Mlang/jamvm) \
  || !empty(PKGPATH:Mlang/mono6) \
  || !empty(PKGPATH:Mmail/elm) \
@@ -15,7 +14,6 @@
  || !empty(PKGPATH:Mmultimedia/dumpmpeg) \
  || !empty(PKGPATH:Mnet/gtk-gnutella) \
  || !empty(PKGPATH:Mnews/knews) \
- || !empty(PKGPATH:Mshells/pdksh) \
  || !empty(PKGPATH:Mtextproc/ja-groff) \
  || !empty(PKGPATH:Mwip/oce) \
  || !empty(PKGPATH:Mwww/wml)
@@ -27,6 +25,7 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mdatabases/mariadb55-server) \
  || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mdevel/xulrunner*) \
+ || !empty(PKGPATH:Memulators/qemu) \
  || !empty(PKGPATH:Mfonts/noto-ttf) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
  || !empty(PKGPATH:Mgraphics/tesseract) \
@@ -34,6 +33,7 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mjoyent/mariadb10-server) \
  || !empty(PKGPATH:Mlang/clang*) \
  || !empty(PKGPATH:Mlang/gcc*) \
+ || !empty(PKGPATH:Mlang/ghc*) \
  || !empty(PKGPATH:Mlang/llvm) \
  || !empty(PKGPATH:Mlang/mercury) \
  || !empty(PKGPATH:Mlang/mono*) \
