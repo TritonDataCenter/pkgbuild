@@ -33,6 +33,7 @@ TOOLS_CREATE+=		${tool}
     !empty(PKGPATH:Mjoyent/gcc*) || \
     !empty(PKGPATH:Mlang/gcc*)
 TOOLS_PLATFORM.flex=	${TOOLS_BASEDIR}/bin/flex
+TOOLS_PLATFORM.m4=	${TOOLS_BASEDIR}/bin/gm4
 TOOLS_PLATFORM.makeinfo=${TOOLS_BASEDIR}/bin/makeinfo
 TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
 TOOLS_PLATFORM.xz=	${TOOLS_BASEDIR}/bin/xz
