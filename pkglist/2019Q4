@@ -54,6 +54,7 @@ joyent/percona57-client
 joyent/percona57-cluster
 joyent/percona57-server
 joyent/percona80-client
+joyent/percona80-cluster
 joyent/percona80-server
 joyent/percona80-xtrabackup
 joyent/pgagent
