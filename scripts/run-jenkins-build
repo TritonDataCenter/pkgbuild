@@ -101,18 +101,37 @@ ret=$?
 # Attempt to automatically report scan failures.
 #
 if [ $ret -ne 0 ]; then
-	matchfile=/tmp/no-match-$$.txt
-	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile} 2>/dev/null
-	if [ -s ${matchfile} ]; then
-		cat ${matchfile}
+	presolve_err=${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log
+	pscan_err=${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/pscan.stderr
+	presolve_match=/tmp/presolve-match-$$.txt
+	pscan_match=/tmp/pscan-match-$$.txt
+
+	# Only look for certain strings, there is lots of unnecessary output
+	# we need to ignore.
+	grep "No.match" ${presolve_err} >${presolve_match} 2>/dev/null
+	grep -v Duplicate ${pscan_err} >${pscan_match} 2>/dev/null
+
+	if [ -s ${presolve_match} ]; then
+
+		# Output for Jenkins logs
+		cat ${presolve_match}
+
+		# Report failures to interested parties.
 		(
-			printf "The following unresolvable dependencies are preventing bulk builds\n"
+			printf "The following unresolvable dependencies are "
+			printf "preventing bulk builds\n"
 			printf "from running:\n\n"
-			cat ${matchfile}
+			cat ${presolve_match}
+			if [ -s ${pscan_match} ]; then
+				printf "\n"
+				printf "Additional pscan.stderr output:\n\n"
+				cat ${pscan_match}
+			fi
 		) | ${PKGBUILD_BASEDIR}/scripts/mail-report \
-		    -s "Scan failure for ${PKGBUILD} bulk build" ${FAILURE_RECIPIENTS}
+		    -s "Scan failure for ${PKGBUILD} bulk build" \
+		    ${FAILURE_RECIPIENTS}
 	fi
-	rm -f ${matchfile}
+	rm -f ${presolve_match} ${pscan_match}
 fi
 
 #
