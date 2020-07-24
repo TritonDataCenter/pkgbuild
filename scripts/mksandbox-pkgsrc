@@ -135,8 +135,6 @@ NetBSD)
 	mountprog=/sbin/mount
 	paxprog=/bin/pax
 	sedprog=/usr/bin/sed
-	need_src=yes
-	need_xsrc=yes
 	;;
 SunOS)
 	bmakeprog=bmake
@@ -304,17 +302,31 @@ for d in $sandboxMountDirs; do
 	*X11*)	test "$with_x" = "yes" || continue ;;
 	esac
 	$mkdirprog $sandbox$d;
-	$mountprog $mountflags -r $mounthost$d $sandbox$d;
+	case "$opsys" in
+	NetBSD)
+		rsync -aq $d/ $sandbox$d/
+		;;
+	*)
+		$mountprog $mountflags -r $mounthost$d $sandbox$d
+		echo "$mounthost$d $d ro \\" >> $sandbox_script
+		;;
+	esac
 	case "$opsys" in
 	Linux)	$mountprog $mountflags -o remount,bind,ro $mounthost$d $sandbox$d ;;
 	esac
-	echo "$mounthost$d $d ro \\" >> $sandbox_script
 done
 for d in $sandboxWriteDirs; do
 	test -d $d || continue;
 	$mkdirprog $sandbox$d;
-	$mountprog $mountflags $mounthost$d $sandbox$d;
-	echo "$mounthost$d $d rw \\" >> $sandbox_script
+	case "$opsys" in
+	NetBSD)
+		rsync -aq $d/ $sandbox$d/
+		;;
+	*)
+		$mountprog $mountflags $mounthost$d $sandbox$d;
+		echo "$mounthost$d $d rw \\" >> $sandbox_script
+		;;
+	esac
 done
 
 echo "Making /tmp in $sandbox"

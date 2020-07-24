@@ -54,7 +54,11 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 	    ${PKGBUILD_LOCALBASE}/sbin/pkg_add -U ${BOOTSTRAP_PACKAGES}
 	# Avoid 'install' as it fails if /etc/ssl/certs exists.
 	(
-		cd ${PKGBUILD_SYSCONFDIR}/openssl/certs
+		if [ '${PKGBUILD_OPSYS}' = 'NetBSD' ]; then
+			cd /etc/openssl/certs
+		else
+			cd ${PKGBUILD_SYSCONFDIR}/openssl/certs
+		fi
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts extract >/dev/null
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts rehash >/dev/null
 	)
@@ -111,6 +115,12 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		#
 		.sinclude \"${PKGBUILD_SYSCONFDIR}/mk.conf.local\"
 	EOF
+	ed ${PKGBUILD_SYSCONFDIR}/pkgin/repositories.conf >/dev/null 2>&1 <<-EOF
+		g/NetBSD OS/d
+		g/cdn.netbsd/d
+		w
+		q
+	EOF
 	cat >>${PKGBUILD_SYSCONFDIR}/pkgin/repositories.conf <<-EOF
 		#
 		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/All
@@ -147,6 +157,9 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		if [ '${PKGBUILD_VARBASE}' = '/var' ]; then
 			slashprivate='/private'
 		fi
+	fi
+	if [ '${PKGBUILD_OPSYS}' = 'NetBSD' ]; then
+		tarextras='./etc/openssl/certs/ca-certificates.crt ./var/db/pkg'
 	fi
 	mkdir -p \${slashprivate}${PKGBUILD_VARBASE}/db/pkgin/cache
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}

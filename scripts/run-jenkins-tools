@@ -24,7 +24,11 @@ fi
 #
 if [ -n "${PI_REQUIRED}" ]; then
 	for ip in ${PBULK_CLIENTS}; do
-		hostpi=$(ssh ${ip} "uname -v")
+		if [ "${PKGBUILD_OPSYS}" = "SunOS" ]; then
+			hostpi=$(ssh ${ip} "uname -v")
+		else
+			hostpi=$(ssh ${ip} "uname -r")
+		fi
 		if [ "${hostpi}" != "${PI_REQUIRED}" ]; then
 			echo "ERROR: ${ip} failed platform check, ${hostpi} != ${PI_REQUIRED}"
 			exit 1

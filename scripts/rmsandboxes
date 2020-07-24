@@ -9,6 +9,9 @@ Darwin)
 Linux)
 	rmsandbox=$(dirname $0)/rmsandbox-linux
 	;;
+NetBSD)
+	rmsandbox=$(dirname $0)/rmsandbox-netbsd
+	;;
 SunOS)
 	rmsandbox=$(dirname $0)/rmsandbox
 	;;

@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# Create a shadowed sandbox from the root file system ready for builds.
+#
+
+if [ "$(uname -s)" != "NetBSD" ]; then
+        echo "ERROR: Script is only suitable for NetBSD." >&2
+        exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	chrootdir=$1; shift
+	chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+while true; do
+	if [ -d ${chrootdir} ]; then
+		sleep 5
+	else
+		break
+	fi
+done
+
+# Calculate pkgbuild based on chroot name.
+pkgbuild=${chrootname}
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build}
+pkgbuild=${pkgbuild%%-scan}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+# We use the pkgtools/mksandbox script on NetBSD as it works well.
+${PKGBUILD_BASEDIR}/scripts/mksandbox-pkgsrc \
+    --without-pkgsrc \
+    --rodirs=${LOFS_RO_MOUNTS_LINUX} \
+    --rwdirs=${LOFS_RW_MOUNTS_LINUX} \
+    ${chrootdir} >/dev/null 2>&1
+
+for tmpdir in ${TMPFS_MOUNTS}; do
+	mkdir -p ${chrootdir}${tmpdir}
+	mount -t tmpfs tmpfs ${chrootdir}${tmpdir}
+done
+
+mkdir -p ${chrootdir}/root
+rsync -a /root/.ssh ${chrootdir}/root/
+
+mkdir -p ${chrootdir}/root/.gnupg
+rsync -a /root/.gnupg/*.{conf,gpg} ${chrootdir}/root/.gnupg/
+socat unix-listen:${chrootdir}/root/.gnupg/S.gpg-agent,fork,reuseaddr unix-connect:/root/.gnupg/S.gpg-agent >/dev/null 2>&1 &
+echo $! >${chrootdir}/root/.gnupg/socat.pid
+
+mkdir -p ${chrootdir}/home/pbulk/build
+chown -R pbulk:pbulk ${chrootdir}/home/pbulk 2>/dev/null || true
+
+#
+# Unpack tools bootstrap and install required packages for building.
+#
+if [ -n "${TOOLS_BOOTSTRAP}" ]; then
+	case "${chrootname}" in
+	*-build-*|*-scan-*)
+		tools_packages="gnupg20 pbulk"
+		;;
+	*)
+		tools_packages="gnupg20 nodejs pbulk"
+		;;
+	esac
+	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
+		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		else
+			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF
+				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
+			EOF
+		fi
+		${TOOLS_BASEDIR}/sbin/pkg_add ${tools_packages} >/dev/null 2>&1
+	"
+fi

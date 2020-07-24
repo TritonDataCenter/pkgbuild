@@ -1,0 +1,64 @@
+#!/bin/bash
+
+if [ "$(uname -s)" != "NetBSD" ]; then
+	echo "ERROR: Script is only suitable for NetBSD." >&2
+	exit 1
+fi
+
+if [ $# -eq 1 ]; then
+	chrootdir="${1%%/}"; shift
+	chrootname=$(basename ${chrootdir})
+else
+	echo "usage: $0 <chrootdir>" >&2
+	exit 2
+fi
+
+pkgbuild=${chrootname}
+pkgbuild=${pkgbuild#bootstrap-pbulk-}
+pkgbuild=${pkgbuild#bootstrap-}
+pkgbuild=${pkgbuild#dev-}
+pkgbuild=${pkgbuild#pkgsrc-}
+pkgbuild=${pkgbuild%%-build}
+pkgbuild=${pkgbuild%%-scan}
+pkgbuild=${pkgbuild%%-build-*}
+pkgbuild=${pkgbuild%%-scan-*}
+
+# Load per-pkgbuild configuration.
+if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
+	echo "Couldn't determine pkgbuild from ${chrootdir}" >&2
+	exit 1
+fi
+
+. $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
+
+if [ -d ${chrootdir} ]; then
+
+	# Kill off processes first to avoid umount failures.
+	pids=$(lsof -t ${chrootdir} 2>/dev/null)
+	if [ -n "${pids}" ]; then
+		kill -9 ${pids} 2>/dev/null
+	fi
+
+	kill $(cat ${chrootdir}/root/.gnupg/socat.pid)
+
+	for mount in ${TMPFS_MOUNTS}; do
+		dst=${mount#*=}
+		umount -f ${chrootdir}${dst}
+		rm -rf ${chrootdir}${dst}
+	done
+
+	#
+	# Don't exit until all mounts are gone, if this hangs then at least
+	# we get a chance to look into why and fix it.
+	#
+	while true; do
+		${chrootdir}/sandbox umount >/dev/null 2>&1
+		mounts=`mount -v | grep "${chrootdir}/"`
+		if [ -z "${mounts}" ]; then
+			rm -rf ${chrootdir}
+			break
+		else
+			sleep 5
+		fi
+	done
+fi
