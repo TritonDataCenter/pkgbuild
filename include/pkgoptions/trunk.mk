@@ -81,7 +81,6 @@ PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
-PKG_OPTIONS.qmail+=		-sasl -tls
 PKG_OPTIONS.scmgit+=		-python
 PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
