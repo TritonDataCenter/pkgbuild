@@ -65,6 +65,8 @@ err()
 need_src=no
 need_xsrc=no
 
+use_rsync=no
+
 opsys=`uname -s`
 case "$opsys" in
 Darwin)
@@ -135,6 +137,7 @@ NetBSD)
 	mountprog=/sbin/mount
 	paxprog=/bin/pax
 	sedprog=/usr/bin/sed
+	use_rsync=no
 	;;
 SunOS)
 	bmakeprog=bmake
@@ -302,15 +305,12 @@ for d in $sandboxMountDirs; do
 	*X11*)	test "$with_x" = "yes" || continue ;;
 	esac
 	$mkdirprog $sandbox$d;
-	case "$opsys" in
-	NetBSD)
+	if [ "$use_rsync" = "yes" ]; then
 		rsync -aq $d/ $sandbox$d/
-		;;
-	*)
+	else
 		$mountprog $mountflags -r $mounthost$d $sandbox$d
 		echo "$mounthost$d $d ro \\" >> $sandbox_script
-		;;
-	esac
+	fi
 	case "$opsys" in
 	Linux)	$mountprog $mountflags -o remount,bind,ro $mounthost$d $sandbox$d ;;
 	esac
@@ -318,15 +318,12 @@ done
 for d in $sandboxWriteDirs; do
 	test -d $d || continue;
 	$mkdirprog $sandbox$d;
-	case "$opsys" in
-	NetBSD)
+	if [ "$use_rsync" = "yes" ]; then
 		rsync -aq $d/ $sandbox$d/
-		;;
-	*)
+	else
 		$mountprog $mountflags $mounthost$d $sandbox$d;
 		echo "$mounthost$d $d rw \\" >> $sandbox_script
-		;;
-	esac
+	fi
 done
 
 echo "Making /tmp in $sandbox"

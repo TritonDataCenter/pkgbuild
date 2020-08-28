@@ -47,6 +47,12 @@ if [ -d ${chrootdir} ]; then
 		rm -rf ${chrootdir}${dst}
 	done
 
+	for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
+		dst=${mount#*=}
+		umount -f ${chrootdir}${dst}
+		rmdir ${chrootdir}${dst}
+	done
+
 	#
 	# Don't exit until all mounts are gone, if this hangs then at least
 	# we get a chance to look into why and fix it.
