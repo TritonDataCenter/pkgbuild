@@ -25,6 +25,7 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mdatabases/mariadb55-server) \
  || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mdevel/xulrunner*) \
+ || !empty(PKGPATH:Memulators/mame) \
  || !empty(PKGPATH:Memulators/qemu) \
  || !empty(PKGPATH:Mfonts/noto-ttf) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
