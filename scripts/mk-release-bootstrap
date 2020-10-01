@@ -159,7 +159,7 @@ ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild}
 		fi
 	fi
 	if [ '${PKGBUILD_OPSYS}' = 'NetBSD' ]; then
-		tarextras='./etc/openssl/certs/ca-certificates.crt ./var/db/pkg'
+		tarextras='./etc/openssl/certs ./var/db/pkg'
 	fi
 	mkdir -p \${slashprivate}${PKGBUILD_VARBASE}/db/pkgin/cache
 	mkdir -p ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_RELEASE_DIR}
