@@ -30,6 +30,7 @@ joyent/gnupg20
 joyent/libcxx6
 joyent/libcxxabi6
 joyent/libunwind6
+joyent/libutempter
 joyent/llvm6
 joyent/node08
 joyent/pkgsrc-gnupg-keys

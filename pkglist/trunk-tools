@@ -25,6 +25,7 @@ joyent/ctftools
 joyent/gcc9
 joyent/gcc9-libs
 joyent/gnupg20
+joyent/libutempter
 joyent/pkgsrc-gnupg-keys
 joyent/smartos-build-tools
 joyent/sun-jre6
