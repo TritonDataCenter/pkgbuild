@@ -30,6 +30,7 @@ joyent/openjdk12
 joyent/openjdk13
 joyent/openjdk14
 joyent/openjdk15
+joyent/openssh75
 joyent/ossec-agent
 joyent/ossec-local
 joyent/ossec-server
@@ -98,6 +99,7 @@ wip/pyzor
 wip/riak
 wip/ruby-xmpp4r
 wip/runit
+wip/rust
 wip/smstools
 wip/spread4
 wip/swftools

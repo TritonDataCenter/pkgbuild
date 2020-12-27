@@ -70,7 +70,6 @@ sysutils/ansible
 sysutils/apcupsd
 sysutils/bsdinstall
 sysutils/cdrtools
-sysutils/cfengine2
 sysutils/cfengine3
 sysutils/collectd
 sysutils/collectd-amqp
