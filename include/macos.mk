@@ -14,6 +14,7 @@
  || !empty(PKGPATH:Mmultimedia/dumpmpeg) \
  || !empty(PKGPATH:Mnet/gtk-gnutella) \
  || !empty(PKGPATH:Mnews/knews) \
+ || !empty(PKGPATH:Mnews/trn) \
  || !empty(PKGPATH:Mtextproc/ja-groff) \
  || !empty(PKGPATH:Mwip/oce) \
  || !empty(PKGPATH:Mwww/wml)
@@ -21,7 +22,8 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
 .endif
 
 # Packages which do not fit in ramdisk build area.
-.if !empty(PKGPATH:Mcross/*gcc*) \
+.if !empty(PKGPATH:Maudio/musescore) \
+ || !empty(PKGPATH:Mcross/*gcc*) \
  || !empty(PKGPATH:Mdatabases/mariadb55-server) \
  || !empty(PKGPATH:Mdatabases/mongodb) \
  || !empty(PKGPATH:Mdevel/xulrunner*) \
@@ -29,6 +31,7 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Memulators/qemu) \
  || !empty(PKGPATH:Mfonts/noto-ttf) \
  || !empty(PKGPATH:Mgames/flightgear-data) \
+ || !empty(PKGPATH:Mgeography/proj) \
  || !empty(PKGPATH:Mgraphics/tesseract) \
  || !empty(PKGPATH:Mham/gnuradio-core) \
  || !empty(PKGPATH:Mjoyent/mariadb10-server) \
@@ -42,8 +45,10 @@ NOT_FOR_BULK_PLATFORM=	Darwin-*-*
  || !empty(PKGPATH:Mlang/rust) \
  || !empty(PKGPATH:Mmail/thunderbird*) \
  || !empty(PKGPATH:Mwip/ghc) \
+ || !empty(PKGPATH:Mwip/rust) \
  || !empty(PKGPATH:Mwww/firefox) \
  || !empty(PKGPATH:Mwww/firefox??) \
+ || !empty(PKGPATH:Mwww/grafana) \
  || !empty(PKGPATH:Mwww/seamonkey) \
  || !empty(PKGPATH:Mwww/webkit*-gtk*) \
  || !empty(PKGPATH:Mx11/kdelibs4) \
