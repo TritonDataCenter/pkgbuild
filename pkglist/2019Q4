@@ -8,6 +8,7 @@ joyent/chef-client
 joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
+joyent/duo-unix-compat32
 joyent/enstratus-agent
 joyent/gnupg20
 joyent/handlersocket
@@ -75,6 +76,7 @@ joyent/ruby-httpclient
 joyent/ruby-memcache-client
 joyent/ruby-rest-client
 joyent/ruby-soap4r
+joyent/samba-compat32
 joyent/smartos-build-tools
 joyent/smtools
 joyent/spice-protocol

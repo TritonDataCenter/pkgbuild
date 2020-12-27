@@ -8,7 +8,7 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs>^pkgsrc-2019Q4-tools$</blockingJobs>
+      <blockingJobs>^pkgsrc-2019Q4-(i386|tools)$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.29.5">
       <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
