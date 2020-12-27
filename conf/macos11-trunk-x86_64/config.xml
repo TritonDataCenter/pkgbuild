@@ -8,7 +8,7 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs></blockingJobs>
+      <blockingJobs>^pkgsrc-macos11-trunk-tools$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.29.5">
       <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
@@ -36,7 +36,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>origin/joyent/feature/pbulk/trunk</name>
+        <name>origin/joyent/release/macos</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -78,8 +78,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=macos15-trunk-tools
-/Volumes/data/pkgbuild/scripts/run-jenkins-tools</command>
+export PKGBUILD=macos11-trunk-x86_64
+/Volumes/data/pkgbuild/scripts/run-jenkins-build</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
