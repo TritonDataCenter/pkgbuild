@@ -45,6 +45,8 @@ fi
 # We use the pkgtools/mksandbox script on NetBSD as it works well.
 ${PKGBUILD_BASEDIR}/scripts/mksandbox-pkgsrc \
     --without-pkgsrc \
+    --without-src \
+    --without-xsrc \
     --rodirs=${LOFS_RO_MOUNTS_LINUX} \
     --rwdirs=${LOFS_RW_MOUNTS_LINUX} \
     ${chrootdir} >/dev/null 2>&1
