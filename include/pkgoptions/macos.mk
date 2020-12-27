@@ -21,10 +21,3 @@ PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
 PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl gzip
 PKG_OPTIONS.vim+=	lua perl python ruby
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses
-
-#
-# XXX: Not the ideal place for this, still fleshing it out though.
-#
-PREFER_PKGSRC=		bzip2 xz zlib
-PREFER_PKGSRC+=		libpcap openssl tcp_wrappers
-PREFER_PKGSRC+=		editline expat ncurses ncursesw readline
