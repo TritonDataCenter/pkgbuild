@@ -13,11 +13,11 @@ TOOLS_PLATFORM.patch=   ${TOOLS_BASEDIR}/bin/nbpatch
 
 #
 # Use binutils from external tools which are not provided by the platform.
-# For trunk we are testing whether adding TOOLS_BASEDIR/bin to PATH is a
-# better solution as it helps to avoid hardcoding paths (e.g. granlib in
-# libtool).
 #
-.if empty(PKGBUILD:Mtrunk-*)
+# In newer releases we add TOOLS_BASEDIR/bin to PATH as it helps to avoid
+# hardcoded paths embedding into binaries.
+#
+.if !empty(PKGBUILD:M201?Q?-*) || !empty(PKGBUILD:M2020Q[123]-*)
 .  for tool in as objcopy objdump ranlib readelf
 ${tool:tu}=		${TOOLS_BASEDIR}/bin/g${tool}
 TOOLS_PATH.${tool}=	${TOOLS_BASEDIR}/bin/g${tool}
