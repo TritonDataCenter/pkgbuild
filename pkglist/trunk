@@ -15,8 +15,6 @@ joyent/gnupg20
 joyent/libsass
 joyent/libspice
 joyent/libutempter
-joyent/mariadb100-client
-joyent/mariadb100-server
 joyent/mms-agent
 joyent/mongodb30
 joyent/neo4j
