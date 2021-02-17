@@ -55,6 +55,7 @@ net/mosh
 net/mtr
 net/nagios-nrpe
 net/openvpn
+net/py-zmq
 parallel/parallel
 pkgtools/pbulk
 pkgtools/pkg_alternatives
