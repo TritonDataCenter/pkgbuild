@@ -55,8 +55,8 @@ fi
 #
 if [ -n "${PKGBUILD_GPG_SIGN_AS}" ]; then
 	for ip in ${PBULK_CLIENTS}; do
-		ssh ${ip} "test -S ${ROOT_HOMEDIR}/.gnupg/S.gpg-agent ||
-			    test -f ${ROOT_HOMEDIR}/.gnupg/no-agent"
+		ssh ${ip} "test -f ${ROOT_HOMEDIR}/.gnupg/no-agent || " \
+			  "pgrep -x gpg-agent >/dev/null"
 		if [ $? -ne 0 ]; then
 			echo "ERROR: ${ip} is not running gpg-agent"
 			exit 1
