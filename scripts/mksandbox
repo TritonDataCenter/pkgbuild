@@ -176,14 +176,15 @@ chown root:sys ${chrootdir}/etc/{group,passwd,shadow}
 chmod 0644 ${chrootdir}/etc/{group,passwd}
 chmod 0400 ${chrootdir}/etc/shadow
 
-# /home/pbulk only if user exists
-if id pbulk >/dev/null 2>&1; then
-	mkdir -p ${chrootdir}/home/pbulk
-	rsync -a ${PKGBUILD_BASEDIR}/homedir/ ${chrootdir}/home/pbulk/
-	chown -R pbulk:pbulk ${chrootdir}/home/pbulk
-	# Optional fixups to avoid warnings
-	chmod 0400 ${chrootdir}/home/pbulk/.ssh/*_rsa 2>/dev/null || true
-fi
+#
+# /home/pbulk using the hardcoded uid/gid from the overlay.  This avoids the
+# requirement that there be a pbulk user outside the chroot, which would be
+# difficult in e.g. SmartOS GZ.
+#
+mkdir -p ${chrootdir}/home/pbulk
+rsync -a ${PKGBUILD_BASEDIR}/homedir/ ${chrootdir}/home/pbulk/
+chown -R 500:500 ${chrootdir}/home/pbulk
+chmod 0400 ${chrootdir}/home/pbulk/.ssh/*_rsa 2>/dev/null || true
 
 #
 # Default PKGBUILD_BASEDIR is /shared/pbulk.  If we're using something
