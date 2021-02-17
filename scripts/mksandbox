@@ -51,6 +51,10 @@ fi
 #
 # Create system loopback mounts.
 #
+if [ -d /devices ]; then
+	mkdir -p ${chrootdir}/devices
+	mount -F lofs -r /devices ${chrootdir}/devices
+fi
 for dir in /dev /lib /sbin /usr; do
 	mkdir -p ${chrootdir}${dir}
 	mount -F lofs -r ${dir} ${chrootdir}${dir}

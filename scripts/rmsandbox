@@ -74,7 +74,7 @@ if [ -d "${chrootdir}" ]; then
 	#
 	# System directories.
 	#
-	for dir in /dev /lib /sbin /usr /proc /system/lxproc; do
+	for dir in /devices /dev /lib /sbin /usr /proc /system/lxproc; do
 		unmount_and_rm ${chrootdir}${dir}
 	done
 
