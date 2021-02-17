@@ -59,6 +59,7 @@ PKG_OPTIONS.ejabberd=		sqlite
 # Package specific build options.  These should mostly be either negative
 # options to revert defaults or mutually-exclusive selections.
 #
+PKG_OPTIONS.binutils+=		disable-ld
 PKG_OPTIONS.clamav+=		milter
 PKG_OPTIONS.db4+=		-doc
 PKG_OPTIONS.exim+=		saslauthd spf
