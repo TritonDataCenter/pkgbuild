@@ -131,12 +131,16 @@ if [ -d "${chrootdir}" ]; then
 	fi
 
 	#
-	# When mounting individual directories under /data we need to clean
-	# up afterwards.  Yes, this is terrible, and should be parameterised.
+	# Different builds may have different prefixes for where things are
+	# mounted, and we need to ensure that all cases are cleaned up.
 	#
-	if [ -d ${chrootdir}/data ]; then
-		rmdir ${chrootdir}/data
-	fi
+	# This is a bit ugly and should be parameterised.
+	#
+	for mnt in /data /nfs; do
+		if [ -d ${chrootdir}${mnt} ]; then
+			rmdir ${chrootdir}${mnt}
+		fi
+	done
 
 	#
 	# chrootdir should now be empty, if not print what's left.
