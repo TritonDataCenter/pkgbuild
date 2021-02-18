@@ -187,10 +187,19 @@ chown -R 500:500 ${chrootdir}/home/pbulk
 chmod 0400 ${chrootdir}/home/pbulk/.ssh/*_rsa 2>/dev/null || true
 
 #
-# Default PKGBUILD_BASEDIR is /shared/pbulk.  If we're using something
-# different then we need to provide a compat symlink for the hardcoded
-# .include path in the bootstrap mk.conf
+# For release builds where the path to pkgbuild is baked into mk.conf and we
+# do not rebuild the bootstrap for every push, we need to ensure that should
+# pkgbuild move around that the original path still works.
 #
+# These need to have corresponding entries in rmsandbox to clean them up.
+#
+if [ "${PKGBUILD_BASEDIR}" != "/data/pkgbuild" ]; then
+	if [ ! -e ${chrootdir}/data/pkgbuild ]; then
+		mkdir -p ${chrootdir}/data
+		ln -s ${PKGBUILD_BASEDIR} ${chrootdir}/data/pkgbuild
+		>${chrootdir}/data/.sandbox_created_symlink
+	fi
+fi
 if [ "${PKGBUILD_BASEDIR}" != "/shared/pbulk" ]; then
 	if [ ! -e ${chrootdir}/shared/pbulk ]; then
 		mkdir -p ${chrootdir}/shared

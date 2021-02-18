@@ -122,8 +122,14 @@ if [ -d "${chrootdir}" ]; then
 	rm -rf ${chrootdir}/{emul,media,news}
 
 	#
-	# Compat symlink.
+	# Remove any compat symlinks we may have needed to create if pkgbuild
+	# moved since the bootstraps were built.
 	#
+	if [ -f ${chrootdir}/data/.sandbox_created_symlink ]; then
+		rm ${chrootdir}/data/pkgbuild
+		rm ${chrootdir}/data/.sandbox_created_symlink
+		rmdir ${chrootdir}/data
+	fi
 	if [ -f ${chrootdir}/shared/.sandbox_created_symlink ]; then
 		rm ${chrootdir}/shared/pbulk
 		rm ${chrootdir}/shared/.sandbox_created_symlink
