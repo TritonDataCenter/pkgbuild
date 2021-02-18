@@ -59,14 +59,6 @@ chown pbulk:pbulk ${chrootdir}/home/pbulk 2>/dev/null || true
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
-	case "${chrootname}" in
-	*-build-*|*-scan-*)
-		tools_packages="nbpatch pbulk"
-		;;
-	*)
-		tools_packages="nbpatch nodejs pbulk"
-		;;
-	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
@@ -78,6 +70,6 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
 			EOF
 		fi
-		${TOOLS_BASEDIR}/sbin/pkg_add ${tools_packages} >/dev/null 2>&1
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null 2>&1
 	"
 fi
