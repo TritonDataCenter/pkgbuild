@@ -171,9 +171,9 @@ mkdir -p ${chrootdir}/etc
 (cd /etc; ${CMD_TAR} -cf - . 2>/dev/null) | (cd ${chrootdir}/etc; ${CMD_TAR} -xf -)
 
 # passwd/group files from the overlay to ensure unmodified copies
-cp ${PKGBUILD_BASEDIR}/overlay/{group,passwd,shadow} ${chrootdir}/etc/
-chown root:sys ${chrootdir}/etc/{group,passwd,shadow}
-chmod 0644 ${chrootdir}/etc/{group,passwd}
+cp ${PKGBUILD_BASEDIR}/overlay/{group,passwd,shadow,user_attr} ${chrootdir}/etc/
+chown root:sys ${chrootdir}/etc/{group,passwd,shadow,user_attr}
+chmod 0644 ${chrootdir}/etc/{group,passwd,user_attr}
 chmod 0400 ${chrootdir}/etc/shadow
 
 #
