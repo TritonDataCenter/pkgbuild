@@ -81,6 +81,7 @@ PKG_OPTIONS.nginx+=		memcache naxsi perl realip
 PKG_OPTIONS.nginx+=		slice status uwsgi
 PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
+PKG_OPTIONS.postgresql13+=	-gssapi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
 PKG_OPTIONS.scmgit+=		-python
