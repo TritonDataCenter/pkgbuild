@@ -169,7 +169,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 				PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All;${REMOTE_PACKAGE_URL}/${TOOLS_PACKAGE_DIR}/All
 			EOF
 		fi
-		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null 2>&1
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null
 		if ${TOOLS_BASEDIR}/sbin/pkg_info -qE mozilla-rootcerts; then
 			${TOOLS_BASEDIR}/sbin/mozilla-rootcerts install >/dev/null
 		fi

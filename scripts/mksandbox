@@ -231,6 +231,6 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 				q
 			EOF
 		fi
-		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null 2>&1
+		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null
 	"
 fi
