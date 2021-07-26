@@ -103,6 +103,7 @@ sysutils/ups-nut-cgi
 sysutils/ups-nut-snmp
 sysutils/ups-nut-usb
 sysutils/zabbix
+sysutils/zabbix50-agent
 sysutils/znapzend
 textproc/grep
 textproc/nbsed
