@@ -9,6 +9,8 @@ joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
 joyent/enstratus-agent
+joyent/gcc10
+joyent/gcc10-libs
 joyent/gcc9
 joyent/gcc9-libs
 joyent/gnupg20

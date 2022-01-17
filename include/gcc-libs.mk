@@ -17,7 +17,6 @@
  || !empty(PKGPATH:Mjoyent/ctftools) \
  || !empty(PKGPATH:Mjoyent/gcc*) \
  || !empty(PKGPATH:Mlang/gcc*) \
- || !empty(PKGPATH:Mmisc/root) \
  || !empty(PKGPATH:Mpkgtools/abiexec) \
  || !empty(PKGPATH:Mpkgtools/cwrappers) \
  || !empty(PKGPATH:Mpkgtools/digest) \

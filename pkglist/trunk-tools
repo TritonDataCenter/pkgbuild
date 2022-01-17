@@ -22,6 +22,8 @@ editors/nano
 editors/vim
 emulators/qemu
 joyent/ctftools
+joyent/gcc10
+joyent/gcc10-libs
 joyent/gcc9
 joyent/gcc9-libs
 joyent/gnupg20

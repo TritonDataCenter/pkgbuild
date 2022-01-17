@@ -12,12 +12,11 @@
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
  || !empty(PKGPATH:Mjoyent/ctftools) \
- || !empty(PKGPATH:Mjoyent/gcc9) \
- || !empty(PKGPATH:Mlang/gcc2) \
+ || !empty(PKGPATH:Mjoyent/gcc[0-9]) \
+ || !empty(PKGPATH:Mjoyent/gcc[0-9][0-9]) \
+ || !empty(PKGPATH:Mlang/gcc[0-9]) \
+ || !empty(PKGPATH:Mlang/gcc[0-9][0-9]) \
  || !empty(PKGPATH:Mlang/gcc3*) \
- || !empty(PKGPATH:Mlang/gcc4?) \
- || !empty(PKGPATH:Mlang/gcc[5-9]) \
- || !empty(PKGPATH:Mmisc/root) \
  || !empty(PKGPATH:Mpkgtools/abiexec) \
  || !empty(PKGPATH:Mpkgtools/cwrappers) \
  || !empty(PKGPATH:Mpkgtools/digest) \
