@@ -21,8 +21,7 @@ MULTILIB_SUPPORTED=	no
 # to GCC_REQD being set then the tests below will always fail, so we need to
 # also force certain packages.
 #
-.if (!empty(PKGBUILD:Mel6*) && !empty(GCC_REQD:M4.[5-9]*)) \
- || (!empty(PKGBUILD:Mel7*) && !empty(GCC_REQD:M4.9*)) \
+.if (!empty(PKGBUILD:Mel7*) && !empty(GCC_REQD:M4.9*)) \
  || !empty(GCC_REQD:M[56]*) \
  || !empty(PKGPATH:Mlang/nodejs*)
 GCC_REQD+=		7
@@ -31,11 +30,6 @@ USE_PKGSRC_GCC_RUNTIME=	yes
 
 # Work around broken libgcc handling
 PKG_DEFAULT_OPTIONS+=	always-libgcc
-
-# XXX: Fix properly upstream.  Native binutils too old.
-.if ${PKGBUILD} == "el6-trunk-tools" && !empty(PKGPATH:Mlang/nodejs)
-CONFIGURE_ARGS+=	--openssl-no-asm
-.endif
 
 # Use native Xorg, except libXft (XXX: forgot why, upstream?).
 #PREFER_PKGSRC=	libXft
