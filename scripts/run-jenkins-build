@@ -119,19 +119,32 @@ if [ $ret -ne 0 ]; then
 		# Output for Jenkins logs
 		cat ${presolve_match}
 
+		# Dig out broken dependencies for the Subject
+		pkgdeps=$(awk -f ${PKGBUILD_BASEDIR}/scripts/presolvedeps.awk \
+		    < ${presolve_match})
+
 		# Report failures to interested parties.
 		(
-			printf "The following unresolvable dependencies are "
-			printf "preventing bulk builds\n"
-			printf "from running:\n\n"
+			cat <<-EOF
+	The pkgsrc tree is currently broken due to the following unresolvable
+	dependencies.  Until they are fixed all bulk builds will stop working
+	and our users will potentially be running into confusing dependency
+	errors in their builds.
+
+	If you are responsible for this breakage please fix it urgently.
+
+			EOF
 			cat ${presolve_match}
 			if [ -s ${pscan_match} ]; then
-				printf "\n"
-				printf "Additional pscan.stderr output:\n\n"
+				cat <<-EOF
+
+	Additional pscan.stderr output:
+
+				EOF
 				cat ${pscan_match}
 			fi
 		) | ${PKGBUILD_BASEDIR}/scripts/mail-report \
-		    -s "Scan failure for ${PKGBUILD} bulk build" \
+		    -s "Broken pkgsrc tree ${pkgdeps}" \
 		    ${FAILURE_RECIPIENTS}
 	fi
 	rm -f ${presolve_match} ${pscan_match}
