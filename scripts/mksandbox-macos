@@ -66,14 +66,16 @@ for mount in ${NFS_RO_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
 	mkdir -p ${chrootdir}${dst}
-	mount_nfs -o ro ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mount_nfs -o ro,noatime,nobrowse ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
 done
 
 for mount in ${NFS_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
 	mkdir -p ${chrootdir}${dst}
-	mount_nfs ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mount_nfs -o nobrowse,noatime ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
 done
 
 #
@@ -158,7 +160,7 @@ done
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
-	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+	env -i ${CMD_CHROOT} ${chrootdir} ${CMD_SHELL} -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF

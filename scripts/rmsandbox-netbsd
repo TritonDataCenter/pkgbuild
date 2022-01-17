@@ -33,23 +33,23 @@ fi
 
 if [ -d ${chrootdir} ]; then
 
+	kill $(cat ${chrootdir}/root/.gnupg/socat.pid) 2>/dev/null
+
 	# Kill off processes first to avoid umount failures.
-	pids=$(lsof -t ${chrootdir} 2>/dev/null)
+	pids=$(fstat ${chrootdir} 2>/dev/null | awk 'NR > 1 {print $3}')
 	if [ -n "${pids}" ]; then
 		kill -9 ${pids} 2>/dev/null
 	fi
 
-	kill $(cat ${chrootdir}/root/.gnupg/socat.pid)
-
 	for mount in ${TMPFS_MOUNTS}; do
 		dst=${mount#*=}
-		umount -f ${chrootdir}${dst}
+		umount -f ${chrootdir}${dst} 2>/dev/null
 		rm -rf ${chrootdir}${dst}
 	done
 
 	for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
 		dst=${mount#*=}
-		umount -f ${chrootdir}${dst}
+		umount -f ${chrootdir}${dst} 2>/dev/null
 		rmdir ${chrootdir}${dst}
 	done
 

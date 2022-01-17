@@ -16,9 +16,10 @@ fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild}
-env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SU} - root -c "
+env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SHELL} -c "
 	set -ex
-	PATH=${PBULK_PATH}
+	export HOME=${ROOT_HOMEDIR}
+	export PATH=${PBULK_PATH}
 	cd ${PKGSRC_BASEDIR}/${PKGSRC_DIR}/bootstrap
 	env ${BOOTSTRAP_ENV} CFLAGS='${BOOTSTRAP_CFLAGS}' PKGSRC_KEEP_BIN_PKGS=no \
 	  ./bootstrap \

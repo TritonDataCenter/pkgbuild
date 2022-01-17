@@ -3,6 +3,8 @@
 # Create a shadowed sandbox from the root file system ready for builds.
 #
 
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/pkg/sbin:/usr/pkg/bin"
+
 if [ "$(uname -s)" != "NetBSD" ]; then
         echo "ERROR: Script is only suitable for NetBSD." >&2
         exit 1
@@ -85,7 +87,7 @@ chown -R pbulk:pbulk ${chrootdir}/home/pbulk 2>/dev/null || true
 # Unpack tools bootstrap and install required packages for building.
 #
 if [ -n "${TOOLS_BOOTSTRAP}" ]; then
-	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
+	env -i ${CMD_CHROOT} ${chrootdir} ${CMD_SHELL} -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			cat >>${TOOLS_BASEDIR}/etc/pkg_install.conf <<-EOF

@@ -47,9 +47,10 @@ if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
 	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
 fi
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SU} - root -c "
-	PATH=${PBULK_PATH}
+env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SHELL} -c "
 	set -ex
+	export HOME=${ROOT_HOMEDIR}
+	export PATH=${PBULK_PATH}
 	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PKGBUILD_LOCALBASE}/sbin:${PKGBUILD_LOCALBASE}/bin:${PBULK_PATH}
 	export DEPENDS_TARGET=bin-install

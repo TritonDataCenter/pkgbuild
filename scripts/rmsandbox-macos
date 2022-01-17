@@ -79,7 +79,7 @@ done
 #
 for pid in $(fuser ${chrootdir} 2>/dev/null); do
 	# Skip mount processes.  Disabling mds helps too.
-	ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$' >/dev/null
+	ps -p ${pid} | egrep '(kextd|mds|mds_stores|notifyd)$'
 	if [ $? -ne 0 ]; then
 		kill -9 ${pid}
 	fi
@@ -89,16 +89,11 @@ for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
 	dst=${mount#*=}
 	while true; do
 		[ -d ${chrootdir}${dst} ] || break
-		umount -f ${chrootdir}${dst} 2>/dev/null
+		diskutil unmount ${chrootdir}${dst} >/dev/null 2>&1
 		rmdir ${chrootdir}${dst} 2>/dev/null && break
-		sleep 5
+		sleep 1
 	done
 done
-
-case "$(uname -r)" in
-10.8.*)	unmountcmd="umount -f" ;;
-*)	unmountcmd="diskutil unmount" ;;
-esac
 
 for mount in ${TMPFS_MOUNTS}; do
 	mnt=${mount%=*}
@@ -106,7 +101,7 @@ for mount in ${TMPFS_MOUNTS}; do
 		[ -d ${chrootdir}${mnt} ] || break
 		mntpoint=$(mount | awk '$3 == "'${chrootdir}${mnt}'" {print}')
 		[ -n "${mntpoint}" ] || break
-		${unmountcmd} ${chrootdir}${mnt} >/dev/null
+		diskutil unmount ${chrootdir}${mnt} >/dev/null
 	done
 done
 
@@ -116,7 +111,7 @@ if [ -s ${SHADOW_BASEDIR}/${chrootname}.ramfs ]; then
 	done < ${SHADOW_BASEDIR}/${chrootname}.ramfs
 fi
 
-umount -f ${chrootdir}/dev 2>/dev/null
+umount ${chrootdir}/dev 2>/dev/null
 
 rm -f ${SHADOW_BASEDIR}/${chrootname}.dev
 rm -f ${SHADOW_BASEDIR}/${chrootname}.ramfs

@@ -56,7 +56,7 @@ fi
 if [ -n "${PKGBUILD_GPG_SIGN_AS}" ]; then
 	for ip in ${PBULK_CLIENTS}; do
 		ssh ${ip} "test -f ${ROOT_HOMEDIR}/.gnupg/no-agent || " \
-			  "pgrep -x gpg-agent >/dev/null"
+			  "pgrep gpg-agent >/dev/null"
 		if [ $? -ne 0 ]; then
 			echo "ERROR: ${ip} is not running gpg-agent"
 			exit 1
@@ -69,27 +69,26 @@ fi
 #
 cleanup()
 {
-	if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
-		echo "Removing ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
-		${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-	fi
+	for dir in ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}*; do
+		if [ -d ${dir} ]; then
+			echo "Removing ${dir} chroot..."
+			${CHROOT_DELETE} ${dir}
+		fi
+	done
 }
 trap cleanup EXIT
 
 #
-# Perform the build.
+# Perform the build.  Start with a cleanup to ensure any previous failed build
+# is removed first (happens if e.g. the Java client disconnects).
 #
 mkdir -p ${CHROOT_BASEDIR}
-if [ -d ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ]; then
-	# Assume that previous job was aborted and try to remove it.
-	echo "WARNING: chroot directory already exists, removing in 10 seconds.."
-	sleep 10
-	${CHROOT_DELETE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-fi
+cleanup
 echo "Creating ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} chroot..."
 ${CHROOT_CREATE} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD}
-env -i /usr/sbin/chroot ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SU} - root -c "
-	PATH=${PBULK_PATH}
+env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/pkgsrc-${PKGBUILD} ${CMD_SHELL} -c "
+	export HOME=${ROOT_HOMEDIR}
+	export PATH=${PBULK_PATH}
 	echo 'Running bulkbuild${PBULK_RESTART:+-restart} using' \
 	    '${PKGBUILD_BASEDIR}/conf/${PKGBUILD}/pbulk.conf'
 	${PBULK_BASEDIR}/bin/bulkbuild${PBULK_RESTART:+-restart} \
