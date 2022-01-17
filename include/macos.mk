@@ -66,6 +66,11 @@ PKGSRC_FORTRAN=		gfortran
 # Use modular-xorg since 2015Q4.
 X11_TYPE=		modular
 
+# Stupid Apple.  Needed for lang/go-bin.
+.if ${MACHINE_ARCH} == "aarch64"
+DARWIN_CHROOTED=	yes
+.endif
+
 # Native curl SIGBUS's when accessing HTTPS in a chroot.
 .if exists(${TOOLS_BASEDIR}/bin/curl)
 TOOLS_PATH.curl=	${TOOLS_BASEDIR}/bin/curl
