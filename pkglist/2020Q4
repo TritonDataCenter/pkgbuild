@@ -15,6 +15,7 @@ joyent/gcc10-libs
 joyent/gcc9
 joyent/gcc9-libs
 joyent/gnupg20
+joyent/influxdb2
 joyent/libsass
 joyent/libspice
 joyent/libutempter

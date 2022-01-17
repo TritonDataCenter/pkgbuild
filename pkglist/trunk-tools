@@ -37,7 +37,6 @@ lang/gcc7
 lang/gcc7-libs
 lang/nawk
 lang/nodejs
-lang/nodejs8
 lang/nodejs10
 lang/nodejs12
 lang/npm
@@ -48,10 +47,12 @@ lang/python37
 mail/postfix
 misc/heirloom-printenv
 misc/mbuffer
+misc/screen
+misc/tmate
 misc/tmux
 misc/watch
 net/cacti
-net/iperf
+net/iperf2
 net/iperf3
 net/mosh
 net/mtr
@@ -79,7 +80,7 @@ sysutils/collectd-amqp
 sysutils/collectd-curl
 sysutils/collectd-dbi
 sysutils/collectd-dns
-sysutils/collectd-memcached
+sysutils/collectd-memcachec
 sysutils/collectd-mysql
 sysutils/collectd-network
 sysutils/collectd-notify-email
