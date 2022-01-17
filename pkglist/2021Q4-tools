@@ -1,0 +1,8 @@
+joyent/ctftools
+joyent/gcc10
+joyent/gcc10-libs
+joyent/gnupg20
+joyent/libutempter
+joyent/openjdk11
+joyent/pkgsrc-gnupg-keys
+joyent/smartos-build-tools
