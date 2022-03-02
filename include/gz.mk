@@ -35,11 +35,17 @@ POSTFIX_GROUP=	mail
 MUNIN_USER=	daemon		# No special requirements.
 MUNIN_GROUP=	daemon		# No special requirements.
 #
+NAGIOS_USER=	daemon		# No special requirements, setuid handled via
+NAGIOS_GROUP=	daemon		# REAL_ROOT_USER
+#
 NGINX_USER=	webservd	# No special requirements.
 NGINX_GROUP=	webservd	# No special requirements.
 #
 NUT_USER=	root		# No SPECIAL_PERMS, but requires valid shell.
 NUT_GROUP=	root		# No SPECIAL_PERMS.
+#
+OPENVPN_USER=	daemon		# No special requirements.
+OPENVPN_GROUP=	daemon		# No special requirements.
 #
 RRDCACHED_USER=	daemon		# No special requirements.
 RRDCACHED_GROUP=daemon		# No special requirements.
