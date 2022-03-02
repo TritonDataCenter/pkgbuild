@@ -601,3 +601,120 @@ PKG_GID.rspamd=		807
 #
 PKG_UID.influxdb=	806
 PKG_GID.influxdb=	806
+#
+PKG_UID.authelia=	805
+PKG_GID.authelia=	805
+#
+PKG_UID.bincimap=	804
+PKG_GID.bincimap=	804
+#
+PKG_UID.colord=		803
+PKG_GID.colord=		803
+#
+PKG_UID.multilog=	802
+PKG_GID.svscan=		802
+#
+PKG_UID.dhcpcd=		801
+PKG_GID.dhcpcd=		801
+#
+PKG_UID.dnsdist=	800
+PKG_GID.dnsdist=	800
+#
+PKG_UID.radiusd=	799
+PKG_GID.radiusd=	799
+#
+PKG_UID.ganglia=	798
+PKG_GID.ganglia=	798
+#
+PKG_UID.git=		797
+PKG_GID.git=		797
+#
+PKG_UID.grafana=	796
+PKG_GID.grafana=	796
+#
+PKG_UID.kafka=		795
+PKG_GID.kafka=		795
+#
+PKG_UID.unit=		794
+PKG_GID.unit=		794
+#
+PKG_UID.synapse=	793
+PKG_GID.synapse=	793
+#
+PKG_UID.miniircd=	792
+PKG_GID.miniircd=	792
+#
+PKG_UID.natssrv=	791
+PKG_GID.natssrv=	791
+#
+PKG_UID.dotclear=	790
+PKG_GID.dotclear=	790
+#
+PKG_UID.fpm=		789
+PKG_GID.fpm=		789
+#
+PKG_UID.polkitd=	788
+PKG_GID.polkitd=	788
+#
+PKG_UID.pubfile=	787
+PKG_GID.pubfile=	787
+#
+PKG_UID.pubftp=		786
+#PKG_GID.pubftp=	786	pubfile
+#
+PKG_UID.pubhttp=	785
+#PKG_GID.pubhttp=	785	pubfile
+#
+PKG_UID.publog=		784
+#PKG_GID.publog=	784	pubfile
+#
+PKG_UID.qmaild=		783
+#PKG_GID.qmaild=	783	nofiles
+#
+PKG_UID.qmaill=		782
+#PKG_GID.qmaill=	782	nofiles
+#
+PKG_UID.qmailp=		781
+#PKG_GID.qmailp=	781	nofiles
+#
+PKG_UID.qmailq=		780
+#PKG_GID.qmailq=	780	qmail
+#
+PKG_UID.qmailr=		779
+#PKG_GID.qmailr=	779	qmail
+#
+PKG_UID.qmails=		778
+#PKG_GID.qmails=	778	qmail
+#
+PKG_UID.rrdcached=	777
+PKG_GID.rrdcached=	777
+#
+PKG_UID.siproxd=	776
+PKG_GID.siproxd=	776
+#
+PKG_UID.slocate=	775
+PKG_GID.slocate=	775
+#
+PKG_UID.sniproxy=	774
+PKG_GID.sniproxy=	774
+#
+PKG_UID.syncthing=	773
+PKG_GID.syncthing=	773
+#
+PKG_UID.taskd=		772
+PKG_GID.taskd=		772
+#
+PKG_UID._tcpdump=	771
+PKG_GID._tcpdump=	771
+#
+PKG_UID.tenshi=		770
+PKG_GID.tenshi=		770
+#
+PKG_UID.tinc=		769
+PKG_GID.tinc=		769
+#
+PKG_UID.tinydyn=	768
+#PKG_GID.tinydyn=	768	djbdns
+#
+PKG_UID.ucspissl=	767
+PKG_GID.ucspissl=	767
