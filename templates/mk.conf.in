@@ -74,6 +74,14 @@ MAKE_JOBS_DEFAULT=	@MAKE_JOBS_DEFAULT@
 MAKE_JOBS=		${PKG_MAKE_JOBS.${PKGPATH}:U${MAKE_JOBS_DEFAULT}}
 
 #
+# List of packages to skip by PKGPATH, with reasons for doing so.
+#
+@PKGPATH_SKIP_REASONS@
+.if defined(PKGSKIP.${PKGPATH})
+PKG_SKIP_REASON+=	${PKGSKIP.${PKGPATH}}
+.endif
+
+#
 # Non-pkgsrc variables which are set on a per-pkgbuild basis that affect logic
 # in any upcoming includes.
 #

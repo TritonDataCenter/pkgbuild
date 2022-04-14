@@ -2,25 +2,6 @@
 # Additional mk.conf settings specific to macOS.
 #
 
-# Packages which currently hang the build
-.if !empty(PKGPATH:Mgames/crimsonfields) \
- || !empty(PKGPATH:Mgames/freeciv-client) \
- || !empty(PKGPATH:Mgames/xclannad) \
- || !empty(PKGPATH:Mgraphics/rayshade) \
- || !empty(PKGPATH:Mlang/jamvm) \
- || !empty(PKGPATH:Mlang/mono6) \
- || !empty(PKGPATH:Mmail/elm) \
- || !empty(PKGPATH:Mmultimedia/acidrip) \
- || !empty(PKGPATH:Mmultimedia/dumpmpeg) \
- || !empty(PKGPATH:Mnet/gtk-gnutella) \
- || !empty(PKGPATH:Mnews/knews) \
- || !empty(PKGPATH:Mnews/trn) \
- || !empty(PKGPATH:Mtextproc/ja-groff) \
- || !empty(PKGPATH:Mwip/oce) \
- || !empty(PKGPATH:Mwww/wml)
-NOT_FOR_BULK_PLATFORM=	Darwin-*-*
-.endif
-
 # Packages which do not fit in ramdisk build area.
 .if !empty(PKGPATH:Maudio/musescore) \
  || !empty(PKGPATH:Mcross/*gcc*) \
