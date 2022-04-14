@@ -21,5 +21,6 @@ PKG_OPTIONS.db4+=	-doc
 PKG_OPTIONS.gnustep+=	fragile
 PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
 PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl gzip
+PKG_OPTIONS.nginx-devel+=	dav status realip uwsgi memcache naxsi perl gzip
 PKG_OPTIONS.vim+=	lua perl python ruby
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses

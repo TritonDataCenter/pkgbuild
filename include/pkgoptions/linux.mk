@@ -15,4 +15,5 @@ PKG_DEFAULT_OPTIONS+=	dv opencore-amr theora x264 xvid
 PKG_DEFAULT_OPTIONS+=	mutt-hcache mutt-smtp tokyocabinet
 #
 PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl gzip
+PKG_OPTIONS.nginx-devel+=dav status realip uwsgi memcache naxsi perl gzip
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses
