@@ -115,6 +115,5 @@ RUBY_VERSION_REQD=		27
 #
 # XXX: This doesn't really belong here, move somewhere more sensible
 #
-CHECK_SSP=			no
 EMACS_TYPE=			emacs26nox
 JPEG_DEFAULT=			libjpeg-turbo
