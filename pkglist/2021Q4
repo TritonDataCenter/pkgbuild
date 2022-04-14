@@ -79,6 +79,7 @@ joyent/samba-compat32
 joyent/smartos-build-tools
 joyent/smtools
 joyent/spice-protocol
+joyent/telegraf
 joyent/trafficserver
 joyent/usbredir
 joyent/zoneinit
