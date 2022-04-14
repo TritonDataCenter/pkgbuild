@@ -20,6 +20,12 @@ SMF_PROJECT_DESC.elastic=	Elastic Search service
 SMF_PROJECT_GROUP.elastic=	${ES_GROUP}
 SMF_PROJECT_USER.elastic=	${ES_USER}
 
+SMF_PROJECT.mariadb-server=	mariadb
+SMF_PROJECT_ATTRS.mariadb=	process.max-file-descriptor=(basic,15000,deny)
+SMF_PROJECT_DESC.mariadb=	MariaDB service
+SMF_PROJECT_GROUP.mariadb=	${MARIADB_GROUP}
+SMF_PROJECT_USER.mariadb=	${MARIADB_USER}
+
 SMF_PROJECT.mongodb=		mongodb
 SMF_PROJECT_ATTRS.mongodb=	process.max-file-descriptor=(basic,10000,deny)
 SMF_PROJECT_DESC.mongodb=	MongoDB service
@@ -30,7 +36,6 @@ SMF_PROJECT.mysql-cluster=	mysql
 SMF_PROJECT.mysql-server=	mysql
 SMF_PROJECT.percona-cluster=	mysql
 SMF_PROJECT.percona-server=	mysql
-SMF_PROJECT.mariadb-server=	mysql
 SMF_PROJECT_ATTRS.mysql=	process.max-file-descriptor=(basic,15000,deny)
 SMF_PROJECT_DESC.mysql=		MySQL service
 SMF_PROJECT_GROUP.mysql=	${MYSQL_GROUP}

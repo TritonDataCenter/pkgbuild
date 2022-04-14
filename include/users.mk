@@ -718,3 +718,6 @@ PKG_UID.tinydyn=	768
 #
 PKG_UID.ucspissl=	767
 PKG_GID.ucspissl=	767
+#
+PKG_UID.mariadb=	766
+PKG_GID.mariadb=	766
