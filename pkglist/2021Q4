@@ -10,6 +10,7 @@ joyent/ctftools
 joyent/dtracetools
 joyent/duo-unix-compat32
 joyent/enstratus-agent
+joyent/erlang14
 joyent/gcc10
 joyent/gcc10-libs
 joyent/gcc9
@@ -66,6 +67,7 @@ joyent/postgresql-pg_top
 joyent/qpress
 joyent/quickbackup-mongodb
 joyent/quickbackup-percona
+joyent/rabbitmq271
 joyent/restdown
 joyent/rethinkdb
 joyent/ruby-bunny
