@@ -30,11 +30,16 @@ SMF_PROJECT.mysql-cluster=	mysql
 SMF_PROJECT.mysql-server=	mysql
 SMF_PROJECT.percona-cluster=	mysql
 SMF_PROJECT.percona-server=	mysql
-SMF_PROJECT.mariadb-server=	mysql
 SMF_PROJECT_ATTRS.mysql=	process.max-file-descriptor=(basic,15000,deny)
 SMF_PROJECT_DESC.mysql=		MySQL service
 SMF_PROJECT_GROUP.mysql=	${MYSQL_GROUP}
 SMF_PROJECT_USER.mysql=		${MYSQL_USER}
+
+SMF_PROJECT.mariadb-server=    mariadb
+SMF_PROJECT_ATTRS.mariadb=     process.max-file-descriptor=(basic,15000,deny)
+SMF_PROJECT_DESC.mariadb=      MariaDB service
+SMF_PROJECT_GROUP.mariadb=     ${MARIADB_GROUP}
+SMF_PROJECT_USER.mariadb=      ${MARIADB_USER}
 
 SMF_PROJECT.php53-fpm=		php
 SMF_PROJECT.php54-fpm=		php
