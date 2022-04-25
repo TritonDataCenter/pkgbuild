@@ -1,0 +1,44 @@
+#
+# List of packages that must have all built successfully before publishing
+# will be enabled.  One per line, matched using /^<pkg>/ in the pbuild file.
+#
+# Core bootstrap/image packages
+#
+coreutils-[0-9]
+mozilla-rootcerts-[0-9]
+nodejs-16.
+nodejs-14.
+nodejs-12.
+npm-[0-9]
+pkg_alternatives-[0-9]
+pkgin-[0-9]
+pkgsrc-gnupg-keys-[0-9]
+#
+# Popular packages
+#
+ffmpeg4-[0-9]
+git-base-[0-9]
+haproxy-[0-9]
+mutt-[0-9]
+weechat-[0-9]
+#
+# illumos-docbooks
+#
+apache-maven-[0-9]
+dblatex-[0-9]
+tex-cyrillic-[0-9]
+tex-epstopdf-[0-9]
+texlive-collection-fontsrecommended-[0-9]
+texlive-collection-latexextra-[0-9]
+texlive-collection-latexrecommended-[0-9]
+#
+# Packages requested by users
+#
+fish-[0-9]
+#fontforge-[0-9]
+#inkscape-[0-9]
+inetutils-[0-9]
+lastpass-cli-[0-9]
+openssh1-[0-9]
+tesseract-[0-9]
+tsocks-[0-9]
