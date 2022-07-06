@@ -11,7 +11,7 @@
       <blockingJobs>^pkgsrc-2017Q2-tools$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.33.1">
-      <projectUrl>https://github.com/joyent/pkgsrc/</projectUrl>
+      <projectUrl>https://github.com/TritonDataCenter/pkgsrc/</projectUrl>
       <displayName></displayName>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
@@ -29,7 +29,7 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-        <url>https://github.com/joyent/pkgsrc.git</url>
+        <url>https://github.com/TritonDataCenter/pkgsrc</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -39,7 +39,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/joyent/pkgsrc/</url>
+      <url>https://github.com/TritonDataCenter/pkgsrc/</url>
     </browser>
     <submoduleCfg class="empty-list"/>
     <extensions>
