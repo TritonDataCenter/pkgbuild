@@ -6,7 +6,6 @@
 #
 coreutils-[0-9]
 mozilla-rootcerts-[0-9]
-nodejs-18.
 nodejs-16.
 nodejs-14.
 nodejs-12.
@@ -17,21 +16,21 @@ pkgsrc-gnupg-keys-[0-9]
 #
 # Popular packages
 #
+ffmpeg4-[0-9]
 git-base-[0-9]
 haproxy-[0-9]
 mutt-[0-9]
 weechat-[0-9]
 #
 # illumos-docbooks
-# XXX: no jvm yet for arm64
 #
-#apache-maven-[0-9]
-#dblatex-[0-9]
-#tex-cyrillic-[0-9]
-#tex-epstopdf-[0-9]
-#texlive-collection-fontsrecommended-[0-9]
-#texlive-collection-latexextra-[0-9]
-#texlive-collection-latexrecommended-[0-9]
+apache-maven-[0-9]
+dblatex-[0-9]
+tex-cyrillic-[0-9]
+tex-epstopdf-[0-9]
+texlive-collection-fontsrecommended-[0-9]
+texlive-collection-latexextra-[0-9]
+texlive-collection-latexrecommended-[0-9]
 #
 # Packages requested by users
 #
@@ -41,5 +40,5 @@ fish-[0-9]
 inetutils-[0-9]
 lastpass-cli-[0-9]
 openssh1-[0-9]
-#tesseract-[0-9]
+tesseract-[0-9]
 tsocks-[0-9]

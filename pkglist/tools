@@ -35,7 +35,6 @@ joyent/llvm6
 joyent/node08
 joyent/pkgsrc-gnupg-keys
 joyent/smartos-build-tools
-joyent/sun-jre6
 lang/clang
 lang/clang6
 lang/gawk

@@ -6,6 +6,7 @@
 #
 coreutils-[0-9]
 mozilla-rootcerts-[0-9]
+nodejs-18.
 nodejs-16.
 nodejs-14.
 nodejs-12.

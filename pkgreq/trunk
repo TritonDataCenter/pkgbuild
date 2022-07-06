@@ -6,6 +6,7 @@
 build-essential-[0-9]
 coreutils-[0-9]
 mozilla-rootcerts-[0-9]
+nodejs-18.
 nodejs-16.
 nodejs-14.
 nodejs-12.
@@ -20,7 +21,7 @@ zoneinit-[0-9]
 # Triton required packages
 #
 apg-[0-9]
-bind-9.11.
+bind-9.16.
 curl-[0-9]
 dateutils-[0-9]
 gsed-[0-9]
@@ -71,6 +72,7 @@ isc-dhcpd-[0-9]
 mbuffer-[0-9]
 mkvtoolnix-[0-9]
 normalize-[0-9]
+opendmarc-[0-9]
 pkg-config-[0-9]
 rabbitmq-[0-9]
 rust-[0-9]

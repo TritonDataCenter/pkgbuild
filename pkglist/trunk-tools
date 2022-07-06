@@ -30,15 +30,14 @@ joyent/gnupg20
 joyent/libutempter
 joyent/pkgsrc-gnupg-keys
 joyent/smartos-build-tools
-joyent/sun-jre6
 lang/clang
 lang/gawk
 lang/gcc7
 lang/gcc7-libs
 lang/nawk
 lang/nodejs
-lang/nodejs10
 lang/nodejs12
+lang/nodejs14
 lang/npm
 lang/openjdk8
 lang/perl5
