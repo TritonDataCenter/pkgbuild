@@ -232,5 +232,16 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 			EOF
 		fi
 		${TOOLS_BASEDIR}/sbin/pkg_add ${TOOLS_PACKAGES} >/dev/null
+		${CMD_GPG} --no-default-keyring --primary-keyring \
+		    ${TOOLS_SYSCONFDIR}/gnupg/pkgsrc.gpg \
+		    --list-keys ${PKGBUILD_GPG_SIGN_AS} >/dev/null 2>&1
+		if [ \$? -ne 0 ]; then
+			${CMD_GPG} --no-default-keyring --primary-keyring \
+			    ${TOOLS_SYSCONFDIR}/gnupg/pkgsrc.gpg \
+			    --trustdb-name /tmp/trustdb.gpg --import \
+			    ${PKGBUILD_BASEDIR}/pgp/${PKGBUILD_GPG_SIGN_AS}.asc \
+			    >/dev/null 2>&1
+			rm -f /tmp/trustdb.gpg
+		fi
 	"
 fi
