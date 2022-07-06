@@ -721,3 +721,6 @@ PKG_GID.ucspissl=	767
 #
 PKG_UID.mariadb=	766
 PKG_GID.mariadb=	766
+#
+PKG_UID.opendmarc=	765
+PKG_GID.opendmarc=	765
