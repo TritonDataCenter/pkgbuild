@@ -84,7 +84,6 @@ PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgresql13+=	-gssapi
 PKG_OPTIONS.postgrey+=		postgrey-targrey
 PKG_OPTIONS.powerdns+=		sqlite
-PKG_OPTIONS.scmgit+=		-python
 PKG_OPTIONS.screen+=		ncurses
 PKG_OPTIONS.spidermonkey+=	-threads
 PKG_OPTIONS.tftp-hpa+=		remap
