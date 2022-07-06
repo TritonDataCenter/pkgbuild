@@ -21,6 +21,7 @@
  || !empty(PKGPATH:Mpkgtools/cwrappers) \
  || !empty(PKGPATH:Mpkgtools/digest) \
  || !empty(PKGPATH:Mpkgtools/isaexec) \
+ || !empty(PKGPATH:Mpkgtools/mktools) \
  || !empty(PKGPATH:Mpkgtools/pkg_install) \
  || !empty(PKGPATH:Mpkgtools/pkg_install-info) \
  || !empty(PKGPATH:Msysutils/checkperms)
