@@ -52,6 +52,15 @@ if [ -d ${chrootdir} ]; then
 	exit 1
 fi
 
+ls ${LOCAL_PACKAGE_BASEDIR}/${TOOLS_PACKAGE_DIR}/All/digest-*.tgz >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+	echo ""
+	echo "It looks like this is the first sandbox creation for this pkgbuild.  It"
+	echo "will take longer than normal, as support packages need to be downloaded"
+	echo "first.  Subsequent runs will be much faster after they have been cached."
+	echo ""
+fi
+
 echo -n "Creating ${chrootdir}..."
 ${CHROOT_CREATE} ${chrootdir}
 echo "done."

@@ -49,20 +49,30 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 	export PATH=${PBULK_PATH}
 	${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${BOOTSTRAP_KIT}.tar.gz -C /
 	PATH=${PKGBUILD_LOCALBASE}/sbin:${PKGBUILD_LOCALBASE}/bin:${PBULK_PATH}
-	# Ensure bootstrap packages are upgraded as well as installing extra
-	# packages to ensure we use main ones and not limited bootstrap ones.
+
+	#
+	# Ensure bootstrap packages are upgraded as well as installing the
+	# additional release packages to ensure we use main ones (SSL-enabled)
+	# and not the limited bootstrap ones.
+	#
 	PKG_PATH=${LOCAL_PACKAGE_BASEDIR}/${LOCAL_PACKAGE_DIR}/${binpkgpath}/All \
-	    ${PKGBUILD_LOCALBASE}/sbin/pkg_add -U ${BOOTSTRAP_PACKAGES}
-	# Avoid 'install' as it fails if /etc/ssl/certs exists.
+	    ${PKGBUILD_LOCALBASE}/sbin/pkg_add -U ${BOOTSTRAP_PACKAGES_RELEASE}
+
+	#
+	# Configure mozilla-rootcerts.
+	#
 	(
 		if [ '${PKGBUILD_OPSYS}' = 'NetBSD' ]; then
 			cd /etc/openssl/certs
 		else
 			cd ${PKGBUILD_SYSCONFDIR}/openssl/certs
 		fi
+
+		# Avoid 'install' as it fails if /etc/ssl/certs exists.
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts extract >/dev/null
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts rehash >/dev/null
 	)
+
 	rm -f ${PKGBUILD_LOCALBASE}/.dlj_license_accepted
 	ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
 		1,5d
