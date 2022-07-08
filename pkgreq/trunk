@@ -48,6 +48,7 @@ mysql-server-5.7.
 rspamd-[0-9]
 tmux-[0-9]
 unbound-[0-9]
+weechat-[0-9]
 #
 # illumos-docbooks
 #
