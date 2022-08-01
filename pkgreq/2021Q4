@@ -44,6 +44,7 @@ dovecot-2.
 ffmpeg4-[0-9]
 git-base-[0-9]
 mysql-server-5.7.
+rspamd-[0-9]
 tmux-[0-9]
 unbound-[0-9]
 #

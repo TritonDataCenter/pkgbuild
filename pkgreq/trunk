@@ -70,6 +70,7 @@ couchdb-[0-9]
 gcc7-[0-9]
 #mate-[0-9]	XXX: dconf
 isc-dhcpd-[0-9]
+mailman-[0-9]
 mbuffer-[0-9]
 mkvtoolnix-[0-9]
 normalize-[0-9]
