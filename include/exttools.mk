@@ -30,6 +30,7 @@ TOOLS_CREATE+=		${tool}
 # itself depends upon gcc when using USE_PKGSRC_GCC_RUNTIME.
 #
 .if !empty(PKGPATH:Mdevel/binutils) || \
+    !empty(PKGPATH:Mextra/gcc*) || \
     !empty(PKGPATH:Mjoyent/gcc*) || \
     !empty(PKGPATH:Mlang/gcc*)
 TOOLS_PLATFORM.flex=	${TOOLS_BASEDIR}/bin/flex

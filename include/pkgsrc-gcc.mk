@@ -11,6 +11,8 @@
  || !empty(PKGPATH:Mdevel/binutils) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
+ || !empty(PKGPATH:Mextra/gcc[0-9]) \
+ || !empty(PKGPATH:Mextra/gcc[0-9][0-9]) \
  || !empty(PKGPATH:Mjoyent/ctftools) \
  || !empty(PKGPATH:Mjoyent/gcc[0-9]) \
  || !empty(PKGPATH:Mjoyent/gcc[0-9][0-9]) \

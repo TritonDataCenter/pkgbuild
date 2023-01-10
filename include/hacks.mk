@@ -19,7 +19,8 @@ CFLAGS:=	${CFLAGS:C/^-g.*//}
 # during the build they legitimately use -m32 for multiarch libraries, which
 # is incompatible with -msave-args.
 #
-.if !empty(PKGPATH:Mjoyent/gcc*) \
+.if !empty(PKGPATH:Mextra/gcc*) \
+ || !empty(PKGPATH:Mjoyent/gcc*) \
  || !empty(PKGPATH:Mlang/compiler-rt) \
  || !empty(PKGPATH:Mlang/gcc*) \
  || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
