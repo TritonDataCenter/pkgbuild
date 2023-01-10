@@ -26,3 +26,12 @@ CFLAGS:=	${CFLAGS:C/^-g.*//}
  || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
 CFLAGS:=	${CFLAGS:N-msave-args}
 .endif
+
+#
+# Generate checksums that work across all branches, avoiding BLAKE2s which is
+# not supported by pkgtools/digest in 2020Q4 and earlier.  This can eventually
+# be removed.
+#
+.if !empty(PKGPATH:Mjoyent/*)
+_DIGEST_ALGORITHMS=	RMD160 SHA512
+.endif
