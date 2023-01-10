@@ -77,10 +77,10 @@ PKG_OPTIONS.mc+=		ncurses
 PKG_OPTIONS.memcached+=		-dtrace # XXX: illumos#6653
 PKG_OPTIONS.modular-xorg-server+=	-dtrace # XXX: illumos#6653
 PKG_OPTIONS.mutt+=		-tokyocabinet # lmdb
-PKG_OPTIONS.nginx+=		auth-request dav gzip headers-more
+PKG_OPTIONS.nginx+=		auth-request dav geoip2 gzip headers-more
 PKG_OPTIONS.nginx+=		memcache naxsi perl realip
 PKG_OPTIONS.nginx+=		slice status uwsgi
-PKG_OPTIONS.nginx-devel+=	auth-request dav gzip headers-more
+PKG_OPTIONS.nginx-devel+=	auth-request dav geoip2 gzip headers-more
 PKG_OPTIONS.nginx-devel+=	memcache naxsi perl realip
 PKG_OPTIONS.nginx-devel+=	slice status uwsgi
 PKG_OPTIONS.openldap-server+=	-unixodbc
@@ -102,17 +102,17 @@ MYSQL_VERSION_DEFAULT=		mariadb106
 PGSQL_VERSION_DEFAULT=		14
 PHP_VERSION_DEFAULT=		74
 PKG_APACHE_DEFAULT=		apache24
-PKG_JVM_DEFAULT=		openjdk11
+PKG_JVM_DEFAULT=		openjdk17
 PYTHON_VERSION_DEFAULT=		310
 RUBY_RAILS_DEFAULT=		52
-RUBY_VERSION_DEFAULT=		27
+RUBY_VERSION_DEFAULT=		31
 
 #
 # Only build specific versions for limited_list tools builds.
 #
 .if !empty(PKGBUILD:M*-tools)
 #PYTHON_VERSION_REQD=		39	# 27 required for nodejs
-RUBY_VERSION_REQD=		27
+RUBY_VERSION_REQD=		31
 .endif
 
 #
