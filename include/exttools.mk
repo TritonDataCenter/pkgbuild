@@ -56,7 +56,17 @@ PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 # bootstrap issues.  Ignored for branches which don't support PKGSRC_USE_CTF.
 # We also need to configure gstrip for STRIP_DEBUG.
 #
+# Builds of 2020Q4 and earlier used patched tools built separately, builds on
+# 20210826 platforms use newer tools from that platform version.
+#
+.if !empty(PKGBUILD:M201?Q?-*) || !empty(PKGBUILD:M2020Q?-*) \
+ || !empty(PKGBUILD:M2021Q4-tools)
 TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert-altexec
+TOOLS_ARGS.ctfconvert=		-i
+.else
+TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert
+TOOLS_ARGS.ctfconvert=		-m
+.endif
 TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
 
 #

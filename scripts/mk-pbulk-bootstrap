@@ -47,6 +47,18 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-pbulk-${pkgbuild} ${CMD_SHELL} 
 	fi
 	cd /
 	touch ${PKGBUILD_LOCALBASE}/.dlj_license_accepted
+	#
+	# Remove flags added by bootstrap that we don't want.
+	#
+	ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+		g/^CFLAGS/d
+		g/^DBG/d
+		g/^CPPFLAGS/d
+		g/^LDFLAGS/d
+		g/^LIBS/d
+		w
+		q
+	EOF
 	if [ -n '${PKGBUILD_GPG_SIGN_AS}' ]; then
 		mkdir -p ${PKGBUILD_SYSCONFDIR}/gnupg
 		${CMD_GPG} --export ${PKGBUILD_GPG_SIGN_AS} \
