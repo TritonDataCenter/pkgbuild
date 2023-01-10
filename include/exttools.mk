@@ -75,10 +75,3 @@ TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
 # easier to find.
 #
 TOOLS_PATH.rpcgen=		${TOOLS_BASEDIR}/bin/rpcgen
-
-#
-# This is a hack, sorry.  Just need an easy way to make this path configurable
-# for now rather than hardcoding it into packages.  This is a custom build of
-# elfedit with patches to work around segfaults in /usr/bin/elfedit.
-#
-TOOLS_PATH.elfedit=		/nfs/pkgsrc/bin/elfedit
