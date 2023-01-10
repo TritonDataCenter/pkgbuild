@@ -1,3 +1,11 @@
+extra/gcc12
+extra/gcc12-libs
+extra/openjdk11
+extra/openjdk17
+extra/pkgsrc-gnupg-keys
+extra/tailscale
+extra/wireguard-go
+extra/wireguard-tools
 joyent/GeoLiteCity
 joyent/ap2-usdt
 joyent/build-essential
@@ -25,13 +33,6 @@ joyent/neo4j
 joyent/nicstat
 joyent/nrsysmond
 joyent/nutcracker
-joyent/openjdk9
-joyent/openjdk10
-joyent/openjdk11
-joyent/openjdk12
-joyent/openjdk13
-joyent/openjdk14
-joyent/openjdk15
 joyent/openssh75
 joyent/ossec-agent
 joyent/ossec-local
@@ -60,7 +61,6 @@ joyent/percona80-xtrabackup
 joyent/pgagent
 joyent/phantomjs-static
 joyent/php-mailparse
-joyent/pkgsrc-gnupg-keys
 joyent/postgresql-pg_top
 joyent/qpress
 joyent/quickbackup-mongodb
@@ -79,7 +79,6 @@ joyent/telegraf
 joyent/trafficserver
 joyent/usbredir
 joyent/zoneinit
-wip/ann
 wip/bioruby
 wip/erlang-basho
 wip/fswatch

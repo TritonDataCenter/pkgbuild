@@ -34,6 +34,7 @@ joyent/openjdk12
 joyent/openjdk13
 joyent/openjdk14
 joyent/openjdk15
+joyent/openjdk17
 joyent/openssh75
 joyent/ossec-agent
 joyent/ossec-local
