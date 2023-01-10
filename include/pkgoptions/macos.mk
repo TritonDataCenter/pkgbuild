@@ -18,6 +18,7 @@ PKG_DEFAULT_OPTIONS+=	mutt-hcache mutt-smtp lmdb tokyocabinet
 PKG_DEFAULT_OPTIONS+=	-proj-grids # Way too much disk space
 #
 PKG_OPTIONS.db4+=	-doc
+PKG_OPTIONS.groff+=	-groff-docs
 PKG_OPTIONS.gnustep+=	fragile
 PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
 PKG_OPTIONS.mutt+=	-tokyocabinet # lmdb

@@ -3,6 +3,8 @@
 # Create a shadowed sandbox from the root file system ready for builds.
 #
 
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin"
+
 if [ "$(uname -s)" != "Darwin" ]; then
 	echo "ERROR: Script is only suitable for macOS." >&2
 	exit 1
@@ -45,6 +47,8 @@ fi
 mkdir -p ${chrootdir}/dev
 mount_devfs devfs ${chrootdir}/dev
 
+mkdir -p ${SHADOW_BASEDIR}
+
 #
 # Ramdisk mounts come first, we may require NFS mounts to go on top, but so
 # far do not require the other way around.
@@ -60,6 +64,28 @@ for mount in ${TMPFS_MOUNTS}; do
 	mkdir -p ${chrootdir}${mnt}/.fseventsd
 	touch ${chrootdir}${mnt}/.fseventsd/no_log
 	touch ${chrootdir}${mnt}/.metadata_never_index
+done
+
+for mount in ${LOFS_RO_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	(
+		ulimit -Sn $(sysctl -n kern.maxfilesperproc)
+		exec bindfs -r ${src} ${chrootdir}${dst}
+	)
+	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
+done
+
+for mount in ${LOFS_RW_MOUNTS}; do
+	src=${mount%=*}
+	dst=${mount#*=}
+	mkdir -p ${chrootdir}${dst}
+	(
+		ulimit -Sn $(sysctl -n kern.maxfilesperproc)
+		exec bindfs ${src} ${chrootdir}${dst}
+	)
+	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
 done
 
 for mount in ${NFS_RO_MOUNTS}; do

@@ -85,23 +85,33 @@ for pid in $(fuser ${chrootdir} 2>/dev/null); do
 	fi
 done
 
-for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
+for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS} ${LOFS_RO_MOUNTS} ${LOFS_RW_MOUNTS}; do
 	dst=${mount#*=}
 	while true; do
 		[ -d ${chrootdir}${dst} ] || break
-		diskutil unmount ${chrootdir}${dst} >/dev/null 2>&1
+		{
+			diskutil unmount ${chrootdir}${dst} || \
+			umount ${chrootdir}${dst} || \
+			diskutil unmount force ${chrootdir}${dst} || \
+			umount -f ${chrootdir}${dst};
+		} >/dev/null 2>&1
 		rmdir ${chrootdir}${dst} 2>/dev/null && break
 		sleep 1
 	done
 done
 
 for mount in ${TMPFS_MOUNTS}; do
-	mnt=${mount%=*}
+	dst=${mount%=*}
 	while true; do
-		[ -d ${chrootdir}${mnt} ] || break
-		mntpoint=$(mount | awk '$3 == "'${chrootdir}${mnt}'" {print}')
-		[ -n "${mntpoint}" ] || break
-		diskutil unmount ${chrootdir}${mnt} >/dev/null
+		[ -d ${chrootdir}${dst} ] || break
+		{
+			diskutil unmount ${chrootdir}${dst} || \
+			umount ${chrootdir}${dst} || \
+			diskutil unmount force ${chrootdir}${dst} || \
+			umount -f ${chrootdir}${dst};
+		} >/dev/null 2>&1
+		rmdir ${chrootdir}${dst} 2>/dev/null && break
+		sleep 1
 	done
 done
 

@@ -8,7 +8,7 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs>^pkgsrc-macos11-trunk-arm64$</blockingJobs>
+      <blockingJobs></blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.33.1">
       <projectUrl>https://github.com/TritonDataCenter/pkgsrc/</projectUrl>
@@ -34,7 +34,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>origin/release/macos</name>
+        <name>origin/feature/pbulk/trunk</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -76,8 +76,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=macos11-trunk-x86_64
-/Volumes/data/pkgbuild/scripts/run-jenkins-build</command>
+export PKGBUILD=macos11-trunk-x86_64-tools
+/Volumes/data/pkgbuild/scripts/run-jenkins-tools</command>
       <configuredLocalRules/>
     </hudson.tasks.Shell>
   </builders>
