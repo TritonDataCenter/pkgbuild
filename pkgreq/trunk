@@ -9,7 +9,6 @@ mozilla-rootcerts-[0-9]
 nodejs-18.
 nodejs-16.
 nodejs-14.
-nodejs-12.
 npm-[0-9]
 pkg_alternatives-[0-9]
 pkgin-[0-9]
@@ -38,18 +37,6 @@ sudo-[0-9]
 the_silver_searcher-[0-9]
 xz-[0-9]
 #
-# Popular packages
-#
-dnsmasq-[0-9]
-dovecot-2.
-ffmpeg4-[0-9]
-git-base-[0-9]
-mysql-server-5.7.
-rspamd-[0-9]
-tmux-[0-9]
-unbound-[0-9]
-weechat-[0-9]
-#
 # illumos-docbooks
 #
 apache-maven-[0-9]
@@ -60,23 +47,35 @@ texlive-collection-fontsrecommended-[0-9]
 texlive-collection-latexextra-[0-9]
 texlive-collection-latexrecommended-[0-9]
 #
-# Packages noticed missing by users
+# General packages required by users
 #
-#beats-[0-9]
+ap24-ruby31-passenger-[0-9]
 c-icap-modules-[0-9]
 clamav-[0-9]
 couchdb-[0-9]
-#firefox-[0-9]
+dnsdist-[0-9]
+dnsmasq-[0-9]
+dovecot-2.
+ffmpeg4-[0-9]
 gcc7-[0-9]
-#mate-[0-9]	XXX: dconf
+git-base-[0-9]
+gitea-[0-9]
+grafana-[0-9]
 isc-dhcpd-[0-9]
 mailman-[0-9]
 mbuffer-[0-9]
 mkvtoolnix-[0-9]
+mysql-server-5.7.
 normalize-[0-9]
 opendmarc-[0-9]
 pkg-config-[0-9]
+powerdns-mysql-[0-9]
 rabbitmq-[0-9]
+rspamd-[0-9]
 rust-[0-9]
 salt-[0-9]
 samba-4.
+tmux-[0-9]
+unbound-[0-9]
+weechat-[0-9]
+xboard-[0-9]

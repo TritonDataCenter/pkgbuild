@@ -9,18 +9,10 @@ mozilla-rootcerts-[0-9]
 nodejs-18.
 nodejs-16.
 nodejs-14.
-nodejs-12.
 npm-[0-9]
 pkg_alternatives-[0-9]
 pkgin-[0-9]
 pkgsrc-gnupg-keys-[0-9]
-#
-# Popular packages
-#
-git-base-[0-9]
-haproxy-[0-9]
-mutt-[0-9]
-weechat-[0-9]
 #
 # illumos-docbooks
 # XXX: no jvm yet for arm64
@@ -33,13 +25,16 @@ weechat-[0-9]
 #texlive-collection-latexextra-[0-9]
 #texlive-collection-latexrecommended-[0-9]
 #
-# Packages requested by users
+# General packages, or those specifically requested by users.
 #
 fish-[0-9]
-#fontforge-[0-9]
-#inkscape-[0-9]
+git-base-[0-9]
+haproxy-[0-9]
+hexchat-[0-9]
 inetutils-[0-9]
 lastpass-cli-[0-9]
+mutt-[0-9]
+nvi-[0-9]
 openssh1-[0-9]
-#tesseract-[0-9]
 tsocks-[0-9]
+weechat-[0-9]
