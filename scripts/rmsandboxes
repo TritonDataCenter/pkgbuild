@@ -21,5 +21,6 @@ SunOS)
 esac
 
 for chroot; do
-	${rmsandbox} ${chroot}
+	${rmsandbox} ${chroot} &
 done
+wait
