@@ -27,7 +27,7 @@ PKG_DEFAULT_OPTIONS+=		acl
 #  - options grouped by package
 #
 PKG_DEFAULT_OPTIONS+=		bind-json-statistics-server
-PKG_DEFAULT_OPTIONS+=		bind-xml-statistics-server
+PKG_DEFAULT_OPTIONS+=		bind-xml-statistics-server tuning
 PKG_DEFAULT_OPTIONS+=		exim-auth-dovecot
 PKG_DEFAULT_OPTIONS+=		exim-lookup-redis exim-lookup-sqlite
 PKG_DEFAULT_OPTIONS+=		mutt-hcache mutt-smtp lmdb tokyocabinet
