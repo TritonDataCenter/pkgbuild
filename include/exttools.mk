@@ -9,7 +9,7 @@
 # if a package adds patches where previously it didn't have any due to the
 # missing dependency on nbpatch.
 #
-TOOLS_PLATFORM.patch=   ${TOOLS_BASEDIR}/bin/nbpatch
+TOOLS_PLATFORM.patch=	${TOOLS_BASEDIR}/bin/nbpatch
 
 #
 # Use binutils from external tools which are not provided by the platform.
@@ -33,12 +33,12 @@ TOOLS_CREATE+=		${tool}
     !empty(PKGPATH:Mextra/gcc*) || \
     !empty(PKGPATH:Mjoyent/gcc*) || \
     !empty(PKGPATH:Mlang/gcc*)
-TOOLS_PLATFORM.flex=	${TOOLS_BASEDIR}/bin/flex
-TOOLS_PLATFORM.m4=	${TOOLS_BASEDIR}/bin/gm4
-TOOLS_PLATFORM.makeinfo=${TOOLS_BASEDIR}/bin/makeinfo
-TOOLS_PLATFORM.perl=	${TOOLS_BASEDIR}/bin/perl
-TOOLS_PLATFORM.xz=	${TOOLS_BASEDIR}/bin/xz
-TOOLS_PLATFORM.xzcat=	${TOOLS_BASEDIR}/bin/xzcat
+TOOLS_PLATFORM.flex=		${TOOLS_BASEDIR}/bin/flex
+TOOLS_PLATFORM.m4=		${TOOLS_BASEDIR}/bin/gm4
+TOOLS_PLATFORM.makeinfo=	${TOOLS_BASEDIR}/bin/makeinfo
+TOOLS_PLATFORM.perl=		${TOOLS_BASEDIR}/bin/perl
+TOOLS_PLATFORM.xz=		${TOOLS_BASEDIR}/bin/xz
+TOOLS_PLATFORM.xzcat=		${TOOLS_BASEDIR}/bin/xzcat
 .endif
 
 #
