@@ -53,11 +53,11 @@ fi
 #
 if [ -d /devices ]; then
 	mkdir -p ${chrootdir}/devices
-	mount -F lofs -r /devices ${chrootdir}/devices
+	mount -O -F lofs -r /devices ${chrootdir}/devices
 fi
 for dir in /dev /lib /sbin /usr; do
 	mkdir -p ${chrootdir}${dir}
-	mount -F lofs -r ${dir} ${chrootdir}${dir}
+	mount -O -F lofs -r ${dir} ${chrootdir}${dir}
 done
 
 #
@@ -80,7 +80,7 @@ fi
 for mount in ${OVERLAY_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
-	mount -F lofs -r ${src} ${chrootdir}${dst}
+	mount -O -F lofs -r ${src} ${chrootdir}${dst}
 done
 
 #
@@ -108,7 +108,7 @@ for mount in ${LOFS_RO_MOUNTS}; do
 	dst=${mount#*=}
 	if [ -d ${src} ]; then
 		mkdir -p ${chrootdir}${dst}
-		mount -F lofs -r ${src} ${chrootdir}${dst}
+		mount -O -F lofs -r ${src} ${chrootdir}${dst}
 	fi
 done
 
@@ -120,7 +120,7 @@ for mount in ${LOFS_RW_MOUNTS}; do
 	dst=${mount#*=}
 	if [ -d ${src} ]; then
 		mkdir -p ${chrootdir}${dst}
-		mount -F lofs ${src} ${chrootdir}${dst}
+		mount -O -F lofs ${src} ${chrootdir}${dst}
 	fi
 done
 
