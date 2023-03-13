@@ -96,6 +96,7 @@ sysutils/htop
 sysutils/munin-master
 sysutils/munin-node
 sysutils/ncdu
+sysutils/packer
 sysutils/puppet
 sysutils/pv
 sysutils/ruby-chef
