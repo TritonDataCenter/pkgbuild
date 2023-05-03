@@ -8,7 +8,7 @@
       <useBuildBlocker>true</useBuildBlocker>
       <blockLevel>GLOBAL</blockLevel>
       <scanQueueFor>ALL</scanQueueFor>
-      <blockingJobs>^pkgsrc-trunk-(i386|tools)$</blockingJobs>
+      <blockingJobs>^pkgsrc-trunk-tools$</blockingJobs>
     </hudson.plugins.buildblocker.BuildBlockerProperty>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.33.1">
       <projectUrl>https://github.com/TritonDataCenter/pkgsrc/</projectUrl>
@@ -76,7 +76,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>#!/bin/bash
-export PKGBUILD=trunk-x86_64
+export PKGBUILD=trunk-i386
 /data/pkgbuild/scripts/run-jenkins-build</command>
       <configuredLocalRules/>
     </hudson.tasks.Shell>
