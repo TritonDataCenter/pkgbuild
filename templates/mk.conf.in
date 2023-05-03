@@ -23,6 +23,7 @@ ALLOW_VULNERABLE_PACKAGES=	yes
 BINPKG_SITES=			# avoid mk/install/bin-install.mk defaults
 CFLAGS+=			@CFLAGS@
 DBG=				# do not add CFLAGS via bootstrap-mk-files
+FAILOVER_FETCH=			yes
 FETCH_USING=			@FETCH_USING@
 INSTALL_UNSTRIPPED=		@INSTALL_UNSTRIPPED@
 @MACHINE_ENDIAN@
@@ -55,14 +56,6 @@ USE_CWRAPPERS=			yes
 @CHECK_SHLIBS_BLACKLIST@
 CHECK_WRKREF=			@CHECK_WRKREF@
 CHECK_WRKREF_EXTRA_DIRS=	@CHECK_WRKREF_EXTRA_DIRS@
-#
-# Support regenerating distinfo files.  This logic was integrated into pkgsrc
-# on 2017-08-01, remove it and move FAILOVER_FETCH to general section above at
-# some point.
-#
-.if !make(distinfo) && !make(mdi) && !make(makedistinfo)
-FAILOVER_FETCH=			yes
-.endif
 
 #
 # List of per-PKGPATH MAKE_JOBS definitions.  These are the packages that
