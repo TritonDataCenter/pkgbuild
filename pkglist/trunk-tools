@@ -70,6 +70,8 @@ security/gnupg
 security/gnupg2
 security/mozilla-rootcerts
 security/sudo
+shells/tcsh
+shells/zsh
 sysutils/ansible
 sysutils/apcupsd
 sysutils/bsdinstall
@@ -88,6 +90,7 @@ sysutils/collectd-postgresql
 sysutils/collectd-riemann
 sysutils/collectd-rrdtool
 sysutils/collectd-snmp
+sysutils/collectd-write_prometheus
 sysutils/coreutils
 sysutils/ddrescue
 sysutils/findutils
@@ -95,6 +98,7 @@ sysutils/htop
 sysutils/munin-master
 sysutils/munin-node
 sysutils/ncdu
+sysutils/node_exporter
 sysutils/packer
 sysutils/puppet
 sysutils/pv
