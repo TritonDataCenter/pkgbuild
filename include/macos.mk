@@ -3,6 +3,9 @@
 #
 
 # /tmp/go-build* sometimes fills up
+.if ${PKGPATH:Mlang/go[0-9]*}
+MAKEFLAGS+=		TMPDIR=${WRKOBJDIR:Q}
+.endif
 MAKE_ENV+=		GOTMPDIR=${WRKOBJDIR:Q}
 
 MASTER_SITE_OVERRIDE=	http://cdn.NetBSD.org/pub/pkgsrc/distfiles/
