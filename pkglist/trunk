@@ -1,8 +1,11 @@
+extra/duo-unix-compat32
 extra/gcc12
 extra/gcc12-libs
+extra/google-authenticator-compat32
 extra/openjdk11
 extra/openjdk17
 extra/pkgsrc-gnupg-keys
+extra/samba-compat32
 extra/tailscale
 extra/wireguard-go
 extra/wireguard-tools

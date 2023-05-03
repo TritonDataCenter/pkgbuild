@@ -7,5 +7,6 @@ pkgtools/pkg_alternatives
 pkgtools/pkg_install
 pkgtools/pkgin
 security/duo-unix
+security/google-authenticator
 sysutils/bsdinstall
 textproc/nbsed
