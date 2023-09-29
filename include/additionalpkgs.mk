@@ -7,15 +7,18 @@
 
 #
 # Additional packages for branch builds.  Pull in all additional packages
-# currently defined in the branch-specific pkglist file.
+# currently defined in the branch-specific pkglist file.  Only called by
+# pbulk via the top level Makefile.
 #
-.if exists(${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD})
-WIPJOYPKGS!=	/usr/bin/egrep '^[A-Za-z]' ${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD} || true
-.elif exists(${PKGBUILD_BASEDIR}/pkglist/${BRANCH})
-WIPJOYPKGS!=	/usr/bin/egrep '^[A-Za-z]' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH} || true
-.endif
-.if defined(WIPJOYPKGS)
-.  for pkg in ${WIPJOYPKGS}
+.if defined(PKGSRCTOP)
+.  if exists(${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD})
+EXTRAPKGS!=	/usr/bin/egrep '^[A-Za-z]' ${PKGBUILD_BASEDIR}/pkglist/${PKGBUILD} || true
+.  elif exists(${PKGBUILD_BASEDIR}/pkglist/${BRANCH})
+EXTRAPKGS!=	/usr/bin/egrep '^[A-Za-z]' ${PKGBUILD_BASEDIR}/pkglist/${BRANCH} || true
+.  endif
+.  if defined(EXTRAPKGS)
+.    for pkg in ${EXTRAPKGS}
 USER_ADDITIONAL_PKGS+=	${pkg}
-.  endfor
+.    endfor
+.  endif
 .endif
