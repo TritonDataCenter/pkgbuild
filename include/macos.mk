@@ -29,3 +29,6 @@ NODE_VERSIONS_INCOMPATIBLE+=	18
 .if exists(${TOOLS_BASEDIR}/bin/curl)
 TOOLS_PATH.curl=	${TOOLS_BASEDIR}/bin/curl
 .endif
+
+TOOLS_PLATFORM.printf=	printf
+TOOLS_PLATFORM.pwd=	pwd
