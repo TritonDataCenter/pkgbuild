@@ -144,6 +144,7 @@ H_TERMCAP=			__nonexistent__
 H_TERMLIB=			__nonexistent__
 
 # security/mit-krb5/builtin.mk
+BUILTIN_PKG.mit-krb5=		mit-krb5-1.6.3
 H_MIT_KRB5=			/usr/include/kerberosv5/krb5.h
 SH_KRB5_CONFIG=			/usr/bin/krb5-config
 
