@@ -43,6 +43,7 @@ PKG_DEFAULT_OPTIONS+=		unrealircd-ziplinks
 #  - negate options
 #
 PKG_DEFAULT_OPTIONS+=		-gdb6-tui
+PKG_DEFAULT_OPTIONS+=		-libgccjit
 PKG_DEFAULT_OPTIONS+=		-mplayer-runtime-cpudetection
 PKG_DEFAULT_OPTIONS+=		-ruby-build-ri-db
 #
