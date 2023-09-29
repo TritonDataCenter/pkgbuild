@@ -28,6 +28,9 @@ DBUS_GROUP=	daemon		# No special requirements.
 DIRMNGR_USER=	daemon		# No special requirements.
 DIRMNGR_GROUP=	daemon		# No special requirements.
 #
+GAMES_USER=	daemon		# One to watch out for due to widespread
+GAMES_GROUP=	games		# USE_GAMESGROUP.
+#
 MAILDROP_GROUP=	smmsp		# SPECIAL_PERMS setgid for post{drop,queue}
 POSTFIX_USER=	smmsp		# SPECIAL_PERMS setgid for post{drop,queue}
 POSTFIX_GROUP=	mail
