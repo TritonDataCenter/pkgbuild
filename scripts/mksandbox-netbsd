@@ -44,14 +44,25 @@ if [ ! -f $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf ]; then
 fi
 . $(dirname $0)/../conf/${pkgbuild}/pkgbuild.conf
 
-# We use the pkgtools/mksandbox script on NetBSD as it works well.
-${PKGBUILD_BASEDIR}/scripts/mksandbox-pkgsrc \
-    --without-pkgsrc \
-    --without-src \
-    --without-xsrc \
-    --rodirs=${LOFS_RO_MOUNTS_LINUX} \
-    --rwdirs=${LOFS_RW_MOUNTS_LINUX} \
-    ${chrootdir} >/dev/null 2>&1
+mkdir -p ${chrootdir}
+for set in base comp etc man misc text xbase xcomp xetc; do
+	tar -xpf /var/cache/sysupgrade/${set}.tar.xz -C ${chrootdir}
+done
+cp /bin/bash ${chrootdir}/bin
+
+for mnt in ${LOFS_RO_MOUNTS}; do
+	src=${mnt%=*}
+	dst=${mnt#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount -r -t null ${src} ${chrootdir}${dst}
+done
+
+for mnt in ${LOFS_RW_MOUNTS}; do
+	src=${mnt%=*}
+	dst=${mnt#*=}
+	mkdir -p ${chrootdir}${dst}
+	mount -t null ${src} ${chrootdir}${dst}
+done
 
 for mount in ${NFS_RO_MOUNTS}; do
 	src=${mount%=*}
@@ -71,6 +82,15 @@ for tmpdir in ${TMPFS_MOUNTS}; do
 	mkdir -p ${chrootdir}${tmpdir}
 	mount -t tmpfs tmpfs ${chrootdir}${tmpdir}
 done
+
+mkdir -p ${chrootdir}/dev
+cp /dev/MAKEDEV* ${chrootdir}/dev
+(cd ${chrootdir}/dev; ./MAKEDEV all)
+
+for f in group master.passwd passwd pwd.db resolv.conf spwd.db; do
+	cp /etc/${f} ${chrootdir}/etc/${f}
+done
+cp /etc/openssl/certs/* ${chrootdir}/etc/openssl/certs/
 
 mkdir -p ${chrootdir}/root
 rsync -a /root/.ssh ${chrootdir}/root/

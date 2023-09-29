@@ -49,10 +49,10 @@ if [ -d ${chrootdir} ]; then
 		rm -rf ${chrootdir}${dst}
 	done
 
-	for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS}; do
+	for mount in ${NFS_RO_MOUNTS} ${NFS_MOUNTS} ${LOFS_RO_MOUNTS} ${LOFS_RW_MOUNTS}; do
 		dst=${mount#*=}
 		umount -f ${chrootdir}${dst} 2>/dev/null
-		rmdir ${chrootdir}${dst}
+		rmdir ${chrootdir}${dst} 2>/dev/null
 	done
 
 	#
@@ -60,7 +60,6 @@ if [ -d ${chrootdir} ]; then
 	# we get a chance to look into why and fix it.
 	#
 	while true; do
-		${chrootdir}/sandbox umount >/dev/null 2>&1
 		mounts=`mount -v | grep "${chrootdir}/"`
 		if [ -z "${mounts}" ]; then
 			rm -rf ${chrootdir}
