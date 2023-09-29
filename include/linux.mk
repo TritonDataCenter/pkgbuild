@@ -14,11 +14,13 @@ MULTILIB_SUPPORTED=	no
 # to GCC_REQD being set then the tests below will always fail, so we need to
 # also force certain packages.
 #
-.if (!empty(PKGBUILD:Mel7*) && !empty(GCC_REQD:M4.9*)) \
- || !empty(GCC_REQD:M[56]*) \
- || !empty(PKGPATH:Mlang/nodejs*)
+.if !empty(PKGBUILD:Mel7*)
+.  if !empty(GCC_REQD:M4.9*) \
+   || !empty(GCC_REQD:M[56]*) \
+   || !empty(PKGPATH:Mlang/nodejs*)
 GCC_REQD+=		7
 USE_PKGSRC_GCC_RUNTIME=	yes
+.  endif
 .endif
 
 # Work around broken libgcc handling
