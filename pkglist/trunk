@@ -31,7 +31,6 @@ joyent/libsass
 joyent/libspice
 joyent/libutempter
 joyent/mms-agent
-joyent/mongodb30
 joyent/neo4j
 joyent/nicstat
 joyent/nrsysmond
@@ -61,12 +60,10 @@ joyent/percona80-client
 joyent/percona80-cluster
 joyent/percona80-server
 joyent/percona80-xtrabackup
-joyent/pgagent
 joyent/phantomjs-static
 joyent/php-mailparse
 joyent/postgresql-pg_top
 joyent/qpress
-joyent/quickbackup-mongodb
 joyent/quickbackup-percona
 joyent/restdown
 joyent/ruby-bunny
@@ -105,7 +102,6 @@ wip/smstools
 wip/spread4
 wip/swftools
 wip/tftp-hpa
-wip/truecrypt
 wip/u-boot
 wip/vmware-sercons
 wip/wackamole
