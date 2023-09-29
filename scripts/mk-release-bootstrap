@@ -61,7 +61,8 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 	#
 	# Configure mozilla-rootcerts.
 	#
-	(
+	if [ -x ${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts ]; then
+		(
 		if [ '${PKGBUILD_OPSYS}' = 'NetBSD' ]; then
 			cd /etc/openssl/certs
 		else
@@ -71,7 +72,8 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 		# Avoid 'install' as it fails if /etc/ssl/certs exists.
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts extract >/dev/null
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts rehash >/dev/null
-	)
+		)
+	fi
 
 	rm -f ${PKGBUILD_LOCALBASE}/.dlj_license_accepted
 	ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF

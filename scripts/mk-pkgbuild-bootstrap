@@ -51,11 +51,13 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 	# Configure mozilla-rootcerts.  Avoid 'install' as it fails if
 	# /etc/ssl/certs exists.
 	#
-	(
+	if [ -x ${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts ]; then
+		(
 		cd ${PKGBUILD_SYSCONFDIR}/openssl/certs
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts extract >/dev/null
 		${PKGBUILD_LOCALBASE}/sbin/mozilla-rootcerts rehash >/dev/null
-	)
+		)
+	fi
 
 	#
 	# Remove signing bits
