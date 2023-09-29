@@ -1,0 +1,236 @@
+#!/bin/bash
+#
+# Generate a file containing per-package MAKE_JOBS to tune a bulk build for
+# best throughput based on target hardware.
+#
+# Best run against a bulk build that has explicitly set MAKE_JOBS=1 for all
+# packages, and requires a pkgtimes directory created by a patched pbulk.
+#
+# Generally you want to tune the score jobs (-s) to the number of CPUs
+# available, as high score packages will likely be built before all others
+# when the machines are otherwise idle, and the time jobs (-t) to the smallest
+# number required to build the slowest package in a reasonable time.
+#
+# So, for example, on 16 CPU hosts:
+#
+#	$ gen-make-jobs -s 16 -t 4 ...
+#
+
+set -eu
+
+usage()
+{
+	cat >&2 <<EOF
+usage: $0 [options] <meta dir> <pkgtimes dir>
+
+Options:
+	-h		Show this help message
+	-s <num>	Tune jobs based on score to num (default: 4)
+	-t <num>	Tune jobs based on time to num (default: 4)
+	-w <weight>	Apply weighting factor to score (default: 1.2)
+EOF
+}
+
+score_jobs=4
+time_jobs=4
+weighting=1.2
+
+while getopts ":hs:t:w:" opt; do
+	case "${opt}" in
+	h)
+		usage
+		exit
+		;;
+	s)
+		score_jobs=${OPTARG}
+		;;
+	t)
+		time_jobs=${OPTARG}
+		;;
+	w)
+		weighting=${OPTARG}
+		;;
+	*)
+		usage
+		exit 2
+	esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 2 ]; then
+	meta_dir=$1; shift
+	pkgtimes_dir=$1; shift
+else
+	usage
+	exit 2
+fi
+
+report_file="${meta_dir}/report.save"
+if [ ! -f "${report_file}" ]; then
+	echo "ERROR: Cannot find ${report_file}" >&2
+	exit 1
+fi
+
+if [ ! -f "$(echo ${pkgtimes_dir}/digest-2*.pkgtime)" ]; then
+	echo "ERROR: ${pkgtimes_dir} does not appear to be valid" >&2
+	exit 1
+fi
+
+if ! command -v gvpr >/dev/null 2>&1; then
+	echo "ERROR: Cannot find gvpr, please install graphviz" >&2
+	exit 1
+fi
+
+workdir=/tmp/make-jobs-$$
+mkdir ${workdir}
+
+#
+# Generate graphviz dot file of package dependencies.
+#
+echo "Generating ${workdir}/packages.dot"
+awk -F= '
+$1 ~ /^PKGNAME/ {
+	cur = $2
+}
+$1 ~ /^DEPENDS/ {
+	depends[cur] = substr($0, 9)
+}
+END {
+	print "digraph packages {"
+	for (pkg in depends) {
+		split(depends[pkg], depend_list, "[ \t]+")
+		for (dep in depend_list) {
+			printf("\"%s\" -> \"%s\"\n", depend_list[dep], pkg)
+		}
+	}
+	print "}"
+}' < ${report_file} > ${workdir}/packages.dot
+
+#
+# Generate weight based on node degrees, giving additional bias to higher
+# nodes.  Leaf packages have an outdegree of 0, hence we add 1 to each.
+#
+echo "Generating ${workdir}/packages.weight"
+gvpr '
+N {
+	printf("%s %d\n", $.name, pow(($.outdegree + 1), '${weighting}'));
+}' ${workdir}/packages.dot | sort > ${workdir}/packages.weight
+
+#
+# Generate file of packages, their PKGPATH, and their PKG_DEPTH (how many total
+# packages depend on them).
+#
+#	1	2	3
+#	pkgname	pkgpath	depth
+#
+echo "Generating ${workdir}/packages.pkginfo"
+awk -F= '
+	/^PKGNAME=/      { printf("%s ",$2); }
+	/^PKG_LOCATION=/ { printf("%s ", $2); }
+	/^PKG_DEPTH=/    { printf("%s\n", $2); }
+' < ${report_file} | sort > ${workdir}/packages.pkginfo
+
+#
+# Now pull in the pkgtimes files.  At this point any package that doesn't have
+# a corresponding pkgtime file it is discarded as it's not being built.
+#
+#	1	2	3	4
+#	pkgname	pkgpath	depth	pkgtime
+#
+echo "Generating ${workdir}/packages.pkgtime"
+while read pkg loc depth; do
+	if [ -f ${pkgtimes_dir}/${pkg}.pkgtime ]; then
+		pkgtime=$(<${pkgtimes_dir}/${pkg}.pkgtime)
+		printf "%s %s %s %s\n" ${pkg} ${loc} ${depth} ${pkgtime}
+	fi
+done < ${workdir}/packages.pkginfo > ${workdir}/packages.pkgtime
+
+#
+# Append weight and score (build time * weight).
+#
+#	1	2	3	4	5	6
+#	pkgname	pkgpath	depth	pkgtime	weight	score
+#
+echo "Generating ${workdir}/packages.score"
+join ${workdir}/packages.pkgtime ${workdir}/packages.weight | awk '{
+	printf("%s %s\n", $0, $4 * $5)
+}' > ${workdir}/packages.score
+
+#
+# Append MAKE_JOBS by build time, crudely scaling by max CPUs, but always using
+# 1 job for packages under 1 hour.  Future work might want to make this more
+# fine-grained for larger max jobs values (e.g. by 30 minute increments) or
+# simply speeding up higher build times.
+#
+#	1	2	3	4	5	6	7
+#	pkgname	pkgpath	depth	pkgtime	weight	score	jobs-by-time
+#
+echo "Generating ${workdir}/packages.jobs-by-time"
+awk -v max=${time_jobs} '
+	$4  < 3600                { printf("%s %d\n", $0, 1) }
+	$4 >= 3600  && $4 < 7200  { printf("%s %d\n", $0, 2 * max / 8) }
+	$4 >= 7200  && $4 < 10800 { printf("%s %d\n", $0, 3 * max / 8) }
+	$4 >= 10800 && $4 < 14400 { printf("%s %d\n", $0, 4 * max / 8) }
+	$4 >= 14400 && $4 < 18000 { printf("%s %d\n", $0, 5 * max / 8) }
+	$4 >= 18000 && $4 < 21600 { printf("%s %d\n", $0, 6 * max / 8) }
+	$4 >= 21600 && $4 < 25200 { printf("%s %d\n", $0, 7 * max / 8) }
+	$4 >= 25200               { printf("%s %d\n", $0, 8 * max / 8) }
+' < ${workdir}/packages.score > ${workdir}/packages.jobs-by-time
+
+#
+# Append MAKE_JOBS by score, arbitrarily done for the top 64 for now.
+#
+#	1	2	3	4	5	6	7	8
+#	pkgname	pkgpath	depth	pkgtime	weight	score	bytime	byscore
+#
+echo "Generating ${workdir}/packages.jobs-by-score"
+sort -k6rn ${workdir}/packages.jobs-by-time | awk -v max=${score_jobs} '
+	            NR < 8  { printf("%s %d\n", $0, 8 * max / 8) }
+	NR >= 8  && NR < 16 { printf("%s %d\n", $0, 7 * max / 8) }
+	NR >= 16 && NR < 24 { printf("%s %d\n", $0, 6 * max / 8) }
+	NR >= 24 && NR < 32 { printf("%s %d\n", $0, 5 * max / 8) }
+	NR >= 32 && NR < 48 { printf("%s %d\n", $0, 4 * max / 8) }
+	NR >= 48 && NR < 56 { printf("%s %d\n", $0, 3 * max / 8) }
+	NR >= 56 && NR < 64 { printf("%s %d\n", $0, 2 * max / 8) }
+	NR >= 64            { printf("%s %d\n", $0, 1) }
+' | sort > ${workdir}/packages.jobs-by-score
+
+#
+# Generate a combined file helpful for printing the final calculations and
+# performing analysis afterwards.
+#
+#	1	2	3	4	5	6	7	8
+#	pkgname	pkgpath	depth	pkgtime	weight	score	bytime	byscore
+#
+
+#
+# Join the files and print generated MAKE_JOBS, keyed by PKGPATH to handle
+# multi-packages, keeping track of the highest score.
+#
+echo "Generating ${workdir}/pkg-make-jobs.mk"
+awk '
+	$7 > 1 || $8 > 1 {
+		if (length($2) < 9)
+			i = "\t\t\t\t\t"
+		else if (length($2) < 17)
+			i = "\t\t\t\t"
+		else if (length($2) < 25)
+			i = "\t\t\t"
+		else if (length($2) < 33)
+			i = "\t\t"
+		else
+			i = "\t"
+		pkgpath[$2] = $2
+		indent[$2] = i
+		max = ($7 > $8) ? $7 : $8
+		if (max > jobs[$2]) {
+			jobs[$2] = max
+		}
+		p++
+	}
+	END {
+		for (p in pkgpath) {
+			printf("PKG_MAKE_JOBS.%s=%s%s\n", p, indent[p], jobs[p])
+		}
+	}
+' < ${workdir}/packages.jobs-by-score | sort -k2rn > ${workdir}/pkg-make-jobs.mk
