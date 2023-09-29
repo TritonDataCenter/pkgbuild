@@ -24,5 +24,6 @@ PKG_OPTIONS.gtk-vnc+=	-python # Allow this to build
 PKG_OPTIONS.mutt+=	-tokyocabinet # lmdb
 PKG_OPTIONS.nginx+=	dav status realip uwsgi memcache naxsi perl gzip
 PKG_OPTIONS.nginx-devel+=	dav status realip uwsgi memcache naxsi perl gzip
+PKG_OPTIONS.nmap+=	lua
 PKG_OPTIONS.vim+=	lua perl python ruby
 PKG_OPTIONS.weechat+=	lua perl python ruby wide-curses

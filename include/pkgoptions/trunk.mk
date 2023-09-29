@@ -82,6 +82,7 @@ PKG_OPTIONS.nginx+=		slice status uwsgi
 PKG_OPTIONS.nginx-devel+=	auth-request dav geoip2 gzip headers-more
 PKG_OPTIONS.nginx-devel+=	memcache naxsi perl realip
 PKG_OPTIONS.nginx-devel+=	slice status uwsgi
+PKG_OPTIONS.nmap+=		lua
 PKG_OPTIONS.openldap-server+=	-unixodbc
 PKG_OPTIONS.p5-HTML-Mason+=	modperl fastcgi
 PKG_OPTIONS.postgresql13+=	-gssapi
