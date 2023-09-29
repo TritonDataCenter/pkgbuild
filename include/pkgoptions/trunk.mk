@@ -96,17 +96,19 @@ PKG_OPTIONS.vim+=		perl python
 PKG_OPTIONS.weechat+=		lua perl python ruby
 
 #
-# Global version defaults
+# Global version defaults.  Only add overrides from the pkgsrc defaults so that
+# we don't end up falling behind due to missed bumps.
 #
-LUA_VERSION_DEFAULT=		54
-MYSQL_VERSION_DEFAULT=		mariadb106
-PGSQL_VERSION_DEFAULT=		14
-PHP_VERSION_DEFAULT=		74
-PKG_APACHE_DEFAULT=		apache24
+#EMACS_TYPE=
+#LUA_VERSION_DEFAULT=
+#MYSQL_VERSION_DEFAULT=
+#PGSQL_VERSION_DEFAULT=
+#PHP_VERSION_DEFAULT=
+#PKG_APACHE_DEFAULT=
 PKG_JVM_DEFAULT=		openjdk17
-PYTHON_VERSION_DEFAULT=		310
-RUBY_RAILS_DEFAULT=		52
-RUBY_VERSION_DEFAULT=		31
+#PYTHON_VERSION_DEFAULT=
+#RUBY_RAILS_DEFAULT=
+#RUBY_VERSION_DEFAULT=
 
 #
 # Only build specific versions for limited_list tools builds.
@@ -119,5 +121,4 @@ RUBY_VERSION_REQD=		31
 #
 # XXX: This doesn't really belong here, move somewhere more sensible
 #
-EMACS_TYPE=			emacs26nox
 JPEG_DEFAULT=			libjpeg-turbo
