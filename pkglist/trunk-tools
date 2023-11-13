@@ -45,7 +45,6 @@ lang/clang
 lang/gawk
 lang/nawk
 lang/nodejs
-lang/nodejs14
 lang/nodejs16
 lang/nodejs18
 lang/openjdk8
@@ -103,6 +102,7 @@ sysutils/coreutils
 sysutils/ddrescue
 sysutils/findutils
 sysutils/htop
+sysutils/mc
 sysutils/munin-master
 sysutils/munin-node
 sysutils/ncdu
