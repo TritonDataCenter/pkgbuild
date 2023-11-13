@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# pkgsrc use of STRIP_DBG is currently hardcoded to support GNU strip arguments
+# (specifically -o), so this is a wrapper to support native illumos strip(1).
+#
+# See pkgsrc/mk/install/install.mk for how this is called.
+#
+
+
+# Verify that the first argument is "-o" as expected and shift past it,
+# otherwise bail as we are not being called as we should be.
+if [ "$1" = "-o" ]; then
+	shift
+else
+	echo "ERROR: $0 should be called in pkgsrc context!" >&2
+	exit 1
+fi
+
+# Copy "${f}" to "${tmp_f}"
+/usr/bin/cp -p $2 $1
+
+# Run strip on "${tmp_f}"
+/usr/bin/strip -x $1

@@ -64,7 +64,20 @@ TOOLS_ARGS.ctfconvert=		-i
 TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert
 TOOLS_ARGS.ctfconvert=		-m
 .endif
+
+#
+# Use a wrapper script for STRIP_DBG so that native illumos strip can be used,
+# as it currently does not support -o that pkgsrc expects.
+#
+# Older releases used GNU strip.
+#
+.if ${PKGBUILD:M201[0-9]Q*} || ${PKGBUILD:M202[12]Q*}
 TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
+.else
+TOOLS_CREATE+=			strip-dbg-illumos
+TOOLS_PATH.strip-dbg-illumos=	${PKGBUILD_BASEDIR}/scripts/strip-dbg-illumos
+STRIP_DBG=			strip-dbg-illumos
+.endif
 
 #
 # rpcgen isn't always available as it requires smartos-build-tools, but if a
