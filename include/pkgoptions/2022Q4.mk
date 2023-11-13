@@ -110,7 +110,7 @@ RUBY_VERSION_DEFAULT=		31
 #
 # Only build specific versions for limited_list tools builds.
 #
-.if !empty(PKGBUILD:M*-tools)
+.if ${PKGBUILD:M*-tools}
 #PYTHON_VERSION_REQD=		39	# 27 required for nodejs
 RUBY_VERSION_REQD=		31
 .endif

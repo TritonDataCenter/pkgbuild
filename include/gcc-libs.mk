@@ -9,23 +9,23 @@
 #
 # This also aids packages which do not yet have USE_GCC_RUNTIME set.
 #
-.if !empty(PKGPATH:Marchivers/bsdtar) \
- || !empty(PKGPATH:Marchivers/pax) \
- || !empty(PKGPATH:Mdevel/binutils) \
- || !empty(PKGPATH:Mdevel/gmake) \
- || !empty(PKGPATH:Mdevel/nbpatch) \
- || !empty(PKGPATH:Mextra/gcc*) \
- || !empty(PKGPATH:Mjoyent/ctftools) \
- || !empty(PKGPATH:Mjoyent/gcc*) \
- || !empty(PKGPATH:Mlang/gcc*) \
- || !empty(PKGPATH:Mpkgtools/abiexec) \
- || !empty(PKGPATH:Mpkgtools/cwrappers) \
- || !empty(PKGPATH:Mpkgtools/digest) \
- || !empty(PKGPATH:Mpkgtools/isaexec) \
- || !empty(PKGPATH:Mpkgtools/mktools) \
- || !empty(PKGPATH:Mpkgtools/pkg_install) \
- || !empty(PKGPATH:Mpkgtools/pkg_install-info) \
- || !empty(PKGPATH:Msysutils/checkperms)
+.if ${PKGPATH:Marchivers/bsdtar} \
+ || ${PKGPATH:Marchivers/pax} \
+ || ${PKGPATH:Mdevel/binutils} \
+ || ${PKGPATH:Mdevel/gmake} \
+ || ${PKGPATH:Mdevel/nbpatch} \
+ || ${PKGPATH:Mextra/gcc*} \
+ || ${PKGPATH:Mjoyent/ctftools} \
+ || ${PKGPATH:Mjoyent/gcc*} \
+ || ${PKGPATH:Mlang/gcc*} \
+ || ${PKGPATH:Mpkgtools/abiexec} \
+ || ${PKGPATH:Mpkgtools/cwrappers} \
+ || ${PKGPATH:Mpkgtools/digest} \
+ || ${PKGPATH:Mpkgtools/isaexec} \
+ || ${PKGPATH:Mpkgtools/mktools} \
+ || ${PKGPATH:Mpkgtools/pkg_install} \
+ || ${PKGPATH:Mpkgtools/pkg_install-info} \
+ || ${PKGPATH:Msysutils/checkperms}
 PKGSRC_USE_SSP=	no
 .else
 _USE_GCC_SHLIB=	yes

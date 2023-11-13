@@ -7,25 +7,25 @@
 # Use external GCC for GCC itself and its dependencies, otherwise we run into
 # circular dependencies.
 #
-.if !empty(PKGPATH:Marchivers/bsdtar) \
- || !empty(PKGPATH:Mdevel/binutils) \
- || !empty(PKGPATH:Mdevel/gmake) \
- || !empty(PKGPATH:Mdevel/nbpatch) \
- || !empty(PKGPATH:Mextra/gcc[0-9]) \
- || !empty(PKGPATH:Mextra/gcc[0-9][0-9]) \
- || !empty(PKGPATH:Mjoyent/ctftools) \
- || !empty(PKGPATH:Mjoyent/gcc[0-9]) \
- || !empty(PKGPATH:Mjoyent/gcc[0-9][0-9]) \
- || !empty(PKGPATH:Mlang/gcc[0-9]) \
- || !empty(PKGPATH:Mlang/gcc[0-9][0-9]) \
- || !empty(PKGPATH:Mlang/gcc3*) \
- || !empty(PKGPATH:Mpkgtools/abiexec) \
- || !empty(PKGPATH:Mpkgtools/cwrappers) \
- || !empty(PKGPATH:Mpkgtools/digest) \
- || !empty(PKGPATH:Mpkgtools/isaexec) \
- || !empty(PKGPATH:Mpkgtools/mktools) \
- || !empty(PKGPATH:Mpkgtools/pkg_install-info) \
- || !empty(PKGPATH:Msysutils/checkperms)
+.if ${PKGPATH:Marchivers/bsdtar} \
+ || ${PKGPATH:Mdevel/binutils} \
+ || ${PKGPATH:Mdevel/gmake} \
+ || ${PKGPATH:Mdevel/nbpatch} \
+ || ${PKGPATH:Mextra/gcc[0-9]} \
+ || ${PKGPATH:Mextra/gcc[0-9][0-9]} \
+ || ${PKGPATH:Mjoyent/ctftools} \
+ || ${PKGPATH:Mjoyent/gcc[0-9]} \
+ || ${PKGPATH:Mjoyent/gcc[0-9][0-9]} \
+ || ${PKGPATH:Mlang/gcc[0-9]} \
+ || ${PKGPATH:Mlang/gcc[0-9][0-9]} \
+ || ${PKGPATH:Mlang/gcc3*} \
+ || ${PKGPATH:Mpkgtools/abiexec} \
+ || ${PKGPATH:Mpkgtools/cwrappers} \
+ || ${PKGPATH:Mpkgtools/digest} \
+ || ${PKGPATH:Mpkgtools/isaexec} \
+ || ${PKGPATH:Mpkgtools/mktools} \
+ || ${PKGPATH:Mpkgtools/pkg_install-info} \
+ || ${PKGPATH:Msysutils/checkperms}
 GCCBASE=	${PKGBUILD_GCCBASE}
 .else
 #
@@ -33,7 +33,7 @@ GCCBASE=	${PKGBUILD_GCCBASE}
 # requirement, but we can't change releases now that didn't use it to begin
 # with, otherwise dependencies will change.
 #
-.  if !empty(PKGBUILD:M201[4567]Q?-*)
+.  if ${PKGBUILD:M201[4567]Q?-*}
 GCC_REQD=	${PKGBUILD_GCC_REQD}
 .  else
 GCC_REQD+=	${PKGBUILD_GCC_REQD}

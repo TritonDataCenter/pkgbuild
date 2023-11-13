@@ -10,7 +10,7 @@
 #
 # For now, remove -g* for those packages to keep the file size down.
 #
-.if !empty(PKGPATH:Mwww/webkit-gtk*) || !empty(PKGPATH:Mwww/webkit24-gtk*)
+.if ${PKGPATH:Mwww/webkit-gtk*} || ${PKGPATH:Mwww/webkit24-gtk*}
 CFLAGS:=	${CFLAGS:C/^-g.*//}
 .endif
 
@@ -19,11 +19,11 @@ CFLAGS:=	${CFLAGS:C/^-g.*//}
 # during the build they legitimately use -m32 for multiarch libraries, which
 # is incompatible with -msave-args.
 #
-.if !empty(PKGPATH:Mextra/gcc*) \
- || !empty(PKGPATH:Mjoyent/gcc*) \
- || !empty(PKGPATH:Mlang/compiler-rt) \
- || !empty(PKGPATH:Mlang/gcc*) \
- || !empty(PKGPATH:Msysutils/arm-trusted-firmware*)
+.if ${PKGPATH:Mextra/gcc*} \
+ || ${PKGPATH:Mjoyent/gcc*} \
+ || ${PKGPATH:Mlang/compiler-rt} \
+ || ${PKGPATH:Mlang/gcc*} \
+ || ${PKGPATH:Msysutils/arm-trusted-firmware*}
 CFLAGS:=	${CFLAGS:N-msave-args}
 .endif
 
@@ -32,6 +32,6 @@ CFLAGS:=	${CFLAGS:N-msave-args}
 # not supported by pkgtools/digest in 2020Q4 and earlier.  This can eventually
 # be removed.
 #
-.if !empty(PKGPATH:Mjoyent/*)
+.if ${PKGPATH:Mjoyent/*}
 _DIGEST_ALGORITHMS=	RMD160 SHA512
 .endif

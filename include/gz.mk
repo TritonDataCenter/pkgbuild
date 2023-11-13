@@ -62,6 +62,6 @@ ZBXGROUP=	root		# No SPECIAL_PERMS.
 #
 # Apply some custom build settings that make sense for the GZ.
 #
-.if !empty(PKGPATH:Mlang/nodejs*) || !empty(PKGPATH:Mjoyent/node*)
+.if ${PKGPATH:Mlang/nodejs*} || ${PKGPATH:Mjoyent/node*}
 PYTHON_FOR_BUILD_ONLY=	yes	# Only required by gyp for building modules
 .endif

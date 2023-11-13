@@ -17,7 +17,7 @@ TOOLS_PLATFORM.patch=	${TOOLS_BASEDIR}/bin/nbpatch
 # In newer releases we add TOOLS_BASEDIR/bin to PATH as it helps to avoid
 # hardcoded paths embedding into binaries.
 #
-.if !empty(PKGBUILD:M201?Q?-*) || !empty(PKGBUILD:M2020Q[123]-*)
+.if ${PKGBUILD:M201?Q?-*} || ${PKGBUILD:M2020Q[123]-*}
 .  for tool in as objcopy objdump ranlib readelf
 ${tool:tu}=		${TOOLS_BASEDIR}/bin/g${tool}
 TOOLS_PATH.${tool}=	${TOOLS_BASEDIR}/bin/g${tool}
@@ -29,10 +29,8 @@ TOOLS_CREATE+=		${tool}
 # Avoid circular dependencies by using external tools for gcc, where the tool
 # itself depends upon gcc when using USE_PKGSRC_GCC_RUNTIME.
 #
-.if !empty(PKGPATH:Mdevel/binutils) || \
-    !empty(PKGPATH:Mextra/gcc*) || \
-    !empty(PKGPATH:Mjoyent/gcc*) || \
-    !empty(PKGPATH:Mlang/gcc*)
+.if ${PKGPATH:Mdevel/binutils} || ${PKGPATH:Mextra/gcc*} || \
+    ${PKGPATH:Mjoyent/gcc*} || ${PKGPATH:Mlang/gcc*}
 TOOLS_PLATFORM.flex=		${TOOLS_BASEDIR}/bin/flex
 TOOLS_PLATFORM.m4=		${TOOLS_BASEDIR}/bin/gm4
 TOOLS_PLATFORM.makeinfo=	${TOOLS_BASEDIR}/bin/makeinfo
@@ -46,7 +44,7 @@ TOOLS_PLATFORM.xzcat=		${TOOLS_BASEDIR}/bin/xzcat
 # correct library paths are encoded, and to do that we need to build binutils
 # (a gcc dependency) with an external libtool.   XXX: requires pkgsrc patch.
 #
-.if !empty(PKGPATH:Mdevel/binutils)
+.if ${PKGPATH:Mdevel/binutils}
 PKG_LIBTOOL=		${TOOLS_BASEDIR}/bin/libtool
 PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 .endif
@@ -59,8 +57,7 @@ PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 # Builds of 2020Q4 and earlier used patched tools built separately, builds on
 # 20210826 platforms use newer tools from that platform version.
 #
-.if !empty(PKGBUILD:M201?Q?-*) || !empty(PKGBUILD:M2020Q?-*) \
- || !empty(PKGBUILD:M2021Q4-tools)
+.if ${PKGBUILD:M201?Q?-*} || ${PKGBUILD:M2020Q?-*} || ${PKGBUILD:M2021Q4-tools}
 TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert-altexec
 TOOLS_ARGS.ctfconvert=		-i
 .else

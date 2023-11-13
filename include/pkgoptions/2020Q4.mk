@@ -111,6 +111,6 @@ JPEG_DEFAULT=			libjpeg-turbo
 # XXX: hack specifically for 2020Q4, where the default is go115, but the hugo
 # that has been backported only works with go116.
 #
-.if !empty(PKGPATH:Mwww/hugo)
+.if ${PKGPATH:Mwww/hugo}
 GO_VERSION_DEFAULT=	116
 .endif

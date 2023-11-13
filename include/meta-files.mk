@@ -5,19 +5,19 @@
 #
 # Avoid gratuitous copies when they can be shared.
 #
-.if !empty(PKGPATH:M*/postgresql*server)
+.if ${PKGPATH:M*/postgresql*server}
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/postgresql-server
-.elif !empty(PKGPATH:M*/percona*-cluster)
+.elif ${PKGPATH:M*/percona*-cluster}
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/percona-cluster
-.elif !empty(PKGPATH:M*/mysql5[156]-server) \
-   || !empty(PKGPATH:M*/percona5[56]-server) \
-   || !empty(PKGPATH:M*/mariadb10-server) \
-   || !empty(PKGPATH:M*/mariadb100-server)
+.elif ${PKGPATH:M*/mysql5[156]-server} \
+   || ${PKGPATH:M*/percona5[56]-server} \
+   || ${PKGPATH:M*/mariadb10-server} \
+   || ${PKGPATH:M*/mariadb100-server}
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/mysql5-server
-.elif !empty(PKGPATH:M*/mysql57-server) \
-   || !empty(PKGPATH:M*/mysql8*-server) \
-   || !empty(PKGPATH:M*/percona57-server) \
-   || !empty(PKGPATH:M*/percona8*-server)
+.elif ${PKGPATH:M*/mysql57-server} \
+   || ${PKGPATH:M*/mysql8*-server} \
+   || ${PKGPATH:M*/percona57-server} \
+   || ${PKGPATH:M*/percona8*-server}
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/common/mysql8-server
 .else
 PKGBUILD_META_DIR=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}
