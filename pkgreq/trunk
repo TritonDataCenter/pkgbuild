@@ -5,7 +5,7 @@
 #
 build-essential-[0-9]
 coreutils-[0-9]
-mozilla-rootcerts-[0-9]
+mozilla-rootcerts-openssl-[0-9]
 nodejs-[0-9]
 pkg_alternatives-[0-9]
 pkgin-[0-9]

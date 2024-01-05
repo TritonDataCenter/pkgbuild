@@ -2,7 +2,7 @@
 # will be enabled.  One per line, matched using /^<pkg>/ in the pbuild file.
 coreutils-[0-9]
 git-base-[0-9]
-mozilla-rootcerts-[0-9]
+mozilla-rootcerts-openssl-[0-9]
 pkg_alternatives-[0-9]
 pkgin-[0-9]
 pkgsrc-gnupg-keys-[0-9]

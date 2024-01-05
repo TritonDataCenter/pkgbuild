@@ -75,7 +75,7 @@ pkgtools/url2pkg
 security/dcfldd
 security/gnupg
 security/gnupg2
-security/mozilla-rootcerts
+security/mozilla-rootcerts-openssl
 security/sudo
 shells/tcsh
 shells/zsh
