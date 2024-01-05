@@ -1,0 +1,12 @@
+devel/bmake
+extra/pkgsrc-gnupg-keys
+lang/nawk
+net/samba4
+pkgtools/bootstrap-mk-files
+pkgtools/pkg_alternatives
+pkgtools/pkg_install
+pkgtools/pkgin
+security/duo-unix
+security/google-authenticator
+sysutils/bsdinstall
+textproc/nbsed
