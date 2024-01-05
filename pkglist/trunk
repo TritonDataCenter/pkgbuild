@@ -1,3 +1,4 @@
+extra/build-essential
 extra/duo-unix-compat32
 extra/gcc13
 extra/gcc13-libs
@@ -12,7 +13,6 @@ extra/wireguard-go
 extra/wireguard-tools
 joyent/GeoLiteCity
 joyent/ap2-usdt
-joyent/build-essential
 joyent/celt051
 joyent/cgatools
 joyent/changepass
