@@ -32,6 +32,7 @@ joyent/gcc10-libs
 joyent/gnupg20
 joyent/libutempter
 joyent/smartos-build-tools
+joyent/smartos-test-tools
 lang/clang
 lang/gawk
 lang/nawk

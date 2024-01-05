@@ -75,6 +75,7 @@ joyent/ruby-memcache-client
 joyent/ruby-rest-client
 joyent/ruby-soap4r
 joyent/smartos-build-tools
+joyent/smartos-test-tools
 joyent/smtools
 joyent/spice-protocol
 joyent/telegraf

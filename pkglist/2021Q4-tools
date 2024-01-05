@@ -26,6 +26,7 @@ joyent/libutempter
 joyent/openjdk11
 joyent/pkgsrc-gnupg-keys
 joyent/smartos-build-tools
+joyent/smartos-test-tools
 lang/clang
 lang/gawk
 lang/nawk

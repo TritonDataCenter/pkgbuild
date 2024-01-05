@@ -30,6 +30,7 @@ extra/mg
 extra/openjdk11
 extra/openjdk17
 extra/pkgsrc-gnupg-keys
+extra/smartos-test-tools
 extra/tailscale
 extra/wireguard-go
 extra/wireguard-tools
