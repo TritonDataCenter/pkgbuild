@@ -27,7 +27,6 @@ joyent/influx-cli
 joyent/influxdb
 joyent/libsass
 joyent/libspice
-joyent/libutempter
 joyent/mms-agent
 joyent/neo4j
 joyent/nicstat

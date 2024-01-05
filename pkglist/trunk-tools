@@ -37,7 +37,6 @@ extra/wireguard-go
 extra/wireguard-tools
 joyent/ctftools
 joyent/gnupg20
-joyent/libutempter
 joyent/smartos-build-tools
 lang/clang
 lang/gawk
