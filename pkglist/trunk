@@ -1,6 +1,6 @@
 extra/duo-unix-compat32
-extra/gcc12
-extra/gcc12-libs
+extra/gcc13
+extra/gcc13-libs
 extra/google-authenticator-compat32
 extra/openjdk11
 extra/openjdk17
@@ -20,10 +20,6 @@ joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
 joyent/enstratus-agent
-joyent/gcc10
-joyent/gcc10-libs
-joyent/gcc9
-joyent/gcc9-libs
 joyent/gnupg20
 joyent/influx-cli
 joyent/influxdb

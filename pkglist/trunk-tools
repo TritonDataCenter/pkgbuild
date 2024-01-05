@@ -23,8 +23,6 @@ editors/nano
 editors/vim
 emulators/qemu
 extra/duo-unix-compat32
-extra/gcc12
-extra/gcc12-libs
 extra/gcc13
 extra/gcc13-libs
 extra/google-authenticator-compat32
@@ -36,8 +34,6 @@ extra/tailscale
 extra/wireguard-go
 extra/wireguard-tools
 joyent/ctftools
-joyent/gcc10
-joyent/gcc10-libs
 joyent/gnupg20
 joyent/libutempter
 joyent/smartos-build-tools
