@@ -29,6 +29,7 @@ extra/google-authenticator-compat32
 extra/mg
 extra/openjdk11
 extra/openjdk17
+extra/openjdk21
 extra/pkgsrc-gnupg-keys
 extra/smartos-test-tools
 extra/tailscale

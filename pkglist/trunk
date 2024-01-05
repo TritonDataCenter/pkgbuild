@@ -5,6 +5,7 @@ extra/gcc13-libs
 extra/google-authenticator-compat32
 extra/openjdk11
 extra/openjdk17
+extra/openjdk21
 extra/pkgsrc-gnupg-keys
 extra/samba-compat32
 extra/smartos-test-tools
