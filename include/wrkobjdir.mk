@@ -4,18 +4,24 @@
 # large and can fill WRKOBJDIR, so we use a known disk-backed location.
 #
 
-.if ${PKGPATH:Maudio/musescore} \
+.if ${PKGPATH:Maudio/gospt} \
+ || ${PKGPATH:Maudio/musescore} \
+ || ${PKGPATH:Maudio/spotify-player} \
  || ${PKGPATH:Mcross/*gcc*} \
  || ${PKGPATH:Mdatabases/mariadb55-server} \
  || ${PKGPATH:Mdatabases/mongodb} \
  || ${PKGPATH:Mdatabases/prometheus} \
+ || ${PKGPATH:Mdevel/conftest} \
  || ${PKGPATH:Mdevel/xulrunner*} \
+ || ${PKGPATH:Meditors/tp-note} \
  || ${PKGPATH:Memulators/mame} \
  || ${PKGPATH:Memulators/qemu} \
+ || ${PKGPATH:Mfonts/noto-fonts} \
  || ${PKGPATH:Mfonts/noto-ttf} \
  || ${PKGPATH:Mgames/flightgear*} \
  || ${PKGPATH:Mgeography/proj} \
  || ${PKGPATH:Mgraphics/tesseract} \
+ || ${PKGPATH:Mgraphics/vtk-docs} \
  || ${PKGPATH:Mham/gnuradio-core} \
  || ${PKGPATH:Mjoyent/mariadb10-server} \
  || ${PKGPATH:Mlang/clang*} \
@@ -27,17 +33,25 @@
  || ${PKGPATH:Mlang/nodejs*} \
  || ${PKGPATH:Mlang/rust} \
  || ${PKGPATH:Mmail/thunderbird*} \
+ || ${PKGPATH:Mnet/dnscontrol} \
  || ${PKGPATH:Mnet/kubectl} \
+ || ${PKGPATH:Mnet/ipget} \
  || ${PKGPATH:Mnet/rclone} \
+ || ${PKGPATH:Mnet/terraform-provider-aws} \
  || ${PKGPATH:Mnet/terraform} \
+ || ${PKGPATH:Msecurity/nuclei} \
  || ${PKGPATH:Msecurity/trufflehog} \
  || ${PKGPATH:Msecurity/vault} \
+ || ${PKGPATH:Mshells/nushell} \
  || ${PKGPATH:Msysutils/consul} \
+ || ${PKGPATH:Msysutils/packer} \
  || ${PKGPATH:Msysutils/restic} \
  || ${PKGPATH:Mwip/ghc} \
  || ${PKGPATH:Mwip/rust} \
- || ${PKGPATH:Mwww/firefox} \
  || ${PKGPATH:Mwww/firefox??} \
+ || ${PKGPATH:Mwww/firefox} \
+ || ${PKGPATH:Mwww/gitea} \
+ || ${PKGPATH:Mwww/gotosocial} \
  || ${PKGPATH:Mwww/grafana} \
  || ${PKGPATH:Mwww/hugo} \
  || ${PKGPATH:Mwww/seamonkey} \
