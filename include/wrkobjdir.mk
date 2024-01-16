@@ -31,7 +31,7 @@
  || ${PKGPATH:Mlang/mercury} \
  || ${PKGPATH:Mlang/mono*} \
  || ${PKGPATH:Mlang/nodejs*} \
- || ${PKGPATH:Mlang/rust} \
+ || ${PKGPATH:Mlang/rust*} \
  || ${PKGPATH:Mmail/thunderbird*} \
  || ${PKGPATH:Mnet/dnscontrol} \
  || ${PKGPATH:Mnet/kubectl} \
