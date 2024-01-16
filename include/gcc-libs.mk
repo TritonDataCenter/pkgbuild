@@ -13,7 +13,10 @@
 #
 .if ${BRANCH:Mtrunk*} || ${BRANCH:M202[3-9]*}
 SKIP_GCC_SHLIB.devel/bmake=
+SKIP_GCC_SHLIB.extra/changepass=
 SKIP_GCC_SHLIB.extra/pkgsrc-gnupg-keys=
+SKIP_GCC_SHLIB.extra/smtools=
+SKIP_GCC_SHLIB.extra/zoneinit=
 SKIP_GCC_SHLIB.pkgtools/bootstrap-mk-files=
 SKIP_GCC_SHLIB.pkgtools/pkg_alternatives=
 SKIP_GCC_SHLIB.pkgtools/pkgin=
