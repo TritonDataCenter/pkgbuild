@@ -115,7 +115,7 @@ PKG_JVM_DEFAULT=		openjdk17
 #
 .if ${PKGBUILD:M*-tools}
 #PYTHON_VERSION_REQD=		39	# 27 required for nodejs
-RUBY_VERSION_REQD=		31
+RUBY_VERSION_REQD=		${RUBY_VERSION_DEFAULT}
 .endif
 
 #
