@@ -81,7 +81,8 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 		i
 		#
 		# Configuration file for building pkgsrc packages from source.  See
-		# http://pkgsrc.joyent.com/docs/building/ for more information.
+		# https://github.com/TritonDataCenter/pkgsrc/wiki/pkgdev:setup for
+		# more information.
 		#
 
 		.
