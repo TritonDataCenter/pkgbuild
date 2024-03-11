@@ -28,6 +28,20 @@ CFLAGS:=	${CFLAGS:N-msave-args}
 .endif
 
 #
+# Packages that use clang, where we must remove GCC-only arguments.
+#
+# Unfortunately we can't test PKGSRC_COMPILER here because it isn't set at this
+# point, so this is a hardcoded list for now.
+#
+.if ${PKGPATH:Mdevel/ccls} \
+ || ${PKGPATH:Mdevel/gnustep-*} \
+ || ${PKGPATH:Mdevel/objfw} \
+ || ${PKGPATH:Mlang/wasi-*}
+CFLAGS:=	${CFLAGS:N-msave-args}
+CFLAGS:=	${CFLAGS:N-fno-aggressive-loop-optimizations}
+.endif
+
+#
 # Generate checksums that work across all branches, avoiding BLAKE2s which is
 # not supported by pkgtools/digest in 2020Q4 and earlier.  This can eventually
 # be removed.
