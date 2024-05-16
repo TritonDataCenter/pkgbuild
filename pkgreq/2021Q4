@@ -45,10 +45,8 @@ ffmpeg4-[0-9]
 git-base-[0-9]
 mysql-server-5.7.
 percona56-[0-9]
-percona57-[0-9]
 percona80-[0-9]
 percona-cluster-8.
-percona-server-5.7.
 rspamd-[0-9]
 tmux-[0-9]
 unbound-[0-9]
