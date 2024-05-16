@@ -7,7 +7,7 @@ PATH=@PBULK_PATH@
 # Limit processes by CPU time.  Set a soft limit so that pkgsrc can override
 # based on UNLIMIT_RESOURCES+=cputime when required.
 #
-ulimit -S -t @CPU_TIME@
+@CPU_TIME@
 
 # Version of the configuration file. This is bumped whenever the default
 # config changes to notify the administrator about updates.
