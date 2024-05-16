@@ -9,4 +9,3 @@ pkgtools/pkgin
 security/duo-unix
 security/google-authenticator
 sysutils/bsdinstall
-textproc/nbsed

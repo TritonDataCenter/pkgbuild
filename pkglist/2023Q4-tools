@@ -117,5 +117,4 @@ sysutils/zabbix
 sysutils/zabbix50-agent
 sysutils/znapzend
 textproc/grep
-textproc/nbsed
 www/nginx

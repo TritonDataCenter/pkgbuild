@@ -154,7 +154,7 @@ make=${prefix}/bin/bmake
 mail=@PKGBUILD_BASEDIR@/scripts/mail-report
 neato=@PBULK_BASEDIR@/bin/neato
 rsync=@PBULK_BASEDIR@/bin/rsync
-sed=@PBULK_BASEDIR@/bin/nbsed
+sed=@CMD_SED@
 tar=@CMD_TAR@
 xz=@CMD_XZ@
 
