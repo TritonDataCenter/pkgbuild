@@ -22,8 +22,6 @@ MAILMAN_MAILGROUP=		mailman
 
 # MySQL
 MYSQL_DATADIR=			/var/mysql
-MYSQL_CHARSET=			utf8
-MYSQL_COLLATION=		utf8_general_ci
 
 # PostgreSQL
 PGHOME=				/var/pgsql
