@@ -32,6 +32,7 @@ TOOLS_CREATE+=		${tool}
 .if ${PKGPATH:Mdevel/binutils} || ${PKGPATH:Mextra/gcc*} || \
     ${PKGPATH:Mjoyent/gcc*} || ${PKGPATH:Mlang/gcc*}
 TOOLS_PLATFORM.flex=		${TOOLS_BASEDIR}/bin/flex
+TOOLS_PLATFORM.gm4=		${TOOLS_BASEDIR}/bin/gm4
 TOOLS_PLATFORM.m4=		${TOOLS_BASEDIR}/bin/gm4
 TOOLS_PLATFORM.makeinfo=	${TOOLS_BASEDIR}/bin/makeinfo
 TOOLS_PLATFORM.perl=		${TOOLS_BASEDIR}/bin/perl
