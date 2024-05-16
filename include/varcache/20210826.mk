@@ -143,6 +143,9 @@ H_TERM=				/usr/include/term.h
 H_TERMCAP=			__nonexistent__
 H_TERMLIB=			__nonexistent__
 
+# net/mDNSResponder/builtin.mk
+BUILTIN_PKG.mDNSResponder=	mDNSResponder-0
+
 # security/mit-krb5/builtin.mk
 BUILTIN_PKG.mit-krb5=		mit-krb5-1.6.3
 H_MIT_KRB5=			/usr/include/kerberosv5/krb5.h
