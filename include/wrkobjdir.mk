@@ -7,11 +7,13 @@
 .if ${PKGPATH:Maudio/gospt} \
  || ${PKGPATH:Maudio/musescore} \
  || ${PKGPATH:Maudio/spotify-player} \
+ || ${PKGPATH:Mbiology/ncbi-blast+} \
  || ${PKGPATH:Mcross/*gcc*} \
  || ${PKGPATH:Mdatabases/mariadb55-server} \
  || ${PKGPATH:Mdatabases/mongodb} \
  || ${PKGPATH:Mdatabases/prometheus} \
  || ${PKGPATH:Mdevel/conftest} \
+ || ${PKGPATH:Mdevel/netbeans-ide} \
  || ${PKGPATH:Mdevel/xulrunner*} \
  || ${PKGPATH:Meditors/tp-note} \
  || ${PKGPATH:Memulators/mame} \
@@ -19,7 +21,7 @@
  || ${PKGPATH:Mfonts/noto-fonts} \
  || ${PKGPATH:Mfonts/noto-ttf} \
  || ${PKGPATH:Mgames/flightgear*} \
- || ${PKGPATH:Mgeography/proj} \
+ || ${PKGPATH:Mgeography/proj*} \
  || ${PKGPATH:Mgraphics/tesseract} \
  || ${PKGPATH:Mgraphics/vtk-docs} \
  || ${PKGPATH:Mham/gnuradio-core} \
