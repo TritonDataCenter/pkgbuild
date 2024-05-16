@@ -108,8 +108,12 @@ env -i ${CMD_CHROOT} ${CHROOT_BASEDIR}/bootstrap-${pkgbuild} ${CMD_SHELL} -c "
 		EOF
 	elif [ '${PKGBUILD_OPSYS}' = 'Darwin' ]; then
 		ed ${PKGBUILD_SYSCONFDIR}/mk.conf >/dev/null 2>&1 <<-EOF
+			g/MACOSX_DEPLOYMENT_TARGET/d
+			$
 			a
 
+			BINPKG_SITES=		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}
+			DEPENDS_TARGET=		bin-install
 			FETCH_USING=		curl
 			MULTILIB_SUPPORTED=	no
 			PKGSRC_FORTRAN=		gfortran
