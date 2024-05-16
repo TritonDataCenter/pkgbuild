@@ -8,4 +8,5 @@ pkgtools/pkg_install
 pkgtools/pkgin
 security/duo-unix
 security/google-authenticator
+security/mozilla-rootcerts-openssl
 sysutils/bsdinstall

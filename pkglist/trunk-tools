@@ -42,8 +42,8 @@ lang/clang
 lang/gawk
 lang/nawk
 lang/nodejs
-lang/nodejs16
 lang/nodejs18
+lang/nodejs20
 lang/openjdk8
 lang/perl5
 lang/python27

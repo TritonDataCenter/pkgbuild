@@ -9,6 +9,7 @@ extra/openjdk17
 extra/openjdk21
 extra/pkgsrc-gnupg-keys
 extra/samba-compat32
+extra/samba418
 extra/smartos-test-tools
 extra/smtools
 extra/tailscale
