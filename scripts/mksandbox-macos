@@ -92,7 +92,7 @@ for mount in ${NFS_RO_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
 	mkdir -p ${chrootdir}${dst}
-	mount_nfs -o ro,noatime,nobrowse ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mount_nfs -o ro,noatime,nobrowse,rwsize=1048576,dsize=1048576 ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
 	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
 done
 
@@ -100,7 +100,7 @@ for mount in ${NFS_MOUNTS}; do
 	src=${mount%=*}
 	dst=${mount#*=}
 	mkdir -p ${chrootdir}${dst}
-	mount_nfs -o nobrowse,noatime ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
+	mount_nfs -o nobrowse,noatime,rwsize=1048576,dsize=1048576 ${NFS_OPTIONS} ${src} ${chrootdir}${dst}
 	mdutil -i off -d ${chrootdir}${dst} >/dev/null 2>&1
 done
 
@@ -116,6 +116,7 @@ chmod 1777 ${chrootdir}/tmp ${chrootdir}/var/tmp
 
 # XXX hardcoded
 mkdir -p ${chrootdir}/Users/pbulk/build
+mkdir -p ${chrootdir}/Users/pbulk/build-disk
 chown -R pbulk:staff ${chrootdir}/Users/pbulk
 tmpdir=$(su - pbulk -c 'dirname $(getconf DARWIN_USER_TEMP_DIR)')
 if [ -n "${tmpdir}" ]; then
