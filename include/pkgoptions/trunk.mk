@@ -7,7 +7,7 @@
 #
 #  - general options
 #
-PKG_DEFAULT_OPTIONS=		dtrace pam pcre readline ncursesw
+PKG_DEFAULT_OPTIONS=		dtrace pam pcre readline
 #
 #  - options grouped by function
 #
