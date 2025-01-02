@@ -43,10 +43,9 @@ CFLAGS:=	${CFLAGS:N-fno-aggressive-loop-optimizations}
 .endif
 
 #
-# Generate checksums that work across all branches, avoiding BLAKE2s which is
-# not supported by pkgtools/digest in 2020Q4 and earlier.  This can eventually
-# be removed.
+# The gzip shipped in illumos-extra is very old and doesn't support -k.  Pull
+# in the version from pkgsrc when required.  TODO: update illumos-extra.
 #
-.if ${PKGPATH:Mjoyent/*}
-_DIGEST_ALGORITHMS=	RMD160 SHA512
+.if ${PKGPATH:Mgraphics/inkscape}
+TOOLS_PLATFORM.gzip=
 .endif
