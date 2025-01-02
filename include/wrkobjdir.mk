@@ -7,41 +7,74 @@
 .if ${PKGPATH:Maudio/gospt} \
  || ${PKGPATH:Maudio/musescore} \
  || ${PKGPATH:Maudio/spotify-player} \
+ || ${PKGPATH:Maudio/termusic} \
  || ${PKGPATH:Mbiology/ncbi-blast+} \
+ || ${PKGPATH:Mcad/kicad-packages3d} \
+ || ${PKGPATH:Mcad/occt} \
+ || ${PKGPATH:Mchat/iamb} \
  || ${PKGPATH:Mcross/*gcc*} \
  || ${PKGPATH:Mdatabases/mariadb55-server} \
+ || ${PKGPATH:Mdatabases/mimir} \
  || ${PKGPATH:Mdatabases/mongodb} \
  || ${PKGPATH:Mdatabases/prometheus} \
  || ${PKGPATH:Mdevel/conftest} \
  || ${PKGPATH:Mdevel/netbeans-ide} \
+ || ${PKGPATH:Mdevel/nextpnr-ice40} \
+ || ${PKGPATH:Mdevel/py-llvmlite} \
+ || ${PKGPATH:Mdevel/py-maturin} \
+ || ${PKGPATH:Mdevel/syft} \
  || ${PKGPATH:Mdevel/xulrunner*} \
+ || ${PKGPATH:Meditors/helix} \
  || ${PKGPATH:Meditors/tp-note} \
+ || ${PKGPATH:Memulators/Cygne-SDL} \
  || ${PKGPATH:Memulators/mame} \
  || ${PKGPATH:Memulators/qemu} \
+ || ${PKGPATH:Memulators/unicorn} \
+ || ${PKGPATH:Mextra/clickhouse} \
+ || ${PKGPATH:Mextra/gcc*} \
+ || ${PKGPATH:Mextra/openjdk*} \
+ || ${PKGPATH:Mextra/percona*} \
+ || ${PKGPATH:Mfinance/bitcoin} \
  || ${PKGPATH:Mfonts/noto-fonts} \
  || ${PKGPATH:Mfonts/noto-ttf} \
  || ${PKGPATH:Mgames/flightgear*} \
+ || ${PKGPATH:Mgames/sauerbraten-server} \
+ || ${PKGPATH:Mgames/wesnoth} \
+ || ${PKGPATH:Mgames/xonotic-dedicated} \
  || ${PKGPATH:Mgeography/proj*} \
+ || ${PKGPATH:Mgraphics/papirus-icon-theme} \
  || ${PKGPATH:Mgraphics/tesseract} \
  || ${PKGPATH:Mgraphics/vtk-docs} \
- || ${PKGPATH:Mham/gnuradio-core} \
- || ${PKGPATH:Mjoyent/mariadb10-server} \
+ || ${PKGPATH:Mham/gnuradio*} \
+ || ${PKGPATH:Mjoyent/mariadb*-server} \
+ || ${PKGPATH:Mjoyent/percona*} \
  || ${PKGPATH:Mlang/clang*} \
  || ${PKGPATH:Mlang/gcc*} \
  || ${PKGPATH:Mlang/ghc*} \
  || ${PKGPATH:Mlang/llvm} \
  || ${PKGPATH:Mlang/mercury} \
  || ${PKGPATH:Mlang/mono*} \
+ || ${PKGPATH:Mlang/mozjs*} \
  || ${PKGPATH:Mlang/nodejs*} \
+ || ${PKGPATH:Mlang/openjdk*} \
  || ${PKGPATH:Mlang/rust*} \
+ || ${PKGPATH:Mmath/openblas*} \
+ || ${PKGPATH:Mmath/z3} \
  || ${PKGPATH:Mmail/thunderbird*} \
+ || ${PKGPATH:Mmisc/libreoffice*} \
+ || ${PKGPATH:Mmultimedia/mlt} \
  || ${PKGPATH:Mnet/dnscontrol} \
- || ${PKGPATH:Mnet/kubectl} \
  || ${PKGPATH:Mnet/ipget} \
+ || ${PKGPATH:Mnet/kubectl} \
+ || ${PKGPATH:Mnet/minikube} \
+ || ${PKGPATH:Mnet/opentofu} \
  || ${PKGPATH:Mnet/rclone} \
+ || ${PKGPATH:Mnet/scaleway-cli} \
+ || ${PKGPATH:Mnet/tektoncd-cli} \
  || ${PKGPATH:Mnet/terraform-provider-aws} \
  || ${PKGPATH:Mnet/terraform} \
  || ${PKGPATH:Msecurity/nuclei} \
+ || ${PKGPATH:Msecurity/sequoia-sq} \
  || ${PKGPATH:Msecurity/trufflehog} \
  || ${PKGPATH:Msecurity/vault} \
  || ${PKGPATH:Mshells/nushell} \
@@ -49,17 +82,21 @@
  || ${PKGPATH:Msysutils/packer} \
  || ${PKGPATH:Msysutils/restic} \
  || ${PKGPATH:Mwip/ghc} \
- || ${PKGPATH:Mwip/rust} \
- || ${PKGPATH:Mwww/firefox??} \
- || ${PKGPATH:Mwww/firefox} \
+ || ${PKGPATH:Mwip/rust*} \
+ || ${PKGPATH:Mwm/lefthk} \
+ || ${PKGPATH:Mwww/firefox*} \
  || ${PKGPATH:Mwww/gitea} \
  || ${PKGPATH:Mwww/gotosocial} \
  || ${PKGPATH:Mwww/grafana} \
  || ${PKGPATH:Mwww/hugo} \
+ || ${PKGPATH:Mwww/palemoon} \
  || ${PKGPATH:Mwww/seamonkey} \
  || ${PKGPATH:Mwww/webkit*-gtk*} \
- || ${PKGPATH:Mx11/kdelibs4} \
- || ${PKGPATH:Mx11/qt4-libs} \
- || ${PKGPATH:Mx11/qt5-qtwebkit}
+ || ${PKGPATH:M*/kactiv*} \
+ || ${PKGPATH:M*/kde*} \
+ || ${PKGPATH:M*/*knews*} \
+ || ${PKGPATH:M*/*-qt*} \
+ || ${PKGPATH:M*/qt*} \
+ || ${PKGPATH:M*/telegraf}
 WRKOBJDIR=		${WRKOBJDIR_DISK}
 .endif
