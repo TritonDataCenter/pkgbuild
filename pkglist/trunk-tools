@@ -2,6 +2,7 @@
 # Packages for /opt/tools build infrastructure.
 #
 archivers/pigz
+benchmarks/fio
 comms/conserver8
 converters/dos2unix
 devel/autoconf
@@ -25,6 +26,8 @@ emulators/qemu
 extra/duo-unix-compat32
 extra/gcc13
 extra/gcc13-libs
+extra/gcc14
+extra/gnupg20
 extra/google-authenticator-compat32
 extra/mg
 extra/openjdk11
@@ -36,7 +39,6 @@ extra/tailscale
 extra/wireguard-go
 extra/wireguard-tools
 joyent/ctftools
-joyent/gnupg20
 joyent/smartos-build-tools
 lang/clang
 lang/gawk
@@ -63,6 +65,7 @@ net/nagios-nrpe
 net/openvpn
 net/py-zmq
 parallel/parallel
+pkgtools/lintpkgsrc
 pkgtools/pbulk
 pkgtools/pkg_alternatives
 pkgtools/pkgdiff
@@ -80,7 +83,6 @@ sysutils/ansible
 sysutils/apcupsd
 sysutils/bsdinstall
 sysutils/cdrtools
-sysutils/cfengine3
 sysutils/collectd
 sysutils/collectd-amqp
 sysutils/collectd-curl

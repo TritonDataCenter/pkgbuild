@@ -77,7 +77,6 @@ sysutils/ansible
 sysutils/apcupsd
 sysutils/bsdinstall
 sysutils/cdrtools
-sysutils/cfengine3
 sysutils/collectd
 sysutils/collectd-amqp
 sysutils/collectd-curl

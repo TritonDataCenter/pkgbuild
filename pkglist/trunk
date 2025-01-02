@@ -1,8 +1,10 @@
 extra/build-essential
 extra/changepass
+extra/clickhouse
 extra/duo-unix-compat32
 extra/gcc13
 extra/gcc13-libs
+extra/gnupg20
 extra/google-authenticator-compat32
 extra/openjdk11
 extra/openjdk17
@@ -25,7 +27,6 @@ joyent/couchdb17
 joyent/ctftools
 joyent/dtracetools
 joyent/enstratus-agent
-joyent/gnupg20
 joyent/influx-cli
 joyent/influxdb
 joyent/libsass
@@ -95,7 +96,6 @@ wip/py-amqplib
 wip/py-pint
 wip/pyzor
 wip/ruby-xmpp4r
-wip/runit
 wip/smstools
 wip/spread4
 wip/swftools
