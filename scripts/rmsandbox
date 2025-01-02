@@ -106,7 +106,7 @@ if [ -d "${chrootdir}" ]; then
 	# tmpfs mounts.
 	#
 	for mount in ${TMPFS_MOUNTS}; do
-		dst=${mount#*=}
+		dst=${mount%=*}
 		unmount_and_rm ${chrootdir}${dst}
 	done
 

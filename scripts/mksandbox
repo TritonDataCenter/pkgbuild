@@ -127,9 +127,16 @@ done
 #
 # tmpfs mounts
 #
-for tmpdir in ${TMPFS_MOUNTS}; do
+for mount in ${TMPFS_MOUNTS}; do
+	tmpdir=${mount%=*}
+	size=${mount#*=}
 	mkdir -p ${chrootdir}${tmpdir}
-	mount -F tmpfs swap ${chrootdir}${tmpdir}
+	# If they are the same (e.g. "/tmp") then a size wasn't specified.
+	if [ "${tmpdir}" = "${size}" ]; then
+		mount -F tmpfs swap ${chrootdir}${tmpdir}
+	else
+		mount -F tmpfs -o size=${size} swap ${chrootdir}${tmpdir}
+	fi
 done
 
 #
