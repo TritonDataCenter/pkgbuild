@@ -36,6 +36,7 @@ CFLAGS:=	${CFLAGS:N-msave-args}
 .if ${PKGPATH:Mdevel/ccls} \
  || ${PKGPATH:Mdevel/gnustep-*} \
  || ${PKGPATH:Mdevel/objfw} \
+ || ${PKGPATH:Mextra/clickhouse} \
  || ${PKGPATH:Mlang/wasi-*}
 CFLAGS:=	${CFLAGS:N-msave-args}
 CFLAGS:=	${CFLAGS:N-fno-aggressive-loop-optimizations}
