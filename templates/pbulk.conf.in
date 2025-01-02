@@ -147,7 +147,7 @@ pkg_delete=@PBULK_BASEDIR@/sbin/pkg_delete
 # to publish anything at all, set rsync=: and mail=:.
 #
 bzip2=@CMD_BZIP2@
-digest=@PBULK_BASEDIR@/bin/digest
+digest="@CMD_DIGEST@"
 gzip="@CMD_GZIP@ -nf -9"
 # On non-NetBSD, this should usually point at the bmake in ${prefix}, not the
 # make used to build pbulk itself.
