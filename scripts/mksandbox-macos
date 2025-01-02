@@ -114,15 +114,29 @@ chown root:mail ${chrootdir}/var/mail
 mkdir -p ${chrootdir}/tmp ${chrootdir}/var/tmp
 chmod 1777 ${chrootdir}/tmp ${chrootdir}/var/tmp
 
+# Copy existing xcrun_db to avoid SIGBUS when invoking compiler tools for the
+# first time.
+roottmpdir=$(getconf DARWIN_USER_TEMP_DIR)
+mkdir -p ${chrootdir}${roottmpdir}
+cp -P ${roottmpdir}/xcrun_db ${chrootdir}${roottmpdir}
+
 # XXX hardcoded
 mkdir -p ${chrootdir}/Users/pbulk/build
 mkdir -p ${chrootdir}/Users/pbulk/build-disk
 chown -R pbulk:staff ${chrootdir}/Users/pbulk
-tmpdir=$(su - pbulk -c 'dirname $(getconf DARWIN_USER_TEMP_DIR)')
-if [ -n "${tmpdir}" ]; then
-	mkdir -p ${chrootdir}${tmpdir}
-	chown pbulk:staff ${chrootdir}${tmpdir}
+pbulktmpdir=$(su - pbulk -c 'getconf DARWIN_USER_TEMP_DIR')
+if [ -n "${pbulktmpdir}" ]; then
+	mkdir -p ${chrootdir}${pbulktmpdir}
+	cp -P ${roottmpdir}/xcrun_db ${chrootdir}${pbulktmpdir}
+	chown -R pbulk:staff $(dirname ${chrootdir}${pbulktmpdir})
 fi
+
+# Ensure chosen Xcode is available and selected
+ln -s /System/Volumes/Data/Applications ${chrootdir}/Applications
+mkdir -p ${chrootdir}/var/select
+for symlink in /var/select/*; do
+	cp -P ${symlink} ${chrootdir}/var/select/
+done
 
 #
 # Enable DNS resolution via an mDNSResponder socket
