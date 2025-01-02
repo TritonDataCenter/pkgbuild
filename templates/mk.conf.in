@@ -91,6 +91,7 @@ PKGBUILD_GCC_REQD?=	@PKGBUILD_GCC_REQD@
 # Any additional per-config custom configuration.
 #
 @MK_SPECIFIC_CONFIG@
+@MK_INCLUDES@
 @INCLUDE_VARCACHE@
 
 #
