@@ -22,6 +22,7 @@ WRKOBJDIR_DISK=		@WRKOBJDIR_DISK@
 ALLOW_VULNERABLE_PACKAGES=	yes
 BINPKG_SITES=			# avoid mk/install/bin-install.mk defaults
 CFLAGS+=			@CFLAGS@
+CHECK_PORTABILITY=		@CHECK_PORTABILITY@
 DBG=				# do not add CFLAGS via bootstrap-mk-files
 FAILOVER_FETCH=			yes
 FETCH_USING=			@FETCH_USING@

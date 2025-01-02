@@ -121,7 +121,8 @@ else
 		#
 		# Additional settings for this build sandbox
 		#
-		BINPKG_SITES=	${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
+		BINPKG_SITES=		${REMOTE_PACKAGE_URL}/${REMOTE_PACKAGE_DIR}/
+		CHECK_PORTABILITY=	yes
 	EOF
 fi
 cat >${chrootdir}${ROOT_HOMEDIR}/.curlrc <<-EOF
